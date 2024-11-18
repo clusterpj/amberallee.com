@@ -7,6 +7,14 @@ const nextConfig = {
   experimental: {
     serverActions: true,
   },
+  async rewrites() {
+    return [
+      {
+        source: '/api/proxy/:path*',
+        destination: 'http://localhost/v1/:path*'
+      }
+    ]
+  }
 }
 
 module.exports = nextConfig
