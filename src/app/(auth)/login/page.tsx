@@ -22,8 +22,8 @@ export default function LoginPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ 
-          email, 
-          password 
+          username: email, 
+          password: password 
         })
       });
 
@@ -35,10 +35,11 @@ export default function LoginPage() {
         throw new Error(errorData.message || 'Login failed')
       }
 
-      const { token } = await response.json();
+      const { token, role } = await response.json();
       
       // Set token in localStorage (more secure than cookies)
       localStorage.setItem('corebill_token', token);
+      localStorage.setItem('corebill_role', role);
       
       // Redirect to admin dashboard
       router.push('/admin/dashboard')
