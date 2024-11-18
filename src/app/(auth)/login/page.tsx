@@ -15,7 +15,7 @@ export default function LoginPage() {
     setError('')
 
     try {
-      const response = await fetch(`${apiConfig.baseURL}${apiConfig.endpoints.auth.login}`, {
+      const response = await fetch(`${apiConfig.endpoints.auth.login}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
