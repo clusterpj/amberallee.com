@@ -18,7 +18,7 @@ apiClient.interceptors.request.use(
 );import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost/v1',
+  baseURL: 'http://localhost:3000/v1',
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
