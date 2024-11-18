@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useCoreBill } from '@/context/CoreBillContext'
 import { usePathname } from 'next/navigation'
+import { Button } from '@/components/ui/button'
 
 const NAV_ITEMS = [
   { href: '/', label: 'Home' },
@@ -39,19 +40,13 @@ export default function Header() {
 
         <div className="flex items-center space-x-4">
           {isAuthenticated ? (
-            <Link 
-              href="/admin/dashboard" 
-              className="bg-pink-600 text-white px-4 py-2 rounded-md hover:bg-pink-700 transition-colors"
-            >
-              Admin Dashboard
-            </Link>
+            <Button asChild variant="default" className="bg-pink-600 hover:bg-pink-700">
+              <Link href="/admin/dashboard">Admin Dashboard</Link>
+            </Button>
           ) : (
-            <Link 
-              href="/login" 
-              className="bg-pink-600 text-white px-4 py-2 rounded-md hover:bg-pink-700 transition-colors"
-            >
-              Login
-            </Link>
+            <Button asChild variant="default" className="bg-pink-600 hover:bg-pink-700">
+              <Link href="/login">Login</Link>
+            </Button>
           )}
         </div>
       </div>
