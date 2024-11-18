@@ -73,22 +73,46 @@ export async function checkCoreBillAuth(token: string): Promise<boolean> {
 }
 
 export async function validateSession(sessionToken: string): Promise<boolean> {
+  if (!sessionToken) {
+    console.warn('No session token provided')
+    return false
+  }
+
   try {
-    // Implement session validation logic here
-    // This could involve checking against a database or an auth service
-    const response = await fetch('/api/validate-session', {
+    // Use PostgreSQL to validate session
+    const response = await fetch('/api/sessions/validate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ token: sessionToken })
+      body: JSON.stringify({ 
+        token: sessionToken,
+        checkExpiration: true 
+      })
     })
 
+    if (!response.ok) {
+      throw new Error('Session validation request failed')
+    }
+
     const result = await response.json()
+    
+    if (!result.valid) {
+      console.warn('Invalid session:', result.reason)
+    }
+
     return result.valid
   } catch (error) {
-    console.error('Session validation failed:', error)
+    console.error('Session validation error:', error)
     return false
+  }
+}
+
+// Enhanced error handling for authentication
+export class AuthenticationError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = 'AuthenticationError'
   }
 }
 
