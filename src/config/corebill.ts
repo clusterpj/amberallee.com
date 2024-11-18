@@ -1,10 +1,9 @@
 export const apiConfig = {
-  baseURL: '/api/corebill/',
   endpoints: {
     auth: {
-      login: 'auth/login',
-      logout: 'auth/logout',
-      me: 'me'
+      login: '/api/corebill/auth/login',
+      logout: '/api/corebill/auth/logout',
+      me: '/api/corebill/me'
     },
     orders: {
       create: 'invoices',
