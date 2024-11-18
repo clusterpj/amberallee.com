@@ -1,4 +1,3 @@
-import { CoreBillProvider } from '@/context/CoreBillContext';
 import { Inter } from 'next/font/google'
 import { CoreBillProvider } from '@/context/CoreBillContext'
 import './globals.css'
