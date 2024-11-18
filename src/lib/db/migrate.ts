@@ -6,21 +6,38 @@ import * as dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
 
 const runMigrate = async () => {
-  const connection = postgres(process.env.DATABASE_URL!, { max: 1 });
+  if (!process.env.DATABASE_URL) {
+    throw new Error('DATABASE_URL is not set in environment');
+  }
+
+  const connection = postgres(process.env.DATABASE_URL, { 
+    max: 1,
+    timeout: 30, // 30 seconds connection timeout
+    connect_timeout: 10 // 10 seconds initial connection timeout
+  });
   const db = drizzle(connection);
 
-  console.log('⏳ Running migrations...');
+  console.log('🚀 Starting database migrations...');
+  console.log(`📂 Migration folder: drizzle`);
   
   const start = Date.now();
-  await migrate(db, { migrationsFolder: 'drizzle' });
-  const end = Date.now();
+  
+  try {
+    await migrate(db, { migrationsFolder: 'drizzle' });
+    const end = Date.now();
 
-  console.log(`✅ Migrations completed in ${end - start}ms`);
-  process.exit(0);
+    console.log(`✅ Migrations completed successfully in ${end - start}ms`);
+  } catch (err) {
+    console.error('❌ Migration failed with error:', err);
+    throw err;
+  } finally {
+    await connection.end(); // Ensure connection is closed
+  }
 };
 
-runMigrate().catch((err) => {
-  console.error('❌ Migration failed');
-  console.error(err);
-  process.exit(1);
-});
+runMigrate()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error('🛑 Fatal migration error:', err);
+    process.exit(1);
+  });
