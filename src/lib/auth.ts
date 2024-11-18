@@ -40,7 +40,7 @@ export async function requireAdminAuth(request: NextRequest) {
 
   return null
 }
-import { apiConfig } from '@/masterplan'
+import { apiConfig } from '@/config/corebill'
 
 interface AuthResponse {
   success: boolean
