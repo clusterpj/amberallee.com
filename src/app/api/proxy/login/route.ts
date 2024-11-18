@@ -21,21 +21,47 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify(body)
     });
 
-    // Log the response status and text
+    // Log the response status and headers
     console.log('Backend Response Status:', response.status);
-    const responseText = await response.text();
-    console.log('Backend Response Text:', responseText);
+    console.log('Backend Response Headers:', Object.fromEntries(response.headers));
 
-    // Try to parse the response as JSON
-    let data;
-    try {
-      data = JSON.parse(responseText);
-    } catch (parseError) {
-      console.error('Failed to parse response as JSON:', parseError);
+    // Check content type before parsing
+    const contentType = response.headers.get('content-type') || '';
+    console.log('Content-Type:', contentType);
+
+    // If not JSON, throw an error
+    if (!contentType.includes('application/json')) {
+      const responseText = await response.text();
+      console.error('Non-JSON response:', responseText);
+      
       return NextResponse.json(
         { 
-          error: 'Invalid server response', 
-          details: responseText 
+          error: 'Authentication failed', 
+          details: 'Received non-JSON response from server' 
+        }, 
+        { 
+          status: 500,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
+            'Access-Control-Allow-Credentials': 'true',
+            'Vary': 'Origin'
+          }
+        }
+      );
+    }
+
+    // Parse JSON response
+    let data;
+    try {
+      data = await response.json();
+    } catch (parseError) {
+      console.error('Failed to parse JSON response:', parseError);
+      return NextResponse.json(
+        { 
+          error: 'Authentication failed', 
+          details: 'Invalid JSON response from server' 
         }, 
         { 
           status: 500,

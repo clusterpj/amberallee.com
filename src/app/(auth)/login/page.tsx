@@ -30,9 +30,9 @@ export default function LoginPage() {
       console.log('Login Response Status:', response.status);
 
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Login Error:', errorData);
-        throw new Error(errorData.message || 'Login failed')
+        const errorData = await response.text();
+        console.error('Login Error Response:', errorData);
+        throw new Error('Login failed: Server returned an error')
       }
 
       const { token, role } = await response.json();
