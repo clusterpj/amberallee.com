@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { db } from '@/lib/db'
 import { blogPosts } from '@/lib/db/schema'
-import { desc, sql } from 'drizzle-orm'
+import { desc, eq, and, lte } from 'drizzle-orm'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import Link from 'next/link'
 import { formatDate } from '@/lib/utils'
@@ -12,13 +12,16 @@ export const metadata: Metadata = {
 }
 
 async function getPublishedPosts() {
-  return await db.query.blogPosts.findMany({
-    where: sql`${blogPosts.isPublished} = true AND ${blogPosts.publishedAt} <= NOW()`,
-    orderBy: [desc(blogPosts.publishedAt)],
-    with: {
-      author: true
-    }
-  })
+  return await db
+    .select()
+    .from(blogPosts)
+    .where(
+      and(
+        eq(blogPosts.isPublished, true),
+        lte(blogPosts.publishedAt, new Date())
+      )
+    )
+    .orderBy(desc(blogPosts.publishedAt))
 }
 
 export default async function BlogPage() {
@@ -43,9 +46,11 @@ export default async function BlogPage() {
               )}
               <CardHeader>
                 <CardTitle className="font-playfair">{post.title}</CardTitle>
-                <p className="text-sm text-muted-foreground">
-                  {formatDate(post.publishedAt!)}
-                </p>
+                {post.publishedAt && (
+                  <p className="text-sm text-muted-foreground">
+                    {formatDate(post.publishedAt)}
+                  </p>
+                )}
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground line-clamp-3">
