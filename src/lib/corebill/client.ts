@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const apiClient = axios.create({
-  baseURL: process.env.COREBILL_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_COREBILL_API_URL,
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',

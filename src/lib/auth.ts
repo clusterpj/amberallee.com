@@ -4,7 +4,7 @@ import { apiConfig } from '@/config/corebill'
 // CoreBill authentication check
 export async function checkCoreBillAuth(token: string) {
   try {
-    const response = await fetch(`${apiConfig.baseURL}${apiConfig.endpoints.auth.me}`, {
+    const response = await fetch(`${apiConfig.endpoints.auth.me}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -118,7 +118,7 @@ export class AuthenticationError extends Error {
 
 export async function loginUser(email: string, password: string): Promise<AuthResponse> {
   try {
-    const response = await fetch(`${apiConfig.baseURL}${apiConfig.endpoints.auth.login}`, {
+    const response = await fetch(`${apiConfig.endpoints.auth.login}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
