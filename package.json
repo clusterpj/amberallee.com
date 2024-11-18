@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.0",
-    "@shadcn/ui": "^0.0.4",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/pg": "^8.11.10",
     "axios": "^1.7.7",
@@ -25,9 +24,8 @@
     "jsonwebtoken": "^9.0.2",
     "next": "15.0.3",
     "postgres": "^3.4.5",
-    "react": "19.0.0-rc-66855b96-20241106",
-    "react-dom": "19.0.0-rc-66855b96-20241106",
-    "shadcn-ui": "^0.9.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "tailwind-merge": "^2.5.4"
   },
   "devDependencies": {
