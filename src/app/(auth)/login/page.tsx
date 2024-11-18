@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Playfair_Display } from 'next/font/google'
 import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
@@ -57,34 +58,41 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8">
-        <h2 className="text-center text-3xl font-extrabold text-gray-900">
-          Admin Login
-        </h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-rose-100">
+      <div className="max-w-md w-full space-y-8 p-8 bg-white/80 backdrop-blur-sm rounded-lg shadow-xl border border-pink-200">
+        <div className="text-center">
+          <h2 className="text-4xl font-serif text-gray-900 mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+            Author Portal
+          </h2>
+          <p className="text-pink-600 italic">Amber Allee</p>
+        </div>
         <form onSubmit={handleLogin} className="mt-8 space-y-6">
-          {error && <p className="text-red-500 text-center">{error}</p>}
-          <div className="rounded-md shadow-sm -space-y-px">
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email address"
-              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-            />
-            <input
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-            />
+          {error && <p className="text-rose-500 text-center bg-rose-50 p-2 rounded">{error}</p>}
+          <div className="space-y-4">
+            <div>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email address"
+                className="appearance-none relative block w-full px-4 py-3 border border-pink-200 placeholder-pink-300 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300 bg-white/50"
+              />
+            </div>
+            <div>
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                className="appearance-none relative block w-full px-4 py-3 border border-pink-200 placeholder-pink-300 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-300 bg-white/50"
+              />
+            </div>
           </div>
           <button
             type="submit"
-            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-400 transition-all duration-200 shadow-md hover:shadow-lg"
           >
             Sign in
           </button>
