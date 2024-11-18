@@ -28,13 +28,21 @@ export default function LoginPage() {
 
       console.log('Login Response Status:', response.status);
 
-      if (!response.ok) {
-        const errorData = await response.text();
-        console.error('Login Error Response:', errorData);
-        throw new Error('Login failed: Server returned an error')
+      let responseData;
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        responseData = await response.json();
+      } else {
+        const textResponse = await response.text();
+        console.error('Non-JSON Response:', textResponse);
+        throw new Error('Server returned invalid response format');
       }
 
-      const { token, role } = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.error || 'Login failed: Server returned an error');
+      }
+
+      const { token, role } = responseData;
       
       // Set token in localStorage (more secure than cookies)
       localStorage.setItem('corebill_token', token);
