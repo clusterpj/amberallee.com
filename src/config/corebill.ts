@@ -1,5 +1,5 @@
 export const apiConfig = {
-  baseURL: process.env.COREBILL_API_URL || 'http://localhost/v1/',
+  baseURL: '/api/corebill/',
   endpoints: {
     auth: {
       login: 'auth/login',
