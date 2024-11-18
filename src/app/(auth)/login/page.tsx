@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { apiConfig } from '@/config/corebill'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
