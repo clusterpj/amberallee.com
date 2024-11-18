@@ -11,9 +11,12 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   async (config) => {
-    const token = localStorage.getItem('corebill_token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    // Check if running on client-side before accessing localStorage
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('corebill_token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
     return config;
   },

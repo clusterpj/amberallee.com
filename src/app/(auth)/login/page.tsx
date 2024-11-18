@@ -15,27 +15,36 @@ export default function LoginPage() {
     setError('')
 
     try {
-      const response = await fetch(`${apiConfig.baseURL}${apiConfig.endpoints.auth.login}`, {
+      const response = await fetch('/api/proxy/login', {
         method: 'POST',
+        credentials: 'include', // Important for CORS with credentials
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password })
-      })
+        body: JSON.stringify({ 
+          email, 
+          password 
+        })
+      });
+
+      console.log('Login Response Status:', response.status);
 
       if (!response.ok) {
-        throw new Error('Login failed')
+        const errorData = await response.json();
+        console.error('Login Error:', errorData);
+        throw new Error(errorData.message || 'Login failed')
       }
 
-      const { token } = await response.json()
+      const { token } = await response.json();
       
-      // Set token in cookies
-      document.cookie = `corebill_token=${token}; path=/; secure; samesite=strict`
+      // Set token in localStorage (more secure than cookies)
+      localStorage.setItem('corebill_token', token);
       
       // Redirect to admin dashboard
       router.push('/admin/dashboard')
     } catch (err) {
-      setError('Invalid credentials')
+      console.error('Login Error:', err);
+      setError(err instanceof Error ? err.message : 'Invalid credentials')
     }
   }
 
