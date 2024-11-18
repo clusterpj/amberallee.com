@@ -18,7 +18,7 @@ apiClient.interceptors.request.use(
 );import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: process.env.COREBILL_API_URL,
+  baseURL: 'http://localhost/v1',
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',

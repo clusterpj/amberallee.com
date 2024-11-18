@@ -4,7 +4,7 @@ import { apiConfig } from '@/config/corebill'
 // CoreBill authentication check
 export async function checkCoreBillAuth(token: string) {
   try {
-    const response = await fetch(`${apiConfig.endpoints.auth.me}`, {
+    const response = await fetch(`${apiConfig.baseURL}${apiConfig.endpoints.auth.me}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
