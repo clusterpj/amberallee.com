@@ -21,10 +21,35 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify(body)
     });
 
-    // Log the response status
+    // Log the response status and text
     console.log('Backend Response Status:', response.status);
+    const responseText = await response.text();
+    console.log('Backend Response Text:', responseText);
 
-    const data = await response.json();
+    // Try to parse the response as JSON
+    let data;
+    try {
+      data = JSON.parse(responseText);
+    } catch (parseError) {
+      console.error('Failed to parse response as JSON:', parseError);
+      return NextResponse.json(
+        { 
+          error: 'Invalid server response', 
+          details: responseText 
+        }, 
+        { 
+          status: 500,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
+            'Access-Control-Allow-Credentials': 'true',
+            'Vary': 'Origin'
+          }
+        }
+      );
+    }
+
     console.log('Backend Response Data:', data);
 
     // Comprehensive CORS headers
