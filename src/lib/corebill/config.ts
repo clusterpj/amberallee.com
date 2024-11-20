@@ -7,9 +7,9 @@ export const apiConfig = {
   timeout: 30000,
   endpoints: {
     auth: {
-      login: 'auth/login',
-      logout: 'auth/logout',
-      me: 'auth/me'
+      login: 'v1/auth/login',
+      logout: 'v1/auth/logout',
+      me: 'v1/auth/me'
     },
     orders: {
       create: 'invoices',
