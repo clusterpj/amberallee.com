@@ -1,7 +1,4 @@
-const environment = typeof window !== 'undefined' 
-  ? import.meta.env.MODE 
-  : process.env.NODE_ENV;
-
+const environment = process.env.NODE_ENV || 'development';
 const isProd = environment === 'production';
 
 export const apiConfig = {
