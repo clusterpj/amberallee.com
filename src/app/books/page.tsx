@@ -49,27 +49,35 @@ export default function BooksPage() {
         </div>
 
         {/* Books Grid */}
-        <div className="grid md:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-2 gap-16 max-w-6xl mx-auto">
           {BOOKS.map((book) => (
-            <Card key={book.title} className="hover:shadow-xl transition-shadow">
-              <CardHeader>
-                <CardTitle>{book.title}</CardTitle>
-                <CardDescription>{book.category}</CardDescription>
+            <Card key={book.title} className="hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <CardHeader className="text-center space-y-4">
+                <CardTitle className="text-3xl font-bold text-gray-900">{book.title}</CardTitle>
+                <CardDescription className="text-lg">
+                  <span className="inline-block bg-pink-100 text-pink-800 px-3 py-1 rounded-full">
+                    {book.category}
+                  </span>
+                </CardDescription>
               </CardHeader>
-              <CardContent>
-                <Image 
-                  src={book.cover} 
-                  alt={book.title} 
-                  width={300} 
-                  height={450} 
-                  className="rounded-xl mx-auto mb-4"
-                />
-                <p className="text-gray-700 mb-4 text-center">{book.description}</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-xl font-bold text-pink-600">${book.price}</span>
-                  <Button asChild variant="default" className="bg-pink-600 hover:bg-pink-700">
-                    <Link href={book.link}>View Details</Link>
-                  </Button>
+              <CardContent className="space-y-6">
+                <div className="relative group">
+                  <Image 
+                    src={book.cover} 
+                    alt={book.title} 
+                    width={400} 
+                    height={600} 
+                    className="rounded-xl mx-auto shadow-lg transform transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl flex items-end justify-center pb-8">
+                    <Button asChild variant="default" className="bg-pink-600 hover:bg-pink-700 text-lg px-8 py-6">
+                      <Link href={book.link}>View Details</Link>
+                    </Button>
+                  </div>
+                </div>
+                <div className="text-center space-y-4">
+                  <p className="text-gray-700 text-lg">{book.description}</p>
+                  <p className="text-2xl font-bold text-pink-600">${book.price}</p>
                 </div>
               </CardContent>
             </Card>

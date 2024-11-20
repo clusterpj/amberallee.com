@@ -89,30 +89,32 @@ export default function Home() {
       </section>
 
       {/* Featured Books Section */}
-      <section className="bg-white py-16">
+      <section className="bg-white py-24">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12 text-gray-900">
+          <h2 className="text-5xl font-bold text-center mb-16 text-gray-900">
             Featured <span className="text-pink-600">Books</span>
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 gap-16 max-w-6xl mx-auto">
             {FEATURED_BOOKS.map((book) => (
-              <Card key={book.title} className="hover:shadow-xl transition-shadow">
-                <CardHeader>
-                  <CardTitle>{book.title}</CardTitle>
-                  <CardDescription>{book.description}</CardDescription>
+              <Card key={book.title} className="hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden">
+                <CardHeader className="text-center space-y-4">
+                  <CardTitle className="text-3xl font-bold text-gray-900">{book.title}</CardTitle>
+                  <CardDescription className="text-lg text-gray-700">{book.description}</CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <Image 
-                    src={book.cover} 
-                    alt={book.title} 
-                    width={300} 
-                    height={450} 
-                    className="rounded-xl mx-auto"
-                  />
-                  <div className="mt-4 text-center">
-                    <Button asChild variant="outline" className="border-pink-600 text-pink-600">
-                      <Link href={book.link}>Learn More</Link>
-                    </Button>
+                <CardContent className="relative">
+                  <div className="relative group">
+                    <Image 
+                      src={book.cover} 
+                      alt={book.title} 
+                      width={400} 
+                      height={600} 
+                      className="rounded-xl mx-auto shadow-lg transform transition-transform duration-300 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl flex items-end justify-center pb-8">
+                      <Button asChild variant="default" className="bg-pink-600 hover:bg-pink-700 text-lg px-8 py-6">
+                        <Link href={book.link}>Explore Book</Link>
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
