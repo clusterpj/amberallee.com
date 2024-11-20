@@ -1,8 +1,9 @@
 import axios from 'axios';
+import apiConfig, { getEndpointUrl } from './config';
 
 const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_COREBILL_API_URL || '/api/proxy',
-  timeout: 30000,
+  baseURL: apiConfig.baseURL,
+  timeout: apiConfig.timeout,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'

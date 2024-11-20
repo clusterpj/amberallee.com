@@ -1,10 +1,11 @@
 import apiClient from './client';
+import apiConfig, { getApiEndpoint } from './config';
 
 export const corebillApi = {
   // Authentication
   auth: {
-    login: (credentials) => apiClient.post('auth/login', credentials),
-    me: () => apiClient.get('me'),
+    login: (credentials) => apiClient.post(getApiEndpoint('auth.login'), credentials),
+    me: () => apiClient.get(getApiEndpoint('auth.me')),
     logout: () => {
       if (typeof window !== 'undefined') {
         localStorage.removeItem('corebill_token');
@@ -16,59 +17,30 @@ export const corebillApi = {
     },
     getCurrentUser: () => {
       const userId = typeof window !== 'undefined' ? localStorage.getItem('corebill_user_id') : null;
-      return userId ? apiClient.get(`users/${userId}`) : Promise.reject('No user logged in');
+      return userId 
+        ? apiClient.get(getApiEndpoint('users').replace('{id}', userId)) 
+        : Promise.reject('No user logged in');
     }
   },
 
   // Orders
   orders: {
-    create: (orderData) => apiClient.post('invoices', orderData),
-    get: (id) => apiClient.get(`invoices/${id}`),
-    list: (params) => apiClient.get('invoices', { params }),
-    update: (id, data) => apiClient.put(`invoices/${id}`, data)
+    create: (orderData) => apiClient.post(getApiEndpoint('orders.create'), orderData),
+    get: (id) => apiClient.get(getApiEndpoint('orders.get').replace('{id}', id)),
+    list: (params) => apiClient.get(getApiEndpoint('orders.list'), { params }),
+    update: (id, data) => apiClient.put(getApiEndpoint('orders.update').replace('{id}', id), data)
   },
 
   // Payments
   payments: {
-    getMethods: () => apiClient.get('payments/multiple/get-payment-methods'),
-    create: (paymentData) => apiClient.post('payments/multiple/create', paymentData)
+    getMethods: () => apiClient.get(getApiEndpoint('payments.methods')),
+    create: (paymentData) => apiClient.post(getApiEndpoint('payments.create'), paymentData)
   },
 
   // Items (Special Editions)
   items: {
-    list: (params) => apiClient.get('items', { params }),
-    get: (id) => apiClient.get(`items/${id}`),
-    update: (id, data) => apiClient.put(`items/${id}`, data)
-  }
-};
-import apiClient from './client';
-import { handleApiError } from './utils';
-
-export const corebillApi = {
-  // Authentication
-  auth: {
-    login: (credentials) => apiClient.post('auth/login', credentials),
-    me: () => apiClient.get('me')
-  },
-
-  // Orders
-  orders: {
-    create: (orderData) => apiClient.post('invoices', orderData),
-    get: (id) => apiClient.get(`invoices/${id}`),
-    list: (params) => apiClient.get('invoices', { params }),
-    update: (id, data) => apiClient.put(`invoices/${id}`, data)
-  },
-
-  // Payments
-  payments: {
-    getMethods: () => apiClient.get('payments/multiple/get-payment-methods'),
-    create: (paymentData) => apiClient.post('payments/multiple/create', paymentData)
-  },
-
-  // Items (Special Editions)
-  items: {
-    list: (params) => apiClient.get('items', { params }),
-    get: (id) => apiClient.get(`items/${id}`),
-    update: (id, data) => apiClient.put(`items/${id}`, data)
+    list: (params) => apiClient.get(getApiEndpoint('items.list'), { params }),
+    get: (id) => apiClient.get(getApiEndpoint('items.get').replace('{id}', id)),
+    update: (id, data) => apiClient.put(getApiEndpoint('items.update').replace('{id}', id), data)
   }
 };
