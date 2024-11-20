@@ -6,16 +6,16 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 
 const FEATURED_BOOKS = [
   {
-    title: "The Price",
-    cover: "/the-price-cover.jpg",
+    title: "The Prince",
+    cover: "/the-prince-cover.jpg",
     description: "The latest captivating romance from Amber Allee.",
-    link: "/books/the-price"
+    link: "/books/the-prince"
   },
   {
-    title: "The Queen",
-    cover: "/the-queen-cover.jpg",
+    title: "Hidden Queen",
+    cover: "/hidden-queen-cover.jpg",
     description: "A dark romance that will keep you on the edge of your seat.",
-    link: "/books/the-queen"
+    link: "/books/hidden-queen"
   }
 ]
 
@@ -77,8 +77,8 @@ export default function Home() {
             </CardHeader>
             <CardContent>
               <Image 
-                src="/the-price-cover.jpg" 
-                alt="The Price - Latest Release" 
+                src="/the-prince-cover.jpg" 
+                alt="The Prince - Latest Release" 
                 width={400} 
                 height={600} 
                 className="rounded-xl"

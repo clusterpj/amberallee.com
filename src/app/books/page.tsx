@@ -10,19 +10,19 @@ const BOOK_CATEGORIES = [
 
 const BOOKS = [
   {
-    title: "The Price",
-    cover: "/book-cover-1.jpg",
+    title: "The Prince",
+    cover: "/the-prince-cover.jpg",
     description: "The latest captivating romance from Amber Allee.",
     category: "Romance",
-    link: "/books/the-price",
+    link: "/books/the-prince",
     price: 19.99
   },
   {
-    title: "The Queen",
-    cover: "/book-cover-2.jpg",
+    title: "Hidden Queen",
+    cover: "/hidden-queen-cover.jpg",
     description: "A dark romance that will keep you on the edge of your seat.",
     category: "Dark Romance",
-    link: "/books/the-queen",
+    link: "/books/hidden-queen",
     price: 17.99
   }
 ]
