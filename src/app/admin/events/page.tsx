@@ -1,6 +1,7 @@
+'use client'
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import AdminLayout from "@/components/admin/AdminLayout"
 
 const UPCOMING_EVENTS = [
   {
