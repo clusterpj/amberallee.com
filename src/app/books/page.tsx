@@ -4,44 +4,26 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 
 const BOOK_CATEGORIES = [
-  "Mafia Romance",
-  "Dark Romance",
-  "Suspense",
-  "Contemporary"
+  "Romance",
+  "Dark Romance"
 ]
 
 const BOOKS = [
   {
-    title: "Crimson Vows",
+    title: "The Price",
     cover: "/book-cover-1.jpg",
-    description: "A dark mafia romance that will leave you breathless.",
-    category: "Mafia Romance",
-    link: "/books/crimson-vows",
+    description: "The latest captivating romance from Amber Allee.",
+    category: "Romance",
+    link: "/books/the-price",
     price: 19.99
   },
   {
-    title: "Midnight Covenant",
+    title: "The Queen",
     cover: "/book-cover-2.jpg",
-    description: "Passion, power, and a love that defies all boundaries.",
+    description: "A dark romance that will keep you on the edge of your seat.",
     category: "Dark Romance",
-    link: "/books/midnight-covenant",
+    link: "/books/the-queen",
     price: 17.99
-  },
-  {
-    title: "Rogue's Redemption",
-    cover: "/book-cover-3.jpg",
-    description: "When love collides with the criminal underworld.",
-    category: "Mafia Romance",
-    link: "/books/rogues-redemption",
-    price: 18.99
-  },
-  {
-    title: "Shadows of Desire",
-    cover: "/book-cover-4.jpg",
-    description: "A gripping tale of forbidden love and dangerous secrets.",
-    category: "Suspense",
-    link: "/books/shadows-of-desire",
-    price: 16.99
   }
 ]
 
