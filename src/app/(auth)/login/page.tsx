@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Playfair_Display } from 'next/font/google'
 import { useRouter } from 'next/navigation'
+import { corebillApi } from '@/lib/corebill/api'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
