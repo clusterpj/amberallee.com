@@ -4,18 +4,63 @@ import apiConfig, { getApiEndpoint } from './config';
 export const corebillApi = {
   // Authentication
   auth: {
-    login: (credentials) => apiClient.post(getApiEndpoint('auth.login'), credentials),
-    me: () => apiClient.get(getApiEndpoint('auth.me')),
-    logout: () => {
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('corebill_token');
-        localStorage.removeItem('corebill_token_type');
-        localStorage.removeItem('corebill_role');
-        localStorage.removeItem('corebill_user_id');
-        window.location.href = '/login';
+    /**
+     * Authenticate user
+     * @param {Object} credentials
+     * @param {string} credentials.email - User email/username
+     * @param {string} credentials.password - User password
+     * @returns {Promise<Object>}
+     */
+    async login(credentials) {
+      try {
+        const response = await apiClient.post(getApiEndpoint('auth.login'), {
+          username: credentials.email, // API expects username
+          password: credentials.password,
+          device_name: 'web' // Default device name for web client
+        });
+        return response.data;
+      } catch (error) {
+        if (error.response?.status === 422) {
+          throw {
+            message: 'Invalid credentials',
+            details: error.response.data.errors || {}
+          };
+        }
+        throw error;
       }
     },
-    getCurrentUser: () => {
+
+    /**
+     * Logout user
+     * @returns {Promise<void>}
+     */
+    async logout() {
+      try {
+        await apiClient.post(getApiEndpoint('auth.logout'));
+      } finally {
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('corebill_token');
+          localStorage.removeItem('corebill_token_type');
+          localStorage.removeItem('corebill_role');
+          localStorage.removeItem('corebill_user_id');
+          window.location.href = '/login';
+        }
+      }
+    },
+
+    /**
+     * Get current user profile
+     * @returns {Promise<Object>}
+     */
+    async getProfile() {
+      return apiClient.get(getApiEndpoint('auth.me'));
+    },
+
+    /**
+     * Get current user
+     * @returns {Promise<Object>}
+     */
+    getCurrentUser() {
       const userId = typeof window !== 'undefined' ? localStorage.getItem('corebill_user_id') : null;
       return userId 
         ? apiClient.get(getApiEndpoint('users').replace('{id}', userId)) 

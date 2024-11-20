@@ -15,47 +15,22 @@ export default function LoginPage() {
     setError('')
 
     try {
-      const response = await fetch('/api/proxy/login', {
-        method: 'POST',
-        credentials: 'include', // Important for CORS with credentials
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          email: email, 
-          password: password 
-        })
+      const { token, user } = await corebillApi.auth.login({ 
+        email, 
+        password 
       });
-
-      console.log('Login Response Status:', response.status);
-
-      let responseData;
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        responseData = await response.json();
-      } else {
-        const textResponse = await response.text();
-        console.error('Non-JSON Response:', textResponse);
-        throw new Error('Server returned invalid response format');
-      }
-
-      if (!response.ok) {
-        throw new Error(responseData.error || 'Login failed: Server returned an error');
-      }
-
-      const { type, token, role, user } = responseData;
       
       // Set token in localStorage with type and role
       localStorage.setItem('corebill_token', token);
-      localStorage.setItem('corebill_token_type', type);
-      localStorage.setItem('corebill_role', role.toLowerCase());
-      localStorage.setItem('corebill_user_id', user?.id || '');
+      localStorage.setItem('corebill_token_type', 'Bearer');
+      localStorage.setItem('corebill_role', user.role.toLowerCase());
+      localStorage.setItem('corebill_user_id', user.id);
       
       // Redirect to admin dashboard
       router.push('/admin/dashboard')
     } catch (err) {
       console.error('Login Error:', err);
-      setError(err instanceof Error ? err.message : 'Invalid credentials')
+      setError(err.message || 'Invalid credentials')
     }
   }
 

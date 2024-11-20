@@ -15,10 +15,9 @@ apiClient.interceptors.request.use(
     // Check if running on client-side before accessing localStorage
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('corebill_token');
-      const tokenType = localStorage.getItem('corebill_token_type') || 'Bearer';
       
       if (token) {
-        config.headers.Authorization = `${tokenType} ${token}`;
+        config.headers.Authorization = `Bearer ${token}`;
       }
     }
     return config;
