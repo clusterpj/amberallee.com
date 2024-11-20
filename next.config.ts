@@ -10,8 +10,8 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/api/proxy/:path*',
-        destination: 'http://localhost/v1/:path*'
+        source: '/api/:path*',
+        destination: 'http://localhost/api/v1/:path*'
       }
     ]
   }
