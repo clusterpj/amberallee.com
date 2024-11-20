@@ -30,17 +30,18 @@ export default function HiddenQueenPage() {
               <div className="space-y-4">
                 <p className="text-2xl font-bold text-pink-600">$17.99</p>
                 <p className="text-gray-700 text-lg leading-relaxed">
-                  A dark romance that pushes boundaries and explores the depths of passion and power. 
-                  Enter a world where love and danger dance in perfect harmony.
+                  It's Sin City, what could go wrong? When Kendall Drake defies her guardians' warning and arrives in Las Vegas, 
+                  she finds herself caught between ambition and desire in a world of power, secrets, and hidden dangers.
                 </p>
               </div>
 
               <div className="space-y-4">
                 <h3 className="text-xl font-semibold text-gray-900">Book Details:</h3>
                 <ul className="space-y-2 text-gray-700">
-                  <li>• Series: Dark Crown Series (Book 1)</li>
+                  <li>• Series: Las Vegas Elite Series (Book 1)</li>
                   <li>• Paperback: 380 pages</li>
-                  <li>• Genre: Dark Romance</li>
+                  <li>• Genre: Mafia Romance</li>
+                  <li>• Tropes: Forced Proximity, Secrets, Found Family, Blind Date, Strong Female Heroine, Hidden Identity</li>
                   <li>• Publication Date: February 2024</li>
                 </ul>
               </div>
@@ -62,15 +63,45 @@ export default function HiddenQueenPage() {
               <CardContent className="space-y-6">
                 <h2 className="text-3xl font-bold text-gray-900">About the Book</h2>
                 <p className="text-gray-700 text-lg leading-relaxed">
-                  In the shadows of an ancient kingdom, a forgotten heir rises. When Sofia discovers 
-                  her true identity as the rightful queen of a powerful dynasty, she must navigate 
-                  a treacherous world of politics, passion, and deadly intrigue.
+                  "You have your whole life ahead of you and I won't let you throw it away to that awful place. 
+                  The answer is no. I'm not going to say it again."
                 </p>
                 <p className="text-gray-700 text-lg leading-relaxed">
-                  "Hidden Queen" delves deep into a world where loyalty comes at a price and love 
-                  can be the deadliest weapon of all. This dark romance will captivate readers with 
-                  its intense passion and complex characters.
+                  When Kendall Drake disregards her guardians' warning and arrives in Las Vegas to accept the summer 
+                  internship of a lifetime, she doesn't expect to meet Wyatt Dawson. Arrogant, rich, and exceedingly 
+                  handsome, he is a delicious distraction that she does not need as she tries to make a name for herself 
+                  in a male-dominated industry. As she juggles her new position and Wyatt's irresistible seduction while 
+                  pretending to be on summer vacation with her friend, Harper, she finds herself caught in a world she 
+                  never knew actually existed. Power plays, secrets, deception, and murder. Kendall soon realizes she's 
+                  bit off more than she can chew when her new life becomes entangled with the life she once led.
                 </p>
+                <p className="text-gray-700 text-lg leading-relaxed">
+                  Who is Wyatt really? Why was she told not to come to Sin City? Danger follows her every move and 
+                  the ghosts of her past lurk in the shadows waiting to tie up loose ends.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Book Teasers */}
+          <div className="mt-16">
+            <Card className="p-8">
+              <CardContent className="space-y-8">
+                <h2 className="text-3xl font-bold text-gray-900">Teasers</h2>
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div className="space-y-4">
+                    <p className="text-gray-700 text-lg italic leading-relaxed">
+                      "Your eyes set you apart from everyone else in this world."<br/>
+                      <span className="text-pink-600 mt-2 block">- Wyatt</span>
+                    </p>
+                  </div>
+                  <div className="space-y-4">
+                    <p className="text-gray-700 text-lg italic leading-relaxed">
+                      "In such a short amount of time you've worked yourself into my whole being and I can't picture a life that doesn't have you by my side."<br/>
+                      <span className="text-pink-600 mt-2 block">- Wyatt</span>
+                    </p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>

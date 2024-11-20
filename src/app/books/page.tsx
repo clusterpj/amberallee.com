@@ -20,8 +20,8 @@ const BOOKS = [
   {
     title: "Hidden Queen",
     cover: "/hidden-queen-cover.jpg",
-    description: "A dark romance that will keep you on the edge of your seat.",
-    category: "Dark Romance",
+    description: "Welcome to Sin City, where danger and romance collide in this thrilling mafia romance filled with secrets and hidden identities.",
+    category: "Mafia Romance",
     link: "/books/hidden-queen",
     price: 17.99
   }
