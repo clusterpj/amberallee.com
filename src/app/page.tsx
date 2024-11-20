@@ -6,22 +6,16 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 
 const FEATURED_BOOKS = [
   {
-    title: "Crimson Vows",
-    cover: "/book-cover-1.jpg",
-    description: "A dark mafia romance that will leave you breathless.",
-    link: "/books/crimson-vows"
+    title: "The Price",
+    cover: "/the-price-cover.jpg",
+    description: "The latest captivating romance from Amber Allee.",
+    link: "/books/the-price"
   },
   {
-    title: "Midnight Covenant",
-    cover: "/book-cover-2.jpg",
-    description: "Passion, power, and a love that defies all boundaries.",
-    link: "/books/midnight-covenant"
-  },
-  {
-    title: "Rogue's Redemption",
-    cover: "/book-cover-3.jpg",
-    description: "When love collides with the criminal underworld.",
-    link: "/books/rogues-redemption"
+    title: "The Queen",
+    cover: "/the-queen-cover.jpg",
+    description: "A dark romance that will keep you on the edge of your seat.",
+    link: "/books/the-queen"
   }
 ]
 
@@ -60,12 +54,12 @@ export default function Home() {
       <section className="container mx-auto px-4 py-16 grid md:grid-cols-2 gap-12 items-center">
         <div className="space-y-6">
           <h1 className="text-5xl font-bold text-gray-900">
-            Mafia Romance <br />
-            <span className="text-pink-600">Where Passion Meets Danger</span>
+            Romance Novels <br />
+            <span className="text-pink-600">That Captivate Your Heart</span>
           </h1>
           <p className="text-xl text-gray-700">
-            Dive into the dark, passionate world of Amber Allee's novels. 
-            Suspense, romance, and edge-of-your-seat storytelling await.
+            Experience the emotional depth and compelling storytelling of Amber Allee's novels.
+            Where romance meets unforgettable characters.
           </p>
           <div className="flex space-x-4">
             <Button asChild variant="default" className="bg-pink-600 hover:bg-pink-700">
@@ -83,8 +77,8 @@ export default function Home() {
             </CardHeader>
             <CardContent>
               <Image 
-                src="/latest-book-cover.jpg" 
-                alt="Latest Book Cover" 
+                src="/the-price-cover.jpg" 
+                alt="The Price - Latest Release" 
                 width={400} 
                 height={600} 
                 className="rounded-xl"
