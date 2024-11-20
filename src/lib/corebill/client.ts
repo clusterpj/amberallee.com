@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: '/api/proxy',
+  baseURL: process.env.NEXT_PUBLIC_COREBILL_API_URL || '/api/proxy',
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
@@ -14,8 +14,10 @@ apiClient.interceptors.request.use(
     // Check if running on client-side before accessing localStorage
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('corebill_token');
+      const tokenType = localStorage.getItem('corebill_token_type') || 'Bearer';
+      
       if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+        config.headers.Authorization = `${tokenType} ${token}`;
       }
     }
     return config;
@@ -23,30 +25,19 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-export default apiClient;
-import axios from 'axios';
-
-const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_COREBILL_API_URL || 'http://localhost/v1/',
-  timeout: 30000,
-  headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json'
-  }
-});
-
-apiClient.interceptors.request.use(
-  async (config) => {
-    // Check if we're running on the client side
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('corebill_token');
-      if (token) {
-        config.headers.Authorization = token;
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // Clear token and redirect to login on unauthorized
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('corebill_token');
+        localStorage.removeItem('corebill_token_type');
+        window.location.href = '/login';
       }
     }
-    return config;
-  },
-  (error) => Promise.reject(error)
+    return Promise.reject(error);
+  }
 );
 
 export default apiClient;

@@ -43,11 +43,13 @@ export default function LoginPage() {
         throw new Error(responseData.error || 'Login failed: Server returned an error');
       }
 
-      const { type, token, role } = responseData;
+      const { type, token, role, user } = responseData;
       
       // Set token in localStorage with type and role
-      localStorage.setItem('corebill_token', `${type} ${token}`);
+      localStorage.setItem('corebill_token', token);
+      localStorage.setItem('corebill_token_type', type);
       localStorage.setItem('corebill_role', role.toLowerCase());
+      localStorage.setItem('corebill_user_id', user?.id || '');
       
       // Redirect to admin dashboard
       router.push('/admin/dashboard')

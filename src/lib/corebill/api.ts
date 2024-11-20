@@ -4,7 +4,20 @@ export const corebillApi = {
   // Authentication
   auth: {
     login: (credentials) => apiClient.post('auth/login', credentials),
-    me: () => apiClient.get('me')
+    me: () => apiClient.get('me'),
+    logout: () => {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('corebill_token');
+        localStorage.removeItem('corebill_token_type');
+        localStorage.removeItem('corebill_role');
+        localStorage.removeItem('corebill_user_id');
+        window.location.href = '/login';
+      }
+    },
+    getCurrentUser: () => {
+      const userId = typeof window !== 'undefined' ? localStorage.getItem('corebill_user_id') : null;
+      return userId ? apiClient.get(`users/${userId}`) : Promise.reject('No user logged in');
+    }
   },
 
   // Orders
