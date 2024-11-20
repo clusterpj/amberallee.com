@@ -2,14 +2,14 @@ const environment = process.env.NODE_ENV || 'development';
 const isProd = environment === 'production';
 
 export const apiConfig = {
-  baseURL: isProd ? 'https://yukikaze/api' : '/api/v1',
+  baseURL: isProd ? 'https://yukikaze/api' : '/api',
   version: '',
   timeout: 30000,
   endpoints: {
     auth: {
-      login: 'v1/auth/login',
-      logout: 'v1/auth/logout',
-      me: 'v1/auth/me'
+      login: 'auth/login',
+      logout: 'auth/logout',
+      me: 'auth/me'
     },
     orders: {
       create: 'invoices',
