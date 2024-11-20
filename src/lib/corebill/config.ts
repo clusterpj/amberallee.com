@@ -2,14 +2,14 @@ const environment = process.env.NODE_ENV || 'development';
 const isProd = environment === 'production';
 
 export const apiConfig = {
-  baseURL: isProd ? 'https://yukikaze/api' : 'http://localhost:3000/api',
-  version: 'corebill',
+  baseURL: isProd ? 'https://yukikaze/api' : 'http://localhost/api',
+  version: 'v1',
   timeout: 30000,
   endpoints: {
     auth: {
-      login: 'corebill/auth/login',
-      logout: 'corebill/auth/logout',
-      me: 'corebill/auth/me'
+      login: 'auth/login',
+      logout: 'auth/logout',
+      me: 'auth/me'
     },
     orders: {
       create: 'invoices',
