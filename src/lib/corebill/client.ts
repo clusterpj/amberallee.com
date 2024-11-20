@@ -24,3 +24,29 @@ apiClient.interceptors.request.use(
 );
 
 export default apiClient;
+import axios from 'axios';
+
+const apiClient = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_COREBILL_API_URL || 'http://localhost/v1/',
+  timeout: 30000,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
+});
+
+apiClient.interceptors.request.use(
+  async (config) => {
+    // Check if we're running on the client side
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('corebill_token');
+      if (token) {
+        config.headers.Authorization = token;
+      }
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+export default apiClient;
