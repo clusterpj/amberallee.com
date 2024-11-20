@@ -8,7 +8,7 @@ const FEATURED_BOOKS = [
   {
     title: "The Prince",
     cover: "/the-prince-cover.jpg",
-    description: "The latest captivating romance from Amber Allee.",
+    description: "First book in the Las Vegas Mafia Series - A story of power, loyalty, and forbidden love.",
     link: "/books/the-prince"
   },
   {

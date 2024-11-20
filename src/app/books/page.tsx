@@ -12,8 +12,8 @@ const BOOKS = [
   {
     title: "The Prince",
     cover: "/the-prince-cover.jpg",
-    description: "The latest captivating romance from Amber Allee.",
-    category: "Romance",
+    description: "First book in the Las Vegas Mafia Series - A story of power, loyalty, and forbidden love.",
+    category: "Mafia Romance",
     link: "/books/the-prince",
     price: 19.99
   },
