@@ -35,15 +35,21 @@ const TESTIMONIALS = [
 const BLOG_POSTS = [
   {
     title: "The Art of Writing Mafia Romance",
-    excerpt: "Dive into my creative process and inspirations...",
+    excerpt: "Discover how real-world research and imagination blend to create compelling mafia romance stories that captivate readers...",
     date: "March 15, 2024",
     link: "/blog/writing-mafia-romance"
   },
   {
-    title: "Behind the Scenes of Crimson Vows",
-    excerpt: "Exclusive insights into my latest novel...",
-    date: "February 22, 2024",
-    link: "/blog/behind-crimson-vows"
+    title: "Behind the Scenes: Las Vegas Elite Series",
+    excerpt: "Take a peek behind the curtain of my latest series and learn about the inspiration behind Hidden Queen...",
+    date: "March 1, 2024",
+    link: "/blog/las-vegas-elite-series"
+  },
+  {
+    title: "Romance Writing Tips: Creating Chemistry",
+    excerpt: "Learn the secrets to writing sizzling chemistry between your characters that keeps readers turning pages...",
+    date: "February 15, 2024",
+    link: "/blog/writing-character-chemistry"
   }
 ]
 
