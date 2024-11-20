@@ -23,7 +23,7 @@ export default function AdminNavigation() {
           </Link>
         </li>
         <li>
-          <Link href="/admin/events" className="block py-2 px-6 hover:bg-gray-100">
+          <Link href="/events" className="block py-2 px-6 hover:bg-gray-100">
             Events
           </Link>
         </li>
