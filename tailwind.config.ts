@@ -9,8 +9,54 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Primary Colors
+        black: "#020202", // Main text, headers
+        white: "#FEFEFE", // Background, contrast elements
+        blue: "#004AAD", // Primary action buttons, links
+        gray: "#484847", // Secondary text, icons
+        
+        // Accent Colors
+        "blue-light": "#69AAD4", // Hover states, progress bars
+        sage: "#718089", // Borders, dividers
+        mint: "#968885", // Success states, secondary buttons
+        pink: "#F6A58D", // Error states, notifications
+        peach: "#EF8EA4", // Highlights, decorative elements
+
+        // Semantic Colors
         background: "var(--background)",
         foreground: "var(--foreground)",
+        primary: {
+          DEFAULT: "var(--primary)",
+          hover: "var(--primary-hover)",
+          foreground: "var(--primary-foreground)",
+        },
+        secondary: {
+          DEFAULT: "var(--secondary)",
+          hover: "var(--secondary-hover)",
+          foreground: "var(--secondary-foreground)",
+        },
+        accent: {
+          DEFAULT: "var(--accent)",
+          hover: "var(--accent-hover)",
+          foreground: "var(--accent-foreground)",
+        },
+        success: {
+          DEFAULT: "var(--success)",
+          foreground: "var(--success-foreground)",
+        },
+        error: {
+          DEFAULT: "var(--error)",
+          foreground: "var(--error-foreground)",
+        },
+        muted: {
+          DEFAULT: "var(--muted)",
+          foreground: "var(--muted-foreground)",
+        },
+        border: "var(--border)",
+        input: "var(--input)",
+      },
+      backgroundImage: {
+        'leopard-pattern': "url('/patterns/leopard.png')", // You'll need to add this image
       },
       typography: {
         DEFAULT: {
