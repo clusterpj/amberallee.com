@@ -46,29 +46,45 @@ const BLOG_POSTS = [
 
 export default function BlogPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-100 to-white py-16">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 to-accent/10 py-16 animate-gradient-x">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-5xl font-bold text-center mb-12 text-gray-900">
-            Author <span className="text-pink-600">Blog</span>
+          <h1 className="text-6xl font-heading font-bold text-center mb-4 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-shimmer">
+            Author Blog
           </h1>
+          <p className="text-center text-lg text-muted-foreground mb-12 max-w-2xl mx-auto">
+            Explore writing tips, behind-the-scenes insights, and updates about my latest works
+          </p>
 
           <div className="space-y-8">
             {BLOG_POSTS.map((post) => (
               <Link href={`/blog/${post.slug}`} key={post.slug}>
-                <Card className="hover:shadow-xl transition-shadow cursor-pointer">
+                <Card className="group hover:shadow-xl transition-all duration-300 border border-accent/20 backdrop-blur-sm bg-white/70 hover:bg-white/90">
                   <CardHeader>
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm text-pink-600">{post.category}</span>
-                      <span className="text-sm text-gray-500">{post.date}</span>
+                      <span className="text-sm font-medium px-3 py-1 rounded-full bg-accent/10 text-primary">
+                        {post.category}
+                      </span>
+                      <span className="text-sm text-muted-foreground">{post.date}</span>
                     </div>
-                    <CardTitle className="text-2xl">{post.title}</CardTitle>
-                    <CardDescription className="text-sm text-gray-500">
+                    <CardTitle className="text-2xl group-hover:text-secondary transition-colors">
+                      {post.title}
+                    </CardTitle>
+                    <CardDescription className="text-sm text-muted-foreground flex items-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                      </svg>
                       {post.readTime}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-700">{post.excerpt}</p>
+                    <p className="text-gray-700 line-clamp-3">{post.excerpt}</p>
+                    <div className="mt-4 flex items-center text-secondary font-medium">
+                      Read More
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                      </svg>
+                    </div>
                   </CardContent>
                 </Card>
               </Link>

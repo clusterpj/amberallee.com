@@ -80,13 +80,24 @@ export default {
         shimmer: {
           '0%': { backgroundPosition: '200% 0' },
           '100%': { backgroundPosition: '-200% 0' },
+        },
+        "gradient-x": {
+          "0%, 100%": {
+            "background-size": "200% 200%",
+            "background-position": "left center"
+          },
+          "50%": {
+            "background-size": "200% 200%",
+            "background-position": "right center"
+          }
         }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "sparkle": "sparkle 1.5s ease-in-out infinite",
-        "shimmer": "shimmer 3s linear infinite"
+        "shimmer": "shimmer 3s linear infinite",
+        "gradient-x": "gradient-x 15s ease infinite"
       },
       backgroundImage: {
         'metallic-gradient': 'linear-gradient(135deg, #C0C0C0 0%, #E8E8E8 50%, #C0C0C0 100%)',
