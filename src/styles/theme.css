@@ -1,0 +1,120 @@
+@layer base {
+  :root {
+    --background: 220 33% 98%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+ 
+    --primary: 222 69% 12%;
+    --primary-foreground: 210 40% 98%;
+ 
+    --secondary: 217 52% 40%;
+    --secondary-foreground: 210 40% 98%;
+ 
+    --accent: 214 83% 90%;
+    --accent-foreground: 222 47% 11%;
+ 
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222 47% 11%;
+ 
+    --radius: 0.5rem;
+  }
+ 
+  .dark {
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+ 
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+ 
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+ 
+    --primary: 210 40% 98%;
+    --primary-foreground: 222 47% 11%;
+ 
+    --secondary: 217 52% 40%;
+    --secondary-foreground: 210 40% 98%;
+ 
+    --accent: 214 83% 90%;
+    --accent-foreground: 222 47% 11%;
+ 
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+ 
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+/* Metallic Effects */
+.metallic {
+  background-image: linear-gradient(135deg, #C0C0C0 0%, #E8E8E8 50%, #C0C0C0 100%);
+  background-size: 200% auto;
+}
+
+.metallic:hover {
+  animation: shimmer 3s linear infinite;
+}
+
+/* Crystal Effects */
+.crystal {
+  background: rgba(209, 227, 249, 0.2);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(209, 227, 249, 0.3);
+}
+
+.crystal:hover {
+  background: rgba(209, 227, 249, 0.3);
+  border-color: rgba(209, 227, 249, 0.4);
+}
+
+/* Interactive Elements */
+.sparkle {
+  position: relative;
+}
+
+.sparkle::after {
+  content: '';
+  position: absolute;
+  top: -10%;
+  right: -10%;
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle, #D1E3F9 0%, transparent 70%);
+  animation: sparkle 1.5s ease-in-out infinite;
+}
+
+@keyframes casinoGlow {
+  0% {
+    opacity: 0.3;
+    filter: blur(8px);
+  }
+  50% {
+    opacity: 0.5;
+    filter: blur(12px);
+  }
+  100% {
+    opacity: 0.3;
+    filter: blur(8px);
+  }
+}
+
+.casino-glow {
+  animation: casinoGlow 3s ease-in-out infinite;
+}
