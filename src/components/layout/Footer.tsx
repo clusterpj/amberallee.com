@@ -30,7 +30,6 @@ export default function Footer() {
           <h3 className="text-xl font-bold mb-4 text-pink-400">Quick Links</h3>
           <nav className="space-y-2">
             <Link href="/books" className="block text-gray-300 hover:text-pink-400">Books</Link>
-            <Link href="/blog" className="block text-gray-300 hover:text-pink-400">Blog</Link>
             <Link href="/events" className="block text-gray-300 hover:text-pink-400">Events</Link>
             <Link href="/contact" className="block text-gray-300 hover:text-pink-400">Contact</Link>
           </nav>
@@ -61,7 +60,7 @@ export default function Footer() {
       {/* Copyright */}
       <div className="text-center mt-8 pt-4 border-t border-gray-700">
         <p className="text-gray-400">
-          © {new Date().getFullYear()} Amber Allee. All Rights Reserved.
+          &copy; {new Date().getFullYear()} Amber Allee. All Rights Reserved.
         </p>
       </div>
     </footer>

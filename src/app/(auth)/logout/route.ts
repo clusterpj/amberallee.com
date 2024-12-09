@@ -1,22 +1,31 @@
-import { NextResponse } from 'next/server'
-import { apiConfig } from '@/config/corebill'
+import { cookies } from 'next/headers';
+import { NextResponse } from 'next/server';
 
-export async function GET(request: Request) {
-  // Clear CoreBill token cookie
-  const response = NextResponse.redirect(new URL('/login', request.url))
-  response.cookies.delete('corebill_token')
-
-  // Optional: Call CoreBill logout endpoint if needed
+export async function POST() {
   try {
-    await fetch(`${apiConfig.baseURL}${apiConfig.endpoints.auth.logout}`, {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('corebill_token');
+
+    if (!token) {
+      return NextResponse.json({ error: 'No token found' }, { status: 401 });
+    }
+
+    await fetch(`${process.env.COREBILL_API_URL}/auth/logout`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${request.cookies.get('corebill_token')}`
+        'Authorization': `Bearer ${token.value}`
       }
-    })
-  } catch (error) {
-    console.error('Logout failed:', error)
-  }
+    });
 
-  return response
+    // Create a response
+    const response = NextResponse.json({ success: true });
+    
+    // Delete the cookie
+    response.cookies.delete('corebill_token');
+
+    return response;
+  } catch (error) {
+    console.error('Logout Error:', error);
+    return NextResponse.json({ error: 'Failed to logout' }, { status: 500 });
+  }
 }

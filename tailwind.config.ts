@@ -39,6 +39,16 @@ export default {
           hover: "#b3b3b3",
           foreground: "#0A1933"
         },
+        highlight1: {
+          DEFAULT: "#EF8EA4",
+          hover: "#e57d95",
+          foreground: "#020202"
+        },
+        highlight2: {
+          DEFAULT: "#718089",
+          hover: "#5f6b73",
+          foreground: "#FEFEFE"
+        },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: "hsl(var(--card))",

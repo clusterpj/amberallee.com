@@ -5,7 +5,9 @@ const nextConfig = {
     domains: ['your-image-domain.com'],
   },
   experimental: {
-    serverActions: true,
+    serverActions: {
+      bodySizeLimit: '2mb'
+    }
   },
   async rewrites() {
     return [

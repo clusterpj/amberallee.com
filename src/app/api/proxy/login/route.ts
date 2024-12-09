@@ -8,16 +8,19 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     console.log('Request Body:', body);
 
+    const authHeader = request.headers.get('authorization')
+
+    const headers: HeadersInit = {
+      'Content-Type': 'application/json'
+    }
+
+    if (authHeader) {
+      headers['Authorization'] = authHeader
+    }
+
     const response = await fetch('http://localhost/v1/auth/login', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        // Forward any authorization headers if present
-        ...(request.headers.get('authorization') ? 
-          { 'Authorization': request.headers.get('authorization') } : 
-          {}
-        )
-      },
+      headers,
       body: JSON.stringify(body)
     });
 
@@ -25,75 +28,31 @@ export async function POST(request: NextRequest) {
     console.log('Backend Response Status:', response.status);
     console.log('Backend Response Headers:', Object.fromEntries(response.headers));
 
-    // Check content type before parsing
-    const contentType = response.headers.get('content-type') || '';
-    console.log('Content-Type:', contentType);
+    const data = await response.json()
 
-    // If not JSON, throw an error
-    if (!contentType.includes('application/json')) {
-      const responseText = await response.text();
-      console.error('Non-JSON response:', responseText);
-      
-      return NextResponse.json(
-        { 
-          error: 'Authentication failed', 
-          details: 'Received non-JSON response from server' 
-        }, 
-        { 
-          status: 500,
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
-            'Access-Control-Allow-Credentials': 'true',
-            'Vary': 'Origin'
-          }
-        }
-      );
+    if (!response.ok) {
+      return NextResponse.json(data, { status: response.status })
     }
 
-    // Parse JSON response
-    let data;
-    try {
-      data = await response.json();
-    } catch (parseError) {
-      console.error('Failed to parse JSON response:', parseError);
-      return NextResponse.json(
-        { 
-          error: 'Authentication failed', 
-          details: 'Invalid JSON response from server' 
-        }, 
-        { 
-          status: 500,
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
-            'Access-Control-Allow-Credentials': 'true',
-            'Vary': 'Origin'
-          }
-        }
-      );
-    }
+    // Create response with the token
+    const nextResponse = NextResponse.json(data)
 
-    console.log('Backend Response Data:', data);
+    // Set the cookie in the response
+    nextResponse.cookies.set('corebill_token', data.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/'
+    })
 
-    // Comprehensive CORS headers
-    const corsHeaders = {
-      'Access-Control-Allow-Origin': '*', // Be more specific in production
-      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
-      'Access-Control-Allow-Credentials': 'true',
-      'Vary': 'Origin'
-    };
+    // Add CORS headers
+    nextResponse.headers.set('Access-Control-Allow-Origin', '*')
+    nextResponse.headers.set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+    nextResponse.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
+    nextResponse.headers.set('Access-Control-Allow-Credentials', 'true')
+    nextResponse.headers.set('Vary', 'Origin')
 
-    // Create response with CORS headers
-    const nextResponse = NextResponse.json(data, { 
-      status: response.status,
-      headers: corsHeaders 
-    });
-
-    return nextResponse;
+    return nextResponse
   } catch (error) {
     console.error('Proxy Login Error:', error);
 

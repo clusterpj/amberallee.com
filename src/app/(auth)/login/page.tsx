@@ -31,7 +31,11 @@ export default function LoginPage() {
       router.push('/admin/dashboard')
     } catch (err) {
       console.error('Login Error:', err);
-      setError(err.message || 'Invalid credentials')
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Invalid credentials');
+      }
     }
   }
 

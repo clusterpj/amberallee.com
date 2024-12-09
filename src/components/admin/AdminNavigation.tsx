@@ -18,11 +18,6 @@ export default function AdminNavigation() {
           </Link>
         </li>
         <li>
-          <Link href="/admin/blog" className="block py-2 px-6 hover:bg-gray-100">
-            Blog Posts
-          </Link>
-        </li>
-        <li>
           <Link href="/events" className="block py-2 px-6 hover:bg-gray-100">
             Events
           </Link>

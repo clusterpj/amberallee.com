@@ -1,33 +1,34 @@
 import { AxiosError } from 'axios';
 
-interface ErrorResponse {
+class ApiError extends Error {
   success: boolean;
-  message: string;
   errors?: Record<string, string[]>;
   statusCode?: number;
+
+  constructor(message: string) {
+    super(message);
+    this.name = 'ApiError';
+    this.success = false;
+  }
 }
 
-export const handleApiError = (error: AxiosError): ErrorResponse => {
-  const errorResponse: ErrorResponse = {
-    success: false,
-    message: error.message,
-    errors: {}
-  };
+export const handleApiError = (error: AxiosError): ApiError => {
+  const apiError = new ApiError(error.message);
 
   if (error.response) {
     switch (error.response.status) {
       case 401:
-        errorResponse.message = 'Authentication required';
+        apiError.message = 'Authentication required';
         break;
       case 422:
-        errorResponse.message = 'Validation failed';
-        errorResponse.errors = (error.response.data as any)?.errors || {};
+        apiError.message = 'Validation failed';
+        apiError.errors = (error.response.data as any)?.errors || {};
         break;
       default:
-        errorResponse.message = (error.response.data as any)?.message || 'An unexpected error occurred';
+        apiError.message = (error.response.data as any)?.message || 'An unexpected error occurred';
     }
-    errorResponse.statusCode = error.response.status;
+    apiError.statusCode = error.response.status;
   }
 
-  return errorResponse;
+  return apiError;
 };

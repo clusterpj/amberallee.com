@@ -3,11 +3,21 @@ import { corebillApi } from '../api';
 import { handleApiError } from '../utils';
 import { AxiosError } from 'axios';
 
-export const useCorebill = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+interface OrderData {
+  // Add the properties that your order data should have
+  [key: string]: any; // This is a temporary solution, replace with actual properties
+}
 
-  const createOrder = async (orderData) => {
+interface PaymentData {
+  // Add the properties that your payment data should have
+  [key: string]: any; // This is a temporary solution, replace with actual properties
+}
+
+export function useCorebill() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const createOrder = async (orderData: OrderData) => {
     setLoading(true);
     try {
       const response = await corebillApi.orders.create(orderData);
@@ -21,7 +31,7 @@ export const useCorebill = () => {
     }
   };
 
-  const processPayment = async (paymentData) => {
+  const processPayment = async (paymentData: PaymentData) => {
     setLoading(true);
     try {
       const response = await corebillApi.payments.create(paymentData);
