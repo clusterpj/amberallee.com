@@ -24,7 +24,8 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
     description: book?.description || '',
     amazonLink: book?.amazon_link || '',
     publishedDate: book?.published_date || '',
-    coverImage: book?.cover_image_url || ''
+    coverImage: book?.cover_image_url || '',
+    price: book?.price || 0
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -138,6 +139,19 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
                 onChange={(e) => setFormData(prev => ({ ...prev, coverImage: e.target.value }))}
                 className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 placeholder="https://example.com/cover.jpg"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-700">Price (in cents)</label>
+              <input
+                type="number"
+                value={formData.price}
+                onChange={(e) => setFormData(prev => ({ ...prev, price: parseInt(e.target.value) || 0 }))}
+                className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                placeholder="2999 (29.99)"
+                min="0"
+                step="1"
               />
               {formData.coverImage && (
                 <div className="mt-2">

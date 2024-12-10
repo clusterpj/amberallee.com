@@ -15,6 +15,7 @@ interface Book {
   cover_image_url: string
   created_at: string
   updated_at: string
+  price: number
 }
 
 export default function AdminBooksPage() {
