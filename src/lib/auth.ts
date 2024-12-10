@@ -160,6 +160,7 @@ export async function signUp(email: string, password: string) {
 }
 
 export async function signIn(email: string, password: string) {
+  // Sign in with Supabase
   const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
     email,
     password
@@ -181,12 +182,22 @@ export async function signIn(email: string, password: string) {
     if (!userData && !userError) {
       await createUserRecord(authData.user.id, authData.user.email!)
     }
+
+    // Store session tokens in cookies
+    if (authData.session) {
+      document.cookie = `sb-access-token=${authData.session.access_token}; path=/; max-age=${60 * 60}`
+      document.cookie = `sb-refresh-token=${authData.session.refresh_token}; path=/; max-age=${60 * 60 * 24 * 7}`
+    }
   }
 
   return authData
 }
 
 export async function signOut() {
+  // Clear session cookies
+  document.cookie = 'sb-access-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT'
+  document.cookie = 'sb-refresh-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT'
+  
   const { error } = await supabase.auth.signOut()
   if (error) throw error
 }

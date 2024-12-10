@@ -9,6 +9,41 @@ export interface CustomUser extends User {
   role?: string
 }
 
+async function ensureUserRecord(user: User): Promise<string> {
+  try {
+    // Try to get existing user record
+    const { data: userData, error } = await supabase
+      .from('users')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+
+    if (error && error.code === 'PGRST116') {
+      // User doesn't exist, create new record
+      const { data: newUser, error: insertError } = await supabase
+        .from('users')
+        .insert([
+          {
+            id: user.id,
+            email: user.email,
+            role: 'customer'
+          }
+        ])
+        .select('role')
+        .single()
+
+      if (insertError) throw insertError
+      return newUser?.role || 'customer'
+    }
+
+    if (error) throw error
+    return userData?.role || 'customer'
+  } catch (error) {
+    console.error('Error in ensureUserRecord:', error)
+    return 'customer'
+  }
+}
+
 export function useAuth() {
   const [user, setUser] = useState<CustomUser | null>(null)
   const [loading, setLoading] = useState(true)
@@ -17,69 +52,47 @@ export function useAuth() {
   useEffect(() => {
     let mounted = true
 
-    // Get initial session
     const initializeAuth = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession()
         
         if (session?.user && mounted) {
-          // Get user data from our custom table
-          const { data: userData } = await supabase
-            .from('users')
-            .select('role')
-            .eq('id', session.user.id)
-            .single()
-
+          const role = await ensureUserRecord(session.user)
           const customUser: CustomUser = {
             ...session.user,
-            role: userData?.role || 'customer'
+            role
           }
-
           setUser(customUser)
         } else if (mounted) {
           setUser(null)
         }
       } catch (error) {
-        console.error('Error getting session:', error)
-        if (mounted) {
-          setUser(null)
-        }
+        console.error('Error in initializeAuth:', error)
+        if (mounted) setUser(null)
       } finally {
-        if (mounted) {
-          setLoading(false)
-        }
+        if (mounted) setLoading(false)
       }
     }
 
     initializeAuth()
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('Auth state changed:', event, session)
       
       if (session?.user && mounted) {
-        // Get user data from our custom table
-        const { data: userData } = await supabase
-          .from('users')
-          .select('role')
-          .eq('id', session.user.id)
-          .single()
-
+        const role = await ensureUserRecord(session.user)
         const customUser: CustomUser = {
           ...session.user,
-          role: userData?.role || 'customer'
+          role
         }
-
         setUser(customUser)
         
-        // If signing in, redirect to dashboard
         if (event === 'SIGNED_IN') {
           router.push('/dashboard')
         }
       } else if (mounted) {
         setUser(null)
         
-        // If signing out, redirect to home
         if (event === 'SIGNED_OUT') {
           router.push('/')
         }
