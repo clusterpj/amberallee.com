@@ -10,13 +10,13 @@ interface Book {
   id: number
   title: string
   description: string
-  amazonLink: string
-  releaseDate: string
-  coverImage: string
+  amazon_link: string
+  release_date: string
+  cover_image: string
   tropes: string[]
   series: string
-  seriesOrder: number
-  isPublished: boolean
+  series_order: number
+  is_published: boolean
   created_at: string
   updated_at: string
 }
