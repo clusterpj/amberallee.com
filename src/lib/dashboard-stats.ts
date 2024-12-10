@@ -1,4 +1,4 @@
-import { sql } from '@vercel/postgres'
+import { supabase } from '@/lib/supabase'
 
 interface DashboardStats {
   totalBooks: number
@@ -8,16 +8,28 @@ interface DashboardStats {
 
 export async function fetchDashboardStats(): Promise<DashboardStats> {
   try {
-    const [booksResult, postsResult, eventsResult] = await Promise.all([
-      sql`SELECT COUNT(*) as total FROM books`,
-      sql`SELECT COUNT(*) as total FROM blog_posts WHERE published_at <= NOW()`,
-      sql`SELECT COUNT(*) as total FROM events WHERE date > NOW()`
+    const [
+      { count: totalBooks = 0 },
+      { count: totalBlogPosts = 0 },
+      { count: upcomingEvents = 0 }
+    ] = await Promise.all([
+      supabase
+        .from('books')
+        .select('*', { count: 'exact', head: true }),
+      supabase
+        .from('blog_posts')
+        .select('*', { count: 'exact', head: true })
+        .lte('published_at', new Date().toISOString()),
+      supabase
+        .from('events')
+        .select('*', { count: 'exact', head: true })
+        .gt('date', new Date().toISOString())
     ])
 
     return {
-      totalBooks: parseInt(booksResult.rows[0].total),
-      totalBlogPosts: parseInt(postsResult.rows[0].total),
-      upcomingEvents: parseInt(eventsResult.rows[0].total)
+      totalBooks: totalBooks || 0,
+      totalBlogPosts: totalBlogPosts || 0,
+      upcomingEvents: upcomingEvents || 0
     }
   } catch (error) {
     console.error('Failed to fetch dashboard stats:', error)
