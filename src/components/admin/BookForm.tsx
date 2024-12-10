@@ -7,16 +7,12 @@ import { supabase } from '@/lib/supabase'
 
 interface BookFormProps {
   book?: {
-    id?: number
+    id?: string
     title: string
     description: string
     amazonLink: string
-    releaseDate: string
+    publishedDate: string
     coverImage: string
-    tropes: string[]
-    series: string
-    seriesOrder: number
-    isPublished: boolean
   }
   onSuccess?: () => void
 }
@@ -26,12 +22,8 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
     title: book?.title || '',
     description: book?.description || '',
     amazonLink: book?.amazonLink || '',
-    releaseDate: book?.releaseDate || '',
-    coverImage: book?.coverImage || '',
-    tropes: book?.tropes?.join(', ') || '',
-    series: book?.series || '',
-    seriesOrder: book?.seriesOrder || 0,
-    isPublished: book?.isPublished || false
+    publishedDate: book?.publishedDate || '',
+    coverImage: book?.coverImage || ''
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -46,12 +38,8 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         title: formData.title,
         description: formData.description,
         amazon_link: formData.amazonLink,
-        release_date: formData.releaseDate,
+        published_date: formData.publishedDate,
         cover_image_url: formData.coverImage,
-        tropes: formData.tropes.split(',').map(trope => trope.trim()).filter(Boolean),
-        series: formData.series,
-        series_order: formData.seriesOrder,
-        is_published: formData.isPublished,
         updated_at: new Date().toISOString()
       }
 
@@ -131,11 +119,11 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-medium">Release Date</label>
+              <label className="block text-sm font-medium">Published Date</label>
               <input
                 type="date"
-                value={formData.releaseDate}
-                onChange={(e) => setFormData(prev => ({ ...prev, releaseDate: e.target.value }))}
+                value={formData.publishedDate}
+                onChange={(e) => setFormData(prev => ({ ...prev, publishedDate: e.target.value }))}
                 className="w-full p-2 border rounded"
               />
             </div>
@@ -147,38 +135,6 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
                 value={formData.coverImage}
                 onChange={(e) => setFormData(prev => ({ ...prev, coverImage: e.target.value }))}
                 className="w-full p-2 border rounded"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium">Series</label>
-              <input
-                type="text"
-                value={formData.series}
-                onChange={(e) => setFormData(prev => ({ ...prev, series: e.target.value }))}
-                className="w-full p-2 border rounded"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium">Series Order</label>
-              <input
-                type="number"
-                value={formData.seriesOrder}
-                onChange={(e) => setFormData(prev => ({ ...prev, seriesOrder: parseInt(e.target.value) || 0 }))}
-                className="w-full p-2 border rounded"
-                min="0"
-              />
-            </div>
-
-            <div className="space-y-2 col-span-2">
-              <label className="block text-sm font-medium">Tropes (comma-separated)</label>
-              <input
-                type="text"
-                value={formData.tropes}
-                onChange={(e) => setFormData(prev => ({ ...prev, tropes: e.target.value }))}
-                className="w-full p-2 border rounded"
-                placeholder="Romance, Fantasy, Adventure"
               />
             </div>
 

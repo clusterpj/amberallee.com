@@ -7,16 +7,12 @@ import BookForm from '@/components/admin/BookForm'
 import { supabase } from '@/lib/supabase'
 
 interface Book {
-  id: number
+  id: string
   title: string
   description: string
   amazon_link: string
-  release_date: string
+  published_date: string
   cover_image_url: string
-  tropes: string[]
-  series: string
-  series_order: number
-  is_published: boolean
   created_at: string
   updated_at: string
 }
