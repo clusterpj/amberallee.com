@@ -1,145 +1,9 @@
+import { supabase } from '@/lib/supabase'
 import Image from "next/image"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-
-const BOOKS = [
-  {
-    title: "The Prince",
-    cover: "/the-prince-cover.jpg",
-    description: "First book in the Las Vegas Mafia Series - A story of power, loyalty, and forbidden love.",
-    category: "Mafia Romance",
-    link: "/books/the-prince",
-    price: 19.99,
-    series: "Las Vegas Mafia Series, Book 1"
-  },
-  {
-    title: "Hidden Queen",
-    cover: "/hidden-queen-cover.jpg",
-    description: "Welcome to Sin City, where danger and romance collide in this thrilling mafia romance filled with secrets and hidden identities.",
-    category: "Mafia Romance",
-    link: "/books/hidden-queen",
-    price: 17.99,
-    series: "Las Vegas Elite Series, Book 1"
-  }
-]
-
-export default function BooksPage() {
-  return (
-    <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <section 
-        style={{
-          background: 'linear-gradient(to right, rgba(209, 227, 249, 0.2), rgba(209, 227, 249, 0.05))'
-        }}
-        className="w-full relative py-20"
-      >
-        <div className="container mx-auto px-4">
-          <div className="text-center space-y-6 max-w-3xl mx-auto">
-            <h1 className="text-6xl font-bold">
-              <span className={cn(
-                "bg-gradient-to-r from-[#0A1933] to-[#2851A3]",
-                "bg-clip-text text-transparent",
-                "crystal sparkle"
-              )}>
-                Explore My Books
-              </span>
-            </h1>
-            <p className="text-xl text-foreground/80">
-              Dive into a world of passion, intrigue, and romance. Each story is crafted to take you on an unforgettable journey.
-            </p>
-          </div>
-        </div>
-
-        {/* Decorative Elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-1/2 -right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-          <div className="absolute -bottom-1/2 -left-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-3xl" />
-        </div>
-      </section>
-
-      <div className="container mx-auto px-4 py-16">
-        {/* Books Grid */}
-        <div className="grid md:grid-cols-2 gap-16 max-w-6xl mx-auto">
-          {BOOKS.map((book) => (
-            <Card 
-              key={book.title} 
-              className={cn(
-                "group relative overflow-hidden",
-                "hover:shadow-2xl transition-all duration-500",
-                "bg-background/50 backdrop-blur-sm",
-                "border border-primary/10 hover:border-primary/20"
-              )}
-            >
-              <CardHeader className="text-center space-y-4">
-                <CardTitle className="text-3xl font-bold">
-                  <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                    {book.title}
-                  </span>
-                </CardTitle>
-                <CardDescription className="text-lg">
-                  <span className={cn(
-                    "inline-block px-4 py-1.5 rounded-full",
-                    "bg-primary/5 text-primary",
-                    "border border-primary/10"
-                  )}>
-                    {book.category}
-                  </span>
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-8">
-                <div className="relative group">
-                  <div className="relative aspect-[2/3] overflow-hidden rounded-xl">
-                    <Image 
-                      src={book.cover} 
-                      alt={book.title} 
-                      fill
-                      className={cn(
-                        "object-cover",
-                        "transform transition-transform duration-500",
-                        "group-hover:scale-105"
-                      )}
-                    />
-                    <div className={cn(
-                      "absolute inset-0",
-                      "bg-gradient-to-t from-black/60 to-transparent",
-                      "opacity-0 group-hover:opacity-100",
-                      "transition-opacity duration-500",
-                      "flex items-end justify-center pb-8"
-                    )}>
-                      <Button 
-                        asChild 
-                        variant="default" 
-                        className={cn(
-                          "metallic",
-                          "bg-primary text-primary-foreground",
-                          "text-lg px-8 py-6"
-                        )}
-                      >
-                        <Link href={book.link}>View Details</Link>
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-4 text-center">
-                  <p className="text-lg text-foreground/80">{book.description}</p>
-                  <p className="text-sm text-foreground/60">{book.series}</p>
-                  <p className="text-2xl font-bold">
-                    <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                      ${book.price}
-                    </span>
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
-import { supabase } from '@/lib/supabase'
 
 interface Book {
   id: string
@@ -169,59 +33,107 @@ export default async function BooksPage() {
   const books = await getBooks()
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <section className="text-center mb-12">
-        <h1 className="text-4xl font-bold mb-4">Explore My Books</h1>
-        <p className="text-lg text-gray-600">
-          Dive into a world of passion, intrigue, and romance. Each story is
-          crafted to take you on an unforgettable journey.
-        </p>
+    <div className="min-h-screen bg-background">
+      {/* Hero Section */}
+      <section 
+        style={{
+          background: 'linear-gradient(to right, rgba(209, 227, 249, 0.2), rgba(209, 227, 249, 0.05))'
+        }}
+        className="w-full relative py-20"
+      >
+        <div className="container mx-auto px-4">
+          <div className="text-center space-y-6 max-w-3xl mx-auto">
+            <h1 className="text-6xl font-bold">
+              <span className={cn(
+                "bg-gradient-to-r from-[#0A1933] to-[#2851A3]",
+                "bg-clip-text text-transparent"
+              )}>
+                Explore My Books
+              </span>
+            </h1>
+            <p className="text-xl text-foreground/80">
+              Dive into a world of passion, intrigue, and romance. Each story is crafted to take you on an unforgettable journey.
+            </p>
+          </div>
+        </div>
+
+        {/* Decorative Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-1/2 -right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+          <div className="absolute -bottom-1/2 -left-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-3xl" />
+        </div>
       </section>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {books.map((book) => (
-          <div key={book.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-200">
-            {book.cover_image_url && (
-              <div className="aspect-[2/3] relative">
-                <img
-                  src={book.cover_image_url}
-                  alt={book.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            )}
-            <div className="p-6">
-              <h3 className="text-xl font-bold mb-2">{book.title}</h3>
-              <div className="text-sm text-gray-500 mb-3">
-                Published: {new Date(book.published_date).toLocaleDateString()}
-              </div>
-              <p className="text-gray-600 mb-4 line-clamp-3">{book.description}</p>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-xl font-bold text-blue-600">
-                    ${(book.price / 100).toFixed(2)}
+      <div className="container mx-auto px-4 py-16">
+        {/* Books Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {books.map((book) => (
+            <Card 
+              key={book.id} 
+              className={cn(
+                "group relative overflow-hidden",
+                "hover:shadow-2xl transition-all duration-500",
+                "bg-background/50 backdrop-blur-sm",
+                "border border-primary/10 hover:border-primary/20"
+              )}
+            >
+              <CardHeader className="text-center space-y-4">
+                <CardTitle className="text-2xl font-bold">
+                  <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                    {book.title}
                   </span>
-                  <a
-                    href={`/books/${book.id}`}
-                    className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200"
-                  >
-                    View Details
-                  </a>
-                </div>
-                {book.amazon_link && (
-                  <a
-                    href={book.amazon_link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center w-full px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors duration-200"
-                  >
-                    Buy on Amazon
-                  </a>
+                </CardTitle>
+                <CardDescription className="text-sm text-gray-500">
+                  Published: {new Date(book.published_date).toLocaleDateString()}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {book.cover_image_url && (
+                  <div className="relative aspect-[2/3] overflow-hidden rounded-xl">
+                    <img 
+                      src={book.cover_image_url}
+                      alt={book.title}
+                      className="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className={cn(
+                      "absolute inset-0",
+                      "bg-gradient-to-t from-black/60 to-transparent",
+                      "opacity-0 group-hover:opacity-100",
+                      "transition-opacity duration-500",
+                      "flex items-end justify-center pb-8"
+                    )}>
+                      <Button 
+                        asChild 
+                        variant="default" 
+                        className="bg-primary text-primary-foreground px-6 py-2"
+                      >
+                        <Link href={`/books/${book.id}`}>View Details</Link>
+                      </Button>
+                    </div>
+                  </div>
                 )}
-              </div>
-            </div>
-          </div>
-        ))}
+                <div className="space-y-4">
+                  <p className="text-gray-600 line-clamp-3">{book.description}</p>
+                  <div className="flex justify-between items-center pt-4 border-t border-gray-100">
+                    <span className="text-xl font-bold text-primary">
+                      ${(book.price / 100).toFixed(2)}
+                    </span>
+                    {book.amazon_link && (
+                      <a
+                        href={book.amazon_link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md text-primary bg-primary/5 hover:bg-primary/10 transition-colors duration-200"
+                      >
+                        Buy on Amazon
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
   )
