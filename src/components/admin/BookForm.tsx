@@ -13,6 +13,7 @@ interface BookFormProps {
     amazonLink: string
     publishedDate: string
     coverImage: string
+    isPublished?: boolean
   }
   onSuccess?: () => void
 }
@@ -23,7 +24,8 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
     description: book?.description || '',
     amazonLink: book?.amazonLink || '',
     publishedDate: book?.publishedDate || '',
-    coverImage: book?.coverImage || ''
+    coverImage: book?.coverImage || '',
+    isPublished: false
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -68,11 +70,8 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
           title: '',
           description: '',
           amazonLink: '',
-          releaseDate: '',
+          publishedDate: '',
           coverImage: '',
-          tropes: '',
-          series: '',
-          seriesOrder: 0,
           isPublished: false
         })
       }
