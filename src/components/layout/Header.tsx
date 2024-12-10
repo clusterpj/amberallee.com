@@ -74,37 +74,49 @@ export default function Header() {
                   </span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <div className="flex items-center justify-start gap-2 p-2">
+              <DropdownMenuContent 
+                align="end" 
+                className="w-56 bg-white border border-border/50 shadow-lg rounded-md mt-2 z-[100]"
+                sideOffset={5}
+              >
+                <div className="flex items-center justify-start gap-2 p-3 border-b border-border/50">
                   <div className="flex flex-col space-y-1 leading-none">
                     {user.email && (
-                      <p className="font-medium text-sm text-foreground">
+                      <p className="font-medium">
                         {user.email}
                       </p>
                     )}
                   </div>
                 </div>
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard" className="w-full cursor-pointer">
-                    Dashboard
-                  </Link>
-                </DropdownMenuItem>
-                {user.role === 'admin' && (
-                  <DropdownMenuItem asChild>
-                    <Link href="/admin" className="w-full cursor-pointer">
-                      Admin Panel
+                <div className="p-1">
+                  <DropdownMenuItem 
+                    asChild
+                    className="w-full px-3 py-2 text-sm cursor-pointer hover:bg-accent/10 rounded-md"
+                  >
+                    <Link href="/dashboard">
+                      Dashboard
                     </Link>
                   </DropdownMenuItem>
-                )}
-                <DropdownMenuItem
-                  className="cursor-pointer text-red-600 focus:text-red-600"
-                  onSelect={(event) => {
-                    event.preventDefault()
-                    signOut()
-                  }}
-                >
-                  Sign out
-                </DropdownMenuItem>
+                  {user.role === 'admin' && (
+                    <DropdownMenuItem 
+                      asChild
+                      className="w-full px-3 py-2 text-sm cursor-pointer hover:bg-accent/10 rounded-md"
+                    >
+                      <Link href="/admin">
+                        Admin Panel
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem
+                    className="w-full px-3 py-2 text-sm cursor-pointer text-red-600 hover:bg-red-50 rounded-md mt-1"
+                    onSelect={(event) => {
+                      event.preventDefault()
+                      signOut()
+                    }}
+                  >
+                    Sign out
+                  </DropdownMenuItem>
+                </div>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
