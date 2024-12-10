@@ -24,8 +24,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
     description: book?.description || '',
     amazonLink: book?.amazon_link || '',
     publishedDate: book?.published_date || '',
-    coverImage: book?.cover_image_url || '',
-    isPublished: book?.is_published || false
+    coverImage: book?.cover_image_url || ''
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -147,17 +146,6 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
               />
             </div>
 
-            <div className="col-span-2">
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  checked={formData.isPublished}
-                  onChange={(e) => setFormData(prev => ({ ...prev, isPublished: e.target.checked }))}
-                  className="rounded"
-                />
-                <span className="text-sm font-medium">Published</span>
-              </label>
-            </div>
           </div>
 
           <div className="flex justify-end space-x-2">

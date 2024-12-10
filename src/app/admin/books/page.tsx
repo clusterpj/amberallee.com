@@ -15,7 +15,6 @@ interface Book {
   cover_image_url: string
   created_at: string
   updated_at: string
-  is_published: boolean
 }
 
 export default function AdminBooksPage() {
@@ -163,13 +162,6 @@ export default function AdminBooksPage() {
                       Delete
                     </Button>
                   </div>
-                  <span className={`px-2 py-1 rounded text-xs ${
-                    book.isPublished
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-yellow-100 text-yellow-800'
-                  }`}>
-                    {book.isPublished ? 'Published' : 'Draft'}
-                  </span>
                 </div>
               </div>
             </CardContent>
