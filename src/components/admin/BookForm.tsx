@@ -82,67 +82,82 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{book?.id ? 'Edit Book' : 'Add New Book'}</CardTitle>
+    <Card className="w-full bg-white shadow-lg">
+      <CardHeader className="border-b border-gray-100 bg-gray-50">
+        <CardTitle className="text-xl text-gray-800">
+          {book?.id ? '✏️ Edit Book' : '📚 Add New Book'}
+        </CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6 py-4">
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
               {error}
             </div>
           )}
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="block text-sm font-medium">Title</label>
+              <label className="block text-sm font-semibold text-gray-700">Title *</label>
               <input
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                className="w-full p-2 border rounded"
+                className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 required
+                placeholder="Enter book title"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-medium">Amazon Link</label>
+              <label className="block text-sm font-semibold text-gray-700">Amazon Link</label>
               <input
                 type="url"
                 value={formData.amazonLink}
                 onChange={(e) => setFormData(prev => ({ ...prev, amazonLink: e.target.value }))}
-                className="w-full p-2 border rounded"
+                className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                placeholder="https://amazon.com/..."
               />
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-medium">Published Date</label>
+              <label className="block text-sm font-semibold text-gray-700">Published Date</label>
               <input
                 type="date"
                 value={formData.publishedDate}
                 onChange={(e) => setFormData(prev => ({ ...prev, publishedDate: e.target.value }))}
-                className="w-full p-2 border rounded"
+                className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-medium">Cover Image URL</label>
+              <label className="block text-sm font-semibold text-gray-700">Cover Image URL</label>
               <input
                 type="url"
                 value={formData.coverImage}
                 onChange={(e) => setFormData(prev => ({ ...prev, coverImage: e.target.value }))}
-                className="w-full p-2 border rounded"
+                className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                placeholder="https://example.com/cover.jpg"
               />
+              {formData.coverImage && (
+                <div className="mt-2">
+                  <img 
+                    src={formData.coverImage} 
+                    alt="Cover preview" 
+                    className="h-32 w-24 object-cover rounded-lg border border-gray-200"
+                  />
+                </div>
+              )}
             </div>
 
             <div className="space-y-2 col-span-2">
-              <label className="block text-sm font-medium">Description</label>
+              <label className="block text-sm font-semibold text-gray-700">Description</label>
               <textarea
                 value={formData.description}
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                className="w-full p-2 border rounded"
+                className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 rows={4}
+                placeholder="Enter book description..."
               />
             </div>
 
