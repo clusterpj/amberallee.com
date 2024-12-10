@@ -1,24 +1,31 @@
 'use client'
 
 import Link from 'next/link'
-import { useCoreBill } from '@/context/CoreBillContext'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { useAuth } from '@/hooks/useAuth'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 const NAV_ITEMS = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
   { href: '/books', label: 'Books' },
   { href: '/coming-soon', label: 'Coming Soon' },
-  { href: '/sign-up', label: 'Sign Up' },
   { href: '/contact', label: 'Contact' },
   { href: '/events', label: 'Events' }
 ]
 
 export default function Header() {
-  const { isAuthenticated } = useCoreBill()
+  const { user, signOut, loading } = useAuth()
   const pathname = usePathname()
+
+  console.log('Header - Auth State:', { user, loading })
 
   return (
     <header className="bg-background/80 backdrop-blur-sm border-b border-border/50 sticky top-0 z-50">
@@ -54,20 +61,52 @@ export default function Header() {
           ))}
         </nav>
 
-        {/* Action buttons with metallic effect */}
+        {/* User menu */}
         <div className="flex items-center space-x-4">
-          {isAuthenticated ? (
-            <Button 
-              asChild 
-              variant="default"
-              className={cn(
-                "metallic font-medium",
-                "bg-primary text-primary-foreground hover:bg-primary/90",
-                "shadow-lg hover:shadow-xl transition-all duration-300"
-              )}
-            >
-              <Link href="/admin/dashboard">Admin Dashboard</Link>
-            </Button>
+          {loading ? (
+            <span className="text-sm text-muted-foreground">Loading...</span>
+          ) : user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                  <span className="text-sm font-medium">
+                    {user.email?.charAt(0).toUpperCase()}
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <div className="flex items-center justify-start gap-2 p-2">
+                  <div className="flex flex-col space-y-1 leading-none">
+                    {user.email && (
+                      <p className="font-medium text-sm text-foreground">
+                        {user.email}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard" className="w-full cursor-pointer">
+                    Dashboard
+                  </Link>
+                </DropdownMenuItem>
+                {user.role === 'admin' && (
+                  <DropdownMenuItem asChild>
+                    <Link href="/admin" className="w-full cursor-pointer">
+                      Admin Panel
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuItem
+                  className="cursor-pointer text-red-600 focus:text-red-600"
+                  onSelect={(event) => {
+                    event.preventDefault()
+                    signOut()
+                  }}
+                >
+                  Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
             <Button 
               asChild
@@ -78,7 +117,7 @@ export default function Header() {
                 "shadow-sm hover:shadow-md transition-all duration-300"
               )}
             >
-              <Link href="/login">Login</Link>
+              <Link href="/auth/signin">Sign In</Link>
             </Button>
           )}
         </div>
