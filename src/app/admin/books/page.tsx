@@ -15,6 +15,7 @@ interface Book {
   cover_image_url: string
   created_at: string
   updated_at: string
+  is_published: boolean
 }
 
 export default function AdminBooksPage() {
@@ -92,7 +93,13 @@ export default function AdminBooksPage() {
           <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
             <div className="p-4">
               <BookForm
-                book={editingBook}
+                book={{
+                  ...editingBook,
+                  amazonLink: editingBook.amazon_link,
+                  publishedDate: editingBook.published_date,
+                  coverImage: editingBook.cover_image_url,
+                  isPublished: editingBook.is_published
+                }}
                 onSuccess={() => {
                   fetchBooks()
                   setEditingBook(null)

@@ -22,10 +22,10 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
   const [formData, setFormData] = useState({
     title: book?.title || '',
     description: book?.description || '',
-    amazonLink: book?.amazonLink || '',
-    publishedDate: book?.publishedDate || '',
-    coverImage: book?.coverImage || '',
-    isPublished: false
+    amazonLink: book?.amazon_link || '',
+    publishedDate: book?.published_date || '',
+    coverImage: book?.cover_image_url || '',
+    isPublished: book?.is_published || false
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
