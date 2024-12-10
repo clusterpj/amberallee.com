@@ -47,7 +47,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         description: formData.description,
         amazon_link: formData.amazonLink,
         release_date: formData.releaseDate,
-        cover_image: formData.coverImage,
+        cover_image_url: formData.coverImage,
         tropes: formData.tropes.split(',').map(trope => trope.trim()).filter(Boolean),
         series: formData.series,
         series_order: formData.seriesOrder,

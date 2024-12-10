@@ -12,7 +12,7 @@ interface Book {
   description: string
   amazon_link: string
   release_date: string
-  cover_image: string
+  cover_image_url: string
   tropes: string[]
   series: string
   series_order: number
@@ -122,9 +122,9 @@ export default function AdminBooksPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                {book.coverImage && (
+                {book.cover_image_url && (
                   <img
-                    src={book.coverImage}
+                    src={book.cover_image_url}
                     alt={book.title}
                     className="w-full h-48 object-cover rounded"
                   />

@@ -12,7 +12,7 @@ export const books = pgTable('books', {
   description: text('description'),
   amazonLink: text('amazon_link'),
   releaseDate: date('release_date'),
-  coverImage: text('cover_image'),
+  coverImage: text('cover_image_url'),
   tropes: text('tropes').array(),
   series: text('series'),
   corebillItemId: text('corebill_item_id'),
