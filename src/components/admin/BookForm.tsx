@@ -14,6 +14,7 @@ interface BookFormProps {
     publishedDate: string
     coverImage: string
     isPublished?: boolean
+    price?: number
   }
   onSuccess?: () => void
 }
@@ -42,6 +43,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         amazon_link: formData.amazonLink,
         published_date: formData.publishedDate,
         cover_image_url: formData.coverImage,
+        price: formData.price,
         updated_at: new Date().toISOString()
       }
 
@@ -72,6 +74,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
           amazonLink: '',
           publishedDate: '',
           coverImage: '',
+          price: 0,
           isPublished: false
         })
       }

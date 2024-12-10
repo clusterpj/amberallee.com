@@ -130,9 +130,10 @@ export default function AdminBooksPage() {
               <CardTitle className="text-xl font-bold text-gray-800 line-clamp-1">
                 {book.title}
               </CardTitle>
-              <p className="text-sm text-gray-500">
-                Published: {new Date(book.published_date).toLocaleDateString()}
-              </p>
+              <div className="text-sm text-gray-500 space-y-1">
+                <p>Published: {new Date(book.published_date).toLocaleDateString()}</p>
+                <p>Price: ${(book.price / 100).toFixed(2)}</p>
+              </div>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
