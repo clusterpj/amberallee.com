@@ -4,7 +4,7 @@ import { Facebook, Users, Instagram } from 'lucide-react';
 
 export function SocialBar() {
   return (
-    <div className="fixed right-6 top-1/2 transform -translate-y-1/2 flex flex-col gap-5 z-40">
+    <div className="fixed right-6 top-1/2 transform -translate-y-1/2 flex flex-col gap-5 z-40 bg-black/80 p-4 rounded-lg">
       {/* Facebook Profile */}
       <a
         href="https://www.facebook.com/AmberAlleeAuthor?mibextid=LQQJ4d"
