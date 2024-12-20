@@ -23,7 +23,7 @@ export function SocialBar() {
 
       {/* Goodreads */}
       <a
-        href="https://www.goodreads.com/author/show/24314392.Amber_Allee"
+        href="https://www.goodreads.com/author/show/48624101.Amber_Allee"
         target="_blank"
         rel="noopener noreferrer"
         className="bg-white p-3 rounded-full shadow-xl hover:scale-110 transition-transform duration-200 group relative
