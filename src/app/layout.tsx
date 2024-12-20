@@ -3,6 +3,7 @@ import { CoreBillProvider } from '@/context/CoreBillContext'
 import Header from '@/components/layout/Header'
 import ConditionalBanner from '@/components/layout/ConditionalBanner'
 import Footer from '@/components/layout/Footer'
+import { SocialBar } from '@/components/ui/SocialBar'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -22,6 +23,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <SocialBar />
         </CoreBillProvider>
       </body>
     </html>
