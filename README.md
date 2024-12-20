@@ -1,132 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Amber Lee Website
 
-## Getting Started
+## Project Overview
 
-First, run the development server:
+This is a Next.js application for Amber Lee's website, built with TypeScript, Tailwind CSS, and Supabase.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Tech Stack
+
+- Framework: Next.js (App Router)
+- Language: TypeScript
+- Styling: Tailwind CSS
+- State Management: Zustand
+- Backend: Supabase
+- Authentication: Custom implementation with Supabase
+
+## Project Structure
+
+```
+├── src/
+│   ├── app/                 # Next.js App Router pages
+│   │   ├── (auth)/          # Authentication-related pages
+│   │   ├── admin/           # Admin section
+│   │   ├── api/             # API routes
+│   │   └── ...other pages
+│   ├── components/          # React components
+│   │   ├── admin/           # Admin-specific components
+│   │   ├── auth/            # Authentication components
+│   │   ├── layout/          # Layout components
+│   │   └── ui/              # Reusable UI components
+│   ├── config/              # Configuration files
+│   ├── context/             # React contexts
+│   ├── hooks/               # Custom React hooks
+│   ├── lib/                 # Utility functions and services
+│   │   ├── corebill/        # CoreBill-specific utilities
+│   │   ├── db/              # Database utilities
+│   │   └── supabase/        # Supabase-related utilities
+│   ├── styles/              # Global styles
+│   └── types/               # TypeScript type definitions
+├── supabase/                # Supabase configurations
+│   └── migrations/          # Database migration scripts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Development Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Set up environment variables:
+   - Create a `.env.local` file
+   - Add Supabase credentials:
+     ```
+     NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+     NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+     ```
 
-## Learn More
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+## Available Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `npm run dev`: Start development server
+- `npm run build`: Create production build
+- `npm start`: Start production server
+- `npm run lint`: Run ESLint
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Type Checking and Linting
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-## Production Deployment
-
-### Environment Variables
-
-Create a `.env` file in the root directory with the following variables:
-
+Before committing, run:
 ```bash
-# Database
-DATABASE_URL=postgresql://user:password@localhost:5432/amberallee
-POSTGRES_URL=postgresql://user:password@localhost:5432/amberallee
-POSTGRES_PRISMA_URL=postgresql://user:password@localhost:5432/amberallee
-POSTGRES_URL_NON_POOLING=postgresql://user:password@localhost:5432/amberallee
+npx tsc --noEmit
+npm run lint
+```
 
-# Authentication
-COREBILL_API_URL=https://api.corebill.com
-JWT_SECRET=your-jwt-secret
+## Deployment
 
-# Next.js
-NEXT_PUBLIC_APP_URL=https://amberallee.com
-```
-### Production Build
+The project is configured for easy deployment on Vercel or similar platforms supporting Next.js.
 
-1. Install dependencies:
-```bash
-pnpm install
-```
-2. Build the application:
-```bash
-pnpm run build
-```
-3. Start the production server:
-```bash
-pnpm start
-```
-### Using PM2 (Recommended)
+## Contributing
 
-1. Install PM2 globally:
-```bash
-npm install -g pm2
-```
-2. Start the application with PM2:
-```bash
-pm2 start npm --name "amberallee" -- start
-pm2 save
-pm2 startup
-```
-### Nginx Configuration
+1. Create a new branch for your feature
+2. Make your changes
+3. Run type checking and linting
+4. Submit a pull request
 
-1. Copy the Nginx configuration file:
-```bash
-sudo cp nginx.conf /etc/nginx/sites-available/amberallee.com
-sudo ln -s /etc/nginx/sites-available/amberallee.com /etc/nginx/sites-enabled/
-```
-2. Test and restart Nginx:
-```bash
-sudo nginx -t
-sudo systemctl restart nginx
-```
-### SSL Configuration
+## License
 
-1. Install Certbot:
-```bash
-sudo snap install --classic certbot
-sudo ln -s /snap/bin/certbot /usr/bin/certbot
-```
-2. Obtain SSL certificate:
-```bash
-sudo certbot --nginx -d amberallee.com -d www.amberallee.com
-```
-### Systemd Service
-
-1. Copy the service file:
-```bash
-sudo cp amberallee.service /etc/systemd/system/
-```
-2. Start and enable the service:
-```bash
-sudo systemctl daemon-reload
-sudo systemctl enable amberallee
-sudo systemctl start amberallee
-```
-### Monitoring
-
-Monitor your application using PM2:
-```bash
-pm2 monit
-```
-View logs:
-```bash
-# Application logs
-sudo journalctl -u amberallee
-# Nginx logs
-sudo tail -f /var/log/nginx/access.log
-sudo tail -f /var/log/nginx/error.log
-```
+[Add your license information]
