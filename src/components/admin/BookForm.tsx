@@ -23,9 +23,9 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
   const [formData, setFormData] = useState({
     title: book?.title || '',
     description: book?.description || '',
-    amazonLink: book?.amazon_link || '',
-    publishedDate: book?.published_date || '',
-    coverImage: book?.cover_image_url || '',
+    amazonLink: book?.amazonLink || '',
+    publishedDate: book?.publishedDate || '',
+    coverImage: book?.coverImage || '',
     price: book?.price || 0
   })
   const [loading, setLoading] = useState(false)
