@@ -127,34 +127,18 @@ export default async function Home() {
             {books.map((book: Book) => {
               const bookUrl = `/books/${book.title.toLowerCase().replace(/\s+/g, '-')}`
               return (
-                <Link key={book.id} href={bookUrl}>
-                  <Card className="group bg-white border-accent/20 hover:shadow-xl transition-all duration-300 h-full cursor-pointer">
-                    <div className="flex flex-col h-full">
-                      <div className="relative w-full pt-4 px-4">
-                        <div className="relative mx-auto aspect-[2/3] w-full max-w-[300px]">
-                          <Image
-                            src={book.coverImage}
-                            alt={book.title}
-                            fill
-                            className="object-cover rounded-lg shadow-md transition-all duration-300 group-hover:scale-[1.02]"
-                            sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 300px"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col flex-grow p-6 space-y-4">
-                        <h3 className="text-xl font-bold text-center text-gray-900">
-                          {book.title}
-                        </h3>
-                        
-                        <div className="mt-auto">
-                          <p className="text-center text-gray-600 font-medium">
-                            ${(book.price / 100).toFixed(2)}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </Card>
+                <Link 
+                  key={book.id} 
+                  href={bookUrl}
+                  className="relative aspect-[2/3] block overflow-hidden rounded-lg group"
+                >
+                  <Image
+                    src={book.coverImage}
+                    alt={book.title}
+                    fill
+                    className="object-cover transition-all duration-300 group-hover:scale-105"
+                    sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 300px"
+                  />
                 </Link>
               )
             })}
