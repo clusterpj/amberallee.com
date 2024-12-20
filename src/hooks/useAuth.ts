@@ -51,9 +51,17 @@ export function useAuth() {
 
   useEffect(() => {
     let mounted = true
+    let timeoutId: NodeJS.Timeout
 
     const initializeAuth = async () => {
       try {
+        // Set a maximum timeout for the loading state
+        timeoutId = setTimeout(() => {
+          if (mounted) {
+            setLoading(false)
+          }
+        }, 3000) // 3 second maximum loading time
+
         const { data: { session } } = await supabase.auth.getSession()
         
         if (session?.user && mounted) {
@@ -70,7 +78,10 @@ export function useAuth() {
         console.error('Error in initializeAuth:', error)
         if (mounted) setUser(null)
       } finally {
-        if (mounted) setLoading(false)
+        if (mounted) {
+          setLoading(false)
+          clearTimeout(timeoutId)
+        }
       }
     }
 
@@ -102,6 +113,7 @@ export function useAuth() {
     return () => {
       mounted = false
       subscription.unsubscribe()
+      clearTimeout(timeoutId)
     }
   }, [router])
 
