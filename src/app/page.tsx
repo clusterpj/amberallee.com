@@ -123,7 +123,7 @@ export default async function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {books.map((book: Book) => {
               const bookUrl = `/books/${book.title.toLowerCase().replace(/\s+/g, '-')}`
               return (
