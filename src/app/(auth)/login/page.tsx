@@ -28,6 +28,9 @@ export default function LoginPage() {
         localStorage.setItem('corebill_role', response.user.role.toLowerCase());
         localStorage.setItem('corebill_user_id', response.user.id);
         
+        // Small delay to ensure localStorage is updated
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
         // Force a page refresh to update auth state
         window.location.href = '/admin/dashboard';
       } else {

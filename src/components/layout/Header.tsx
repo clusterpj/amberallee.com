@@ -25,6 +25,9 @@ export default function Header() {
   const { user, signOut, loading } = useAuth()
   const pathname = usePathname()
 
+  // Add timeout to prevent infinite loading state
+  const showLoading = loading && !user
+
   return (
     <header className="bg-background/80 backdrop-blur-sm border-b border-border/50 sticky top-0 z-50">
       <div className="container mx-auto flex justify-between items-center h-16">
@@ -61,7 +64,7 @@ export default function Header() {
 
         {/* User menu */}
         <div className="flex items-center space-x-4">
-          {loading ? (
+          {showLoading ? (
             <span className="text-sm text-muted-foreground">Loading...</span>
           ) : user ? (
             <DropdownMenu>
