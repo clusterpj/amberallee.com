@@ -1,7 +1,21 @@
 import DashboardStats from '@/components/admin/DashboardStats'
 import { fetchDashboardStats } from '@/lib/dashboard-stats'
 
+import { requireAdminAuthSupabase } from '@/lib/auth'
+import { headers } from 'next/headers'
+
 export default async function AdminDashboardPage() {
+  // Check admin auth on the server side
+  const headersList = headers()
+  const auth = await requireAdminAuthSupabase({
+    headers: headersList,
+    url: '/admin/dashboard',
+    nextUrl: { pathname: '/admin/dashboard' }
+  } as any)
+
+  if (auth) {
+    return auth
+  }
   const stats = await fetchDashboardStats()
 
   return (

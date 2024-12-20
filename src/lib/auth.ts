@@ -228,16 +228,23 @@ export async function requireAuth(request: NextRequest) {
 }
 
 export async function requireAdminAuthSupabase(request: NextRequest) {
-  const { data: { session }, error } = await supabase.auth.getSession()
-  
-  if (error || !session) {
+  try {
+    const { data: { session }, error } = await supabase.auth.getSession()
+    
+    if (error || !session) {
+      console.log('No session found, redirecting to signin')
+      return NextResponse.redirect(new URL('/auth/signin', request.url))
+    }
+    
+    const role = await checkUserRole(session.user.id)
+    if (role !== 'admin') {
+      console.log('User is not admin, redirecting to signin')
+      return NextResponse.redirect(new URL('/auth/signin', request.url))
+    }
+    
+    return null
+  } catch (error) {
+    console.error('Admin auth error:', error)
     return NextResponse.redirect(new URL('/auth/signin', request.url))
   }
-  
-  const role = await checkUserRole(session.user.id)
-  if (role !== 'admin') {
-    return NextResponse.redirect(new URL('/auth/signin', request.url))
-  }
-  
-  return null
 }

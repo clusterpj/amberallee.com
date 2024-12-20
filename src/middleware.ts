@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js'
 
 export async function middleware(request: NextRequest) {
   // Public routes that don't require authentication
-  const publicRoutes = ['/auth/signin', '/auth/signup', '/login', '/']
+  const publicRoutes = ['/auth/signin', '/auth/signup', '/login', '/', '/about', '/books', '/coming-soon', '/contact', '/events']
   if (publicRoutes.includes(request.nextUrl.pathname)) {
     return NextResponse.next()
   }
@@ -48,8 +48,8 @@ export async function middleware(request: NextRequest) {
       return response
     }
 
-    // Check if the path starts with /admin
-    if (request.nextUrl.pathname.startsWith('/admin')) {
+    // Check if the path starts with /admin or is the dashboard
+    if (request.nextUrl.pathname.startsWith('/admin') || request.nextUrl.pathname.startsWith('/dashboard')) {
       const token = request.cookies.get('corebill_token')?.value
       const sessionToken = request.cookies.get('session_token')?.value
 

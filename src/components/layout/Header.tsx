@@ -103,8 +103,8 @@ export default function Header() {
                       asChild
                       className="w-full px-3 py-2 text-sm cursor-pointer hover:bg-accent/10 rounded-md"
                     >
-                      <Link href="/admin">
-                        Admin Panel
+                      <Link href="/admin/dashboard">
+                        Admin Dashboard
                       </Link>
                     </DropdownMenuItem>
                   )}
