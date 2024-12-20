@@ -21,13 +21,13 @@ export default function AboutPage() {
                     Amber Allee
                   </h1>
                   <p className="text-2xl text-highlight2">
-                    USA Today Bestselling Author of Heart-Stopping Romance
+                    Author of The Las Vegas Mafia Series
                   </p>
                 </div>
                 <p className="text-xl text-muted-foreground leading-relaxed">
-                  Crafting stories that blend passion, suspense, and the raw emotions 
-                  of forbidden love. Every page is an invitation to explore the depths 
-                  of human connection and the transformative power of love.
+                  Crafting stories filled with romance, drama, and suspense featuring 
+                  hot alpha heroes. Join her in exploring the thrilling world of 
+                  mafia romance.
                 </p>
               </div>
 
@@ -60,22 +60,21 @@ export default function AboutPage() {
               </h2>
               <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
                 <p>
-                  Amber Allee is a passionate storyteller who weaves intricate tales of love, 
-                  power, and redemption. Her journey into the world of romance writing began 
-                  with a deep fascination for the complex dynamics of relationships and the 
-                  transformative journey of finding love in unexpected places.
+                  Amber Allee is a brand-new author who made her debut with "The Prince" in 
+                  February 2024, followed by "Hidden Queen" in June 2024. These books are part 
+                  of her thrilling Las Vegas Mafia Series, with the final book set to release 
+                  early 2025.
                 </p>
                 <p>
-                  Her mafia romance novels have captivated readers worldwide with their blend 
-                  of intense passion and heart-stopping suspense. Each story features strong, 
-                  complex characters who must navigate the dangerous waters of loyalty, betrayal, 
-                  and passion.
+                  While she started writing in 2015, Amber recently took the bold step to share 
+                  her stories with the world. She lives in Texas with her husband and two kids, 
+                  in the same town she grew up in. When not writing, you can find her curled up 
+                  under blankets reading, playing games with her family, traveling, or shopping.
                 </p>
                 <p>
-                  As a USA Today bestselling author, Amber has established herself as a master 
-                  of the genre, known for creating worlds where love conquers even the darkest 
-                  of circumstances. Her writing style combines emotional depth with pulse-pounding 
-                  action, keeping readers on the edge of their seats until the very last page.
+                  A lover of animal print and everything bling, Amber brings her vibrant 
+                  personality to her writing, creating stories that capture readers' hearts 
+                  with their blend of romance, drama, and suspense.
                 </p>
               </div>
             </div>
@@ -96,83 +95,53 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Amazon Book Launch Journey */}
+      {/* Upcoming Events Section */}
       <section className="py-24 relative overflow-hidden bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16 space-y-4">
               <h2 className="text-4xl font-bold text-primary">
-                The Amazon Journey
+                Upcoming Events
               </h2>
               <p className="text-xl text-highlight2">
-                A Dream Launch That Became Reality
+                Meet Amber in 2025
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              {/* Launch Story */}
-              <div className="space-y-6">
-                <div className="space-y-4 text-lg text-muted-foreground leading-relaxed">
-                  <p>
-                    When "The Prince" hit Amazon's virtual shelves, it wasn't just another 
-                    book launch – it was the culmination of countless hours of writing, 
-                    editing, and dreaming. The response was overwhelming, with readers 
-                    immediately connecting with Dante's complex world and the forbidden 
-                    romance at its heart.
-                  </p>
-                  <p>
-                    Within hours of its release, "The Prince" began climbing the Amazon 
-                    charts, eventually reaching #1 in multiple categories. The success 
-                    wasn't just in numbers – it was in the countless messages from readers 
-                    who found themselves unable to put the book down, staying up late into 
-                    the night to discover how the story would unfold.
-                  </p>
-                </div>
-
-                {/* Achievement Cards */}
-                <div className="grid grid-cols-2 gap-4 mt-8">
-                  <div className="p-6 rounded-xl text-center bg-highlight2/5 border border-highlight1/20 hover:border-highlight1/40 transition-colors duration-300">
-                    <div className="text-3xl font-bold text-primary mb-2">#1</div>
-                    <div className="text-sm text-highlight2">
-                      Amazon Bestseller in Dark Romance
-                    </div>
-                  </div>
-                  <div className="p-6 rounded-xl text-center bg-highlight2/5 border border-highlight1/20 hover:border-highlight1/40 transition-colors duration-300">
-                    <div className="text-3xl font-bold text-primary mb-2">10K+</div>
-                    <div className="text-sm text-highlight2">
-                      Copies Sold in First Week
-                    </div>
-                  </div>
+            <div className="grid gap-8">
+              <div className="p-6 rounded-xl bg-highlight2/5 border border-highlight1/20">
+                <h3 className="text-2xl font-bold text-primary mb-4">
+                  Motorcycles Mobsters & Mayhem
+                </h3>
+                <div className="space-y-2">
+                  <p className="text-highlight2">March 15, 2025</p>
+                  <p className="text-muted-foreground">Frisco, TX</p>
+                  <a 
+                    href="https://motorcyclesmobstersandmayhem.com" 
+                    className="text-highlight1 hover:underline"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Visit Event Website
+                  </a>
                 </div>
               </div>
 
-              {/* Launch Images */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-4">
-                  <div className="relative aspect-[3/4] rounded-xl overflow-hidden group">
-                    <Image
-                      src="/amazon-launch-1.jpg"
-                      alt="Amazon Book Launch Celebration"
-                      fill
-                      className="object-cover transition-all duration-500 ease-in-out group-hover:scale-105"
-                    />
-                  </div>
-                  <div className="relative aspect-square rounded-xl overflow-hidden group">
-                    <Image
-                      src="/amazon-launch-2.jpg"
-                      alt="Book Signing Event"
-                      fill
-                      className="object-cover transition-all duration-500 ease-in-out group-hover:scale-105"
-                    />
-                  </div>
-                </div>
-                <div className="relative aspect-[3/4] rounded-xl overflow-hidden mt-8 group">
-                  <Image
-                    src="/amazon-launch-3.jpg"
-                    alt="Readers with The Prince"
-                    fill
-                    className="object-cover transition-all duration-500 ease-in-out group-hover:scale-105"
-                  />
+              <div className="p-6 rounded-xl bg-highlight2/5 border border-highlight1/20">
+                <h3 className="text-2xl font-bold text-primary mb-4">
+                  Kiss and Tell Book Event
+                </h3>
+                <div className="space-y-2">
+                  <p className="text-highlight2">June 21, 2025</p>
+                  <p className="text-muted-foreground">Grapevine, TX</p>
+                  <a 
+                    href="https://kissandtelltx.com" 
+                    className="text-highlight1 hover:underline"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Visit Event Website
+                  </a>
                 </div>
               </div>
             </div>
