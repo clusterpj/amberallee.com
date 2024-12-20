@@ -16,19 +16,23 @@ export default function LoginPage() {
     setError('')
 
     try {
-      const { token, user } = await corebillApi.auth.login({ 
+      const response = await corebillApi.auth.login({ 
         email, 
         password 
       });
       
-      // Set token in localStorage with type and role
-      localStorage.setItem('corebill_token', token);
-      localStorage.setItem('corebill_token_type', 'Bearer');
-      localStorage.setItem('corebill_role', user.role.toLowerCase());
-      localStorage.setItem('corebill_user_id', user.id);
-      
-      // Redirect to admin dashboard
-      router.push('/admin/dashboard')
+      if (response.token && response.user) {
+        // Set token in localStorage with type and role
+        localStorage.setItem('corebill_token', response.token);
+        localStorage.setItem('corebill_token_type', 'Bearer');
+        localStorage.setItem('corebill_role', response.user.role.toLowerCase());
+        localStorage.setItem('corebill_user_id', response.user.id);
+        
+        // Force a page refresh to update auth state
+        window.location.href = '/admin/dashboard';
+      } else {
+        throw new Error('Invalid response from server');
+      }
     } catch (err) {
       console.error('Login Error:', err);
       if (err instanceof Error) {

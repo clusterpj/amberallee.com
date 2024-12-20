@@ -25,8 +25,6 @@ export default function Header() {
   const { user, signOut, loading } = useAuth()
   const pathname = usePathname()
 
-  console.log('Header - Auth State:', { user, loading })
-
   return (
     <header className="bg-background/80 backdrop-blur-sm border-b border-border/50 sticky top-0 z-50">
       <div className="container mx-auto flex justify-between items-center h-16">

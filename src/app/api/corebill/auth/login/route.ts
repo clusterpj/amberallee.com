@@ -30,11 +30,12 @@ export async function POST(request: NextRequest) {
     // This is a placeholder - you'll want to integrate with your actual auth system
     if (email === 'admin@example.com' && password === 'password') {
       return NextResponse.json({ 
+        success: true,
         token: 'mock-jwt-token',
         user: {
           id: '1',
           role: 'admin',
-          email: 'admin@example.com'
+          email: email
         }
       }, { 
         status: 200,
