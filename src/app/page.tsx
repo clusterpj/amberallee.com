@@ -5,29 +5,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { NewsletterPopup } from "@/components/ui/NewsletterPopup"
 import { SocialBar } from "@/components/ui/SocialBar"
-
-const FEATURED_BOOKS = [
-  {
-    title: "The Prince",
-    cover: "/the-prince-cover.jpg",
-    description: "First book in the Las Vegas Mafia Series - A story of power, loyalty, and forbidden love.",
-    link: "/books/the-prince",
-    excerpt: "In the glittering city of Las Vegas, where power is the ultimate currency, Dante Romano rules his empire with an iron fist. But when a mysterious woman from his past resurfaces, he finds himself caught between duty and desire, forced to confront the true meaning of loyalty.",
-    details: {
-      series: "Las Vegas Mafia Series, Book 1"
-    }
-  },
-  {
-    title: "Hidden Queen",
-    cover: "/hidden-queen-cover.jpg",
-    description: "A dark romance that will keep you on the edge of your seat.",
-    link: "/books/hidden-queen",
-    excerpt: "She was meant to be just another pawn in his game. But when Alessandro discovers the truth about the woman he's been hunting, everything changes. Now, he must decide between his thirst for revenge and the undeniable pull of a love that could destroy them both.",
-    details: {
-      series: "Las Vegas Elite Series, Book 1"
-    }
-  }
-]
+import { getPublishedBooks } from "@/lib/books"
+import type { Book } from "@/types/book"
 
 const TESTIMONIALS = [
   {
@@ -63,7 +42,9 @@ const BLOG_POSTS = [
   }
 ]
 
-export default function Home() {
+export default async function Home() {
+  const books = await getPublishedBooks()
+
   return (
     <div className="min-h-screen bg-background">
       <NewsletterPopup />
@@ -113,13 +94,15 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="relative p-6">
                   <div className="relative group/image overflow-hidden rounded-xl">
-                    <Image 
-                      src="/hidden-queen-cover.jpg" 
-                      alt="Hidden Queen - Latest Release" 
-                      width={400} 
-                      height={600} 
-                      className="rounded-xl shadow-lg transition-all duration-500 ease-in-out group-hover/image:scale-110 group-hover/image:rotate-3 group-hover/image:shadow-xl"
-                    />
+                    {books[0] && (
+                      <Image 
+                        src={books[0].coverImage}
+                        alt={`${books[0].title} - Latest Release`}
+                        width={400} 
+                        height={600} 
+                        className="rounded-xl shadow-lg transition-all duration-500 ease-in-out group-hover/image:scale-110 group-hover/image:rotate-3 group-hover/image:shadow-xl"
+                      />
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -128,7 +111,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Books Section */}
+      {/* Featured Books Section - Redesigned */}
       <section className="py-24 bg-highlight2/5">
         <div className="container px-4 mx-auto">
           <div className="text-center mb-16 space-y-4">
@@ -140,58 +123,41 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 max-w-[1800px] mx-auto">
-            {FEATURED_BOOKS.map((book) => (
-              <Card key={book.title} className="group bg-white border-accent/20 hover:shadow-xl transition-all duration-300">
-                <div className="flex flex-col lg:min-h-[1000px]">
-                  <div className="relative w-full px-6 pt-8 pb-4">
-                    <div className="relative mx-auto" style={{ width: '500px', maxWidth: '100%', aspectRatio: '2/3' }}>
-                      <Image
-                        src={book.cover}
-                        alt={book.title}
-                        fill
-                        className="object-cover rounded-lg shadow-xl transition-all duration-300 group-hover:scale-[1.02]"
-                        priority
-                        sizes="(max-width: 768px) 90vw, (max-width: 1800px) 45vw, 500px"
-                      />
-                    </div>
-                  </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+            {books.map((book: Book) => {
+              const bookUrl = `/books/${book.title.toLowerCase().replace(/\s+/g, '-')}`
+              return (
+                <Link key={book.id} href={bookUrl}>
+                  <Card className="group bg-white border-accent/20 hover:shadow-xl transition-all duration-300 h-full cursor-pointer">
+                    <div className="flex flex-col h-full">
+                      <div className="relative w-full pt-4 px-4">
+                        <div className="relative mx-auto aspect-[2/3] w-full max-w-[300px]">
+                          <Image
+                            src={book.coverImage}
+                            alt={book.title}
+                            fill
+                            className="object-cover rounded-lg shadow-md transition-all duration-300 group-hover:scale-[1.02]"
+                            sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 300px"
+                          />
+                        </div>
+                      </div>
 
-                  <div className="flex flex-col flex-grow p-8 space-y-6">
-                    <div className="space-y-6">
-                      <div>
-                        <h3 className="text-3xl font-bold mb-2 text-center lg:text-left text-primary">
+                      <div className="flex flex-col flex-grow p-6 space-y-4">
+                        <h3 className="text-xl font-bold text-center text-gray-900">
                           {book.title}
                         </h3>
-                        <p className="text-lg text-highlight2 text-center lg:text-left">
-                          {book.details.series}
-                        </p>
-                      </div>
-
-                      <div className="space-y-4">
-                        <p className="text-lg text-highlight1 leading-relaxed italic">
-                          "{book.description}"
-                        </p>
-                        <p className="text-muted-foreground leading-relaxed">
-                          {book.excerpt}
-                        </p>
+                        
+                        <div className="mt-auto">
+                          <p className="text-center text-gray-600 font-medium">
+                            ${(book.price / 100).toFixed(2)}
+                          </p>
+                        </div>
                       </div>
                     </div>
-
-                    <div className="mt-auto">
-                      <Button 
-                        asChild
-                        className="w-full bg-secondary hover:bg-secondary-hover text-white font-medium text-lg py-6"
-                      >
-                        <Link href={book.link}>
-                          Explore Book
-                        </Link>
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            ))}
+                  </Card>
+                </Link>
+              )
+            })}
           </div>
         </div>
       </section>

@@ -16,6 +16,7 @@ interface Book {
   created_at: string
   updated_at: string
   price: number
+  is_published: boolean
 }
 
 export default function AdminBooksPage() {
@@ -45,7 +46,7 @@ export default function AdminBooksPage() {
     fetchBooks()
   }, [])
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this book?')) return
 
     try {
@@ -127,9 +128,18 @@ export default function AdminBooksPage() {
         {books.map((book) => (
           <Card key={book.id} className="hover:shadow-lg transition-shadow duration-200">
             <CardHeader className="pb-4">
-              <CardTitle className="text-xl font-bold text-gray-800 line-clamp-1">
-                {book.title}
-              </CardTitle>
+              <div className="flex justify-between items-start">
+                <CardTitle className="text-xl font-bold text-gray-800 line-clamp-1">
+                  {book.title}
+                </CardTitle>
+                <span className={`px-2 py-1 text-xs rounded-full ${
+                  book.is_published 
+                    ? 'bg-green-100 text-green-800' 
+                    : 'bg-gray-100 text-gray-800'
+                }`}>
+                  {book.is_published ? 'Published' : 'Draft'}
+                </span>
+              </div>
               <div className="text-sm text-gray-500 space-y-1">
                 <p>Published: {new Date(book.published_date).toLocaleDateString()}</p>
                 <p>Price: ${(book.price / 100).toFixed(2)}</p>

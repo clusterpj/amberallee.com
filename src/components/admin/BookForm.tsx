@@ -26,7 +26,8 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
     amazonLink: book?.amazonLink || '',
     publishedDate: book?.publishedDate || '',
     coverImage: book?.coverImage || '',
-    price: book?.price || 0
+    price: book?.price || 0,
+    isPublished: book?.isPublished || false
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -44,6 +45,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         published_date: formData.publishedDate,
         cover_image_url: formData.coverImage,
         price: formData.price,
+        is_published: formData.isPublished,
         updated_at: new Date().toISOString()
       }
 
@@ -167,6 +169,19 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
               )}
             </div>
 
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-700">Status</label>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  checked={formData.isPublished}
+                  onChange={(e) => setFormData(prev => ({ ...prev, isPublished: e.target.checked }))}
+                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <span className="text-sm text-gray-600">Published</span>
+              </div>
+            </div>
+
             <div className="space-y-2 col-span-2">
               <label className="block text-sm font-semibold text-gray-700">Description</label>
               <textarea
@@ -177,7 +192,6 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
                 placeholder="Enter book description..."
               />
             </div>
-
           </div>
 
           <div className="flex justify-end space-x-2">
