@@ -1,11 +1,6 @@
-import Image from 'next/image'
 import Link from 'next/link'
-import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { NewsletterPopup } from "@/components/ui/NewsletterPopup"
-import { SocialBar } from "@/components/ui/SocialBar"
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 const FEATURED_BOOKS = [
   {
@@ -69,8 +64,6 @@ const BLOG_POSTS = [
 export default function Home() {
   return (
     <div className="min-h-screen bg-background">
-      <NewsletterPopup />
-      <SocialBar />
       {/* Hero Section */}
       <section className="w-full relative py-24 bg-background">
         <div className="container mx-auto px-4">
@@ -122,11 +115,9 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="relative p-6">
                   <div className="relative group/image overflow-hidden rounded-xl">
-                    <Image 
+                    <img 
                       src="/hidden-queen-cover.jpg" 
                       alt="Hidden Queen - Latest Release" 
-                      width={400} 
-                      height={600} 
                       className="rounded-xl shadow-lg transition-all duration-500 ease-in-out group-hover/image:scale-110 group-hover/image:rotate-3 group-hover/image:shadow-xl"
                     />
                   </div>
@@ -153,16 +144,11 @@ export default function Home() {
             {FEATURED_BOOKS.map((book) => (
               <div key={book.title} className="bg-white rounded-lg shadow-lg overflow-hidden">
                 <div className="relative">
-                  <Image
+                  <img
                     src={book.cover}
                     alt={book.title}
-                    width={400}
-                    height={600}
                     className="w-full h-auto object-cover"
                   />
-                  <Badge className="absolute top-4 right-4" variant="secondary">
-                    Book {book.title === "Hidden Queen" ? "2" : "1"}
-                  </Badge>
                 </div>
                 <div className="p-6">
                   <h3 className="text-2xl font-bold mb-2">{book.title}</h3>
@@ -196,10 +182,9 @@ export default function Home() {
               <div className="relative order-2 lg:order-1">
                 <div className="relative group">
                   <div className="relative aspect-[3/4] rounded-xl overflow-hidden">
-                    <Image 
+                    <img 
                       src="/author-photo.jpg" 
                       alt="Amber Allee" 
-                      fill
                       className="object-cover rounded-xl transition-all duration-300 group-hover:scale-[1.02]"
                     />
                   </div>

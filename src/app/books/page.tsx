@@ -3,7 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
 interface Book {
   id: string
@@ -72,8 +72,7 @@ export default async function BooksPage() {
               className={cn(
                 "group relative overflow-hidden",
                 "hover:shadow-2xl transition-all duration-500",
-                "bg-white",
-                "border border-primary/10 hover:border-primary/20"
+                "bg-white"
               )}
             >
               <CardHeader className="text-center space-y-4">
@@ -87,10 +86,12 @@ export default async function BooksPage() {
               <CardContent className="space-y-6">
                 {book.cover_image_url && (
                   <div className="relative aspect-[2/3] overflow-hidden rounded-xl">
-                    <img 
+                    <Image
                       src={book.cover_image_url}
                       alt={book.title}
-                      className="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-105"
+                      fill
+                      style={{ objectFit: 'cover' }}
+                      className="rounded-md"
                     />
                     <div className={cn(
                       "absolute inset-0 flex flex-col justify-end p-6",

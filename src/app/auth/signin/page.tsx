@@ -1,16 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { signIn } from '@/lib/auth'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
-export default function SignIn() {
+function SignInForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
   const searchParams = useSearchParams()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -29,11 +28,11 @@ export default function SignIn() {
         window.location.href = searchParams.get('returnUrl') || '/dashboard'
       } else {
         console.log('No user data returned')
-        setError('Sign in failed - no user data')
+        setError('Invalid credentials')
       }
     } catch (err) {
       console.error('Sign in error:', err)
-      setError(err instanceof Error ? err.message : 'Failed to sign in')
+      setError('An error occurred during sign in')
     } finally {
       setIsLoading(false)
     }
@@ -112,5 +111,13 @@ export default function SignIn() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignInForm />
+    </Suspense>
   )
 }
