@@ -1,4 +1,5 @@
 import { Inter } from 'next/font/google'
+import Banner from '@/components/layout/Banner'
 import { CoreBillProvider } from '@/context/CoreBillContext'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
@@ -16,6 +17,7 @@ export default function RootLayout({
       <body className={`${inter.className} flex flex-col min-h-screen`}>
         <CoreBillProvider>
           <Header />
+          <Banner />
           <main className="flex-grow">
             {children}
           </main>
