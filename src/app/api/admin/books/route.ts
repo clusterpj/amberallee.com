@@ -1,14 +1,13 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { books } from '@/lib/db/schema'
-import { auth } from '@/lib/auth'
+import { requireAdminAuth } from '@/lib/auth'
 
 export async function POST(request: Request) {
   try {
-    const session = await auth()
-    
-    if (!session || session.user.role !== 'admin') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const authResponse = await requireAdminAuth(request)
+    if (authResponse) {
+      return authResponse
     }
 
     const body = await request.json()
