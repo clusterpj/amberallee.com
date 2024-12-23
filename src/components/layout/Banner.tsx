@@ -12,7 +12,7 @@ export default function Banner() {
   }
 
   return (
-    <div className="relative w-full h-[300px] overflow-hidden">
+    <div className="relative w-full h-[400px] overflow-hidden">
       <Image
         src="/facebook-cover.jpg"
         alt="Banner"
