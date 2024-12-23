@@ -54,7 +54,10 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-transparent text-foreground overflow-x-hidden;
+  }
+  main {
+    @apply relative z-10 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8;
   }
 }
 

@@ -51,7 +51,8 @@ export default {
         },
         background: {
           DEFAULT: "hsl(var(--background))",
-          foreground: "hsl(var(--foreground))"
+          foreground: "hsl(var(--foreground))",
+          pattern: "#FFF5F5"
         },
         card: {
           DEFAULT: "hsl(var(--card))",

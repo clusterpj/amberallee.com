@@ -15,7 +15,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} flex flex-col min-h-screen bg-[url('/patterns/pattern.jpg')] bg-repeat bg-[length:400px_400px] before:content-[''] before:fixed before:inset-0 before:bg-background/95 before:-z-10`}>
+      <body className={`${inter.className} relative flex flex-col min-h-screen`}>
+        <div className="fixed inset-0 -z-20 bg-[url('/patterns/pattern.jpg')] bg-repeat bg-[length:400px_400px] opacity-50" />
+        <div className="fixed inset-0 -z-10 bg-background/98" />
         <CoreBillProvider>
           <Header />
           <ConditionalBanner />
