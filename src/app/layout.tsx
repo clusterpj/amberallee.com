@@ -1,10 +1,13 @@
-import { Inter } from 'next/font/google'
+import { Inter as FontSans } from 'next/font/google'
 import { CoreBillProvider } from '@/context/CoreBillContext'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'] });
+const fontSans = FontSans({
+  subsets: ['latin'],
+  variable: '--font-sans',
+})
 
 export default function RootLayout({
   children,
@@ -13,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} flex flex-col min-h-screen`}>
+      <body className={`${fontSans.variable} font-sans antialiased flex flex-col min-h-screen`}>
         <CoreBillProvider>
           <Header />
           <main className="flex-grow">
