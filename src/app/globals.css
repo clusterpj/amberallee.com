@@ -56,10 +56,21 @@
   body {
     @apply bg-background text-foreground;
     font-family: Arial, Helvetica, sans-serif;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     background-image: var(--background-pattern);
     background-repeat: repeat;
     background-blend-mode: soft-light;
     background-size: 75px;
     opacity: 0.15;
+    z-index: -1;
   }
 }
