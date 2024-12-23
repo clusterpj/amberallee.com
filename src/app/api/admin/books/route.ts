@@ -17,13 +17,13 @@ export async function POST(request: NextRequest) {
       description: body.description,
       amazonLink: body.amazonLink,
       coverImage: body.coverImage,
-      releaseDate: new Date(body.releaseDate),
+      releaseDate: new Date(body.releaseDate).toISOString(),
       series: body.series,
       seriesOrder: body.seriesOrder,
       tropes: body.tropes,
       isPublished: body.isPublished,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     }).returning()
 
     return NextResponse.json(newBook[0])
