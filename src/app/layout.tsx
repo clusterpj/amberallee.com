@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${fontSans.variable} font-sans antialiased flex flex-col min-h-screen`}>
+      <body className={`${fontSans.variable} min-h-screen bg-background font-sans antialiased flex flex-col`}>
         <CoreBillProvider>
           <Header />
           <main className="flex-grow">
