@@ -5,6 +5,7 @@
 @layer base {
   :root {
     --background: #FEFEFE;
+    --background-pattern: url('/patterns/pattern.jpg');
     --foreground: #020202;
     --card: #FEFEFE;
     --card-foreground: #020202;
@@ -55,5 +56,9 @@
   body {
     @apply bg-background text-foreground;
     font-family: Arial, Helvetica, sans-serif;
+    background-image: var(--background-pattern);
+    background-repeat: repeat;
+    background-blend-mode: overlay;
+    background-opacity: 0.1;
   }
 }
