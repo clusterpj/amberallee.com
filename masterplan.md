@@ -1,18 +1,41 @@
 # AmberAllee.com Website Masterplan
 
 ## Brand Overview
-Amber Allee is a rising romance author specializing in mafia romance novels, combining passionate storytelling with elements of suspense and drama. Her brand identity merges feminine sophistication with edgy undertones, reflected in her visual identity through:
-- Soft pink leopard print patterns
-- Vintage typewriter motifs
-- Elegant script typography
+Amber Allee is a rising romance author specializing in mafia romance novels, combining passionate storytelling with elements of suspense and drama. Her brand identity merges sophistication with modern edge, reflected through:
+- Blues with leopard print accents
+- Elegant typography
 - Gold/metallic accents
+- Bling details
 
 ## Core Objectives
-1. Create a professional author platform that showcases Amber's books and brand
-2. Enable direct sales of special edition books via CoreBill integration
-3. Facilitate fan engagement and community building
-4. Provide easy content management for ongoing updates
-5. Drive traffic through blog content and social media integration
+1. Create a professional author platform showcasing books and brand
+2. Enable direct sales of special editions via CoreBill integration
+3. Build and engage "Amber's Army of Readers" community
+4. Streamline content management for regular updates
+5. Drive traffic through social media integration and newsletter growth
+6. Facilitate ARC/Beta reader program management
+
+## Navigation Structure
+- Home
+- Books/Coming Soon
+- Sign Up (Beta/ARC/Street Teams)
+- Events
+- Join Reader Group
+- Contact
+- Blog
+
+## Social Media Integration
+- Facebook: /AmberAlleeAuthor
+- Facebook Group: Amber's Army of Readers
+- Instagram: @author.amberallee
+- TikTok: @author.amberallee
+- Goodreads: Author Profile
+- Contact Email: author.amberallee@gmail.com
+
+## Upcoming Events 2025
+- Book Release (TBD)
+- Motorcycles Mobsters & Mayhem (March 15, Frisco, TX)
+- Kiss and Tell Book Event (June 21, Grapevine, TX)
 
 ## Technical Stack
 ### Frontend
@@ -142,29 +165,32 @@ export const apiConfig = {
 
 ## Development Phases
 
-### Phase 1: Foundation (1 week)
-- Project setup
-- CoreBill API integration
-- Authentication implementation
-- Database setup
+### Phase 1: Core Setup (Current)
+- ✅ Project initialization
+- ✅ Basic layout and components
+- ⏳ CoreBill integration
+- ⏳ Database setup
+- ⏳ Authentication implementation
 
-### Phase 2: Content (1 week)
-- Admin dashboard
-- Book management
-- Blog system
-- Event calendar
+### Phase 2: Content & Design
+- ⏳ Layout refinement
+- ⏳ Brand implementation
+- ⏳ Content migration
+- ⏳ Newsletter integration
+- ⏳ Social media components
 
-### Phase 3: E-commerce (1 week)
-- Special editions store
-- Shopping cart
-- Checkout process
-- Order management
+### Phase 3: E-commerce
+- Special editions store setup
+- Shopping cart implementation
+- Checkout flow integration
+- Order management system
 
-### Phase 4: Launch (1 week)
-- Testing
-- Content migration
+### Phase 4: Launch
+- Comprehensive testing
 - Performance optimization
-- SSL setup
+- SSL configuration
+- Content finalization
+- Analytics setup
 
 ## Environment Variables
 ```
