@@ -155,7 +155,7 @@ export default function Header() {
       {mobileMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-50 bg-background/95 backdrop-blur-sm">
           <div className="container mx-auto px-4 py-8">
-            <div className="flex flex-col space-y-4">
+            <div className="flex flex-col space-y-4 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm p-6 rounded-lg shadow-lg">
               {NAV_ITEMS.map((item) => (
                 <Link
                   key={item.href}
