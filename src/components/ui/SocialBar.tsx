@@ -1,26 +1,10 @@
 'use client';
 
-import { Facebook, Users, Instagram } from 'lucide-react';
+import { Facebook, Users, Instagram, Book } from 'lucide-react';
 
 export function SocialBar() {
   return (
     <div className="fixed right-6 top-1/2 transform -translate-y-1/2 flex flex-col gap-5 z-40 bg-black/60 p-4 rounded-t-3xl rounded-b-3xl">
-      {/* Facebook Profile */}
-      <a
-        href="https://www.facebook.com/AmberAlleeAuthor?mibextid=LQQJ4d"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="bg-white p-3 rounded-full shadow-xl hover:scale-110 transition-transform duration-200 group relative
-                 hover:shadow-[0_0_15px_rgba(24,119,242,0.4)] border-2 border-transparent hover:border-[#1877F2]"
-        aria-label="Facebook Profile"
-      >
-        <Facebook className="w-7 h-7 text-[#1877F2] group-hover:text-[#0d6efd]" />
-        <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-white px-3 py-1 rounded-lg shadow-md
-                       text-sm font-medium text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-          Facebook Profile
-        </span>
-      </a>
-
       {/* Facebook Group */}
       <a
         href="https://www.facebook.com/share/GoP2UGzzWMA78A89/?mibextid=K35XfP"
@@ -30,10 +14,26 @@ export function SocialBar() {
                  hover:shadow-[0_0_15px_rgba(24,119,242,0.4)] border-2 border-transparent hover:border-[#1877F2]"
         aria-label="Facebook Group"
       >
-        <Users className="w-7 h-7 text-[#1877F2] group-hover:text-[#0d6efd]" />
+        <Facebook className="w-7 h-7 text-[#1877F2] group-hover:text-[#0d6efd]" />
         <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-white px-3 py-1 rounded-lg shadow-md
                        text-sm font-medium text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
           Facebook Group
+        </span>
+      </a>
+
+      {/* Goodreads */}
+      <a
+        href="https://www.goodreads.com/author/show/48624101.Amber_Allee"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="bg-white p-3 rounded-full shadow-xl hover:scale-110 transition-transform duration-200 group relative
+                 hover:shadow-[0_0_15px_rgba(103,68,25,0.4)] border-2 border-transparent hover:border-[#674419]"
+        aria-label="Goodreads"
+      >
+        <Book className="w-7 h-7 text-[#674419] group-hover:text-[#553615]" />
+        <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-white px-3 py-1 rounded-lg shadow-md
+                       text-sm font-medium text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+          Goodreads
         </span>
       </a>
 
