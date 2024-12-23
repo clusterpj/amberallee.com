@@ -15,15 +15,15 @@ export async function POST(request: NextRequest) {
     const newBook = await db.insert(books).values({
       title: body.title,
       description: body.description,
-      amazonLink: body.amazonLink,
-      coverImage: body.coverImage,
-      releaseDate: new Date(body.releaseDate).toISOString(),
+      amazon_link: body.amazonLink,
+      cover_image: body.coverImage,
+      release_date: new Date(body.releaseDate).toISOString(),
       series: body.series,
-      seriesOrder: body.seriesOrder,
+      series_order: body.seriesOrder,
       tropes: body.tropes,
-      isPublished: body.isPublished,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      is_published: body.isPublished,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     }).returning()
 
     return NextResponse.json(newBook[0])
