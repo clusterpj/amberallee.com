@@ -4,73 +4,88 @@
 
 @layer base {
   :root {
-    --background: #FEFEFE;
+    --background: #FAFAF9;
     --background-pattern: url('/patterns/pattern.jpg');
-    --foreground: #020202;
-    --card: #FEFEFE;
-    --card-foreground: #020202;
-    --popover: #FEFEFE;
-    --popover-foreground: #020202;
-    --primary: #004AAD;
-    --primary-foreground: #FEFEFE;
-    --secondary: #69AAD4;
-    --secondary-foreground: #020202;
-    --muted: #96B8B5;
-    --muted-foreground: #484847;
-    --accent: #F6A5BD;
-    --accent-foreground: #020202;
-    --destructive: #F6A5BD;
-    --destructive-foreground: #020202;
-    --border: #718089;
-    --input: #EFBEA4;
-    --ring: #004AAD;
+    --foreground: #292524;
+    --card: #FFFFFF;
+    --card-foreground: #292524;
+    --popover: #FFFFFF;
+    --popover-foreground: #292524;
+    --primary: #D4AF37;
+    --primary-foreground: #000000;
+    --secondary: #C5A028;
+    --secondary-foreground: #000000;
+    --muted: #78716C;
+    --muted-foreground: #57534E;
+    --accent: #D6D3D1;
+    --accent-foreground: #292524;
+    --destructive: #EF4444;
+    --destructive-foreground: #FFFFFF;
+    --border: #E7E5E4;
+    --input: #E7E5E4;
+    --ring: #D4AF37;
     --radius: 0.5rem;
   }
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #020202;
-    --foreground: #FEFEFE;
-    --card: #484847;
-    --card-foreground: #FEFEFE;
-    --popover: #484847;
-    --popover-foreground: #FEFEFE;
-    --primary: #004AAD;
-    --primary-foreground: #FEFEFE;
-    --secondary: #69AAD4;
-    --secondary-foreground: #FEFEFE;
-    --muted: #718089;
-    --muted-foreground: #96B8B5;
-    --accent: #F6A5BD;
-    --accent-foreground: #FEFEFE;
-    --destructive: #F6A5BD;
-    --destructive-foreground: #FEFEFE;
-    --border: #718089;
-    --input: #484847;
-    --ring: #004AAD;
-  }
-}
-
-@layer base {
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
     font-family: Arial, Helvetica, sans-serif;
     position: relative;
+    background-color: var(--background);
   }
 
   body::before {
     content: '';
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
     background-image: var(--background-pattern);
     background-repeat: repeat;
-    background-blend-mode: multiply;
     background-size: 150px;
-    opacity: 0.3;
+    opacity: 0.15;
     z-index: -1;
+    pointer-events: none;
   }
+}
+
+@layer components {
+  .title-gradient {
+    @apply bg-gradient-to-r from-stone-800 via-stone-600 to-stone-800 bg-clip-text text-transparent;
+  }
+
+  /* Gold Button Styles */
+  .btn-gold {
+    background: linear-gradient(135deg, #D4AF37 0%, #F4E5AA 50%, #D4AF37 100%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1),
+                inset 0 1px 2px rgba(255, 255, 255, 0.5);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    font-weight: 600;
+    color: #000000;
+  }
+
+  .btn-gold:hover {
+    background: linear-gradient(135deg, #E5C44D 0%, #FFF6CC 50%, #E5C44D 100%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15),
+                inset 0 2px 3px rgba(255, 255, 255, 0.5);
+    transform: translateY(-1px);
+  }
+
+  .btn-gold:active {
+    background: linear-gradient(135deg, #C5A028 0%, #E5C44D 50%, #C5A028 100%);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1),
+                inset 0 1px 2px rgba(0, 0, 0, 0.2);
+    transform: translateY(1px);
+  }
+}
+
+/* Button hover states */
+.hover\:bg-secondary-hover:hover {
+  background: linear-gradient(135deg, #E5C44D 0%, #FFF6CC 50%, #E5C44D 100%);
+}
+
+.hover\:bg-primary-hover:hover {
+  background: linear-gradient(135deg, #C5A028 0%, #E5C44D 50%, #C5A028 100%);
 }

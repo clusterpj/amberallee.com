@@ -5,35 +5,60 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
+import { supabase } from '@/lib/supabase'
 
 interface BookFormData {
   title: string
   description: string
-  amazonLink: string
-  coverImage: string
-  releaseDate: string
+  amazon_link: string
+  cover_image: string
+  release_date: string
   series?: string
-  seriesOrder?: number
+  series_order?: number
   tropes: string[]
-  isPublished: boolean
+  is_published: boolean
 }
 
-export default function BookForm({ onSubmit }: { onSubmit: (data: BookFormData) => void }) {
-  const [formData, setFormData] = useState<BookFormData>({
-    title: '',
-    description: '',
-    amazonLink: '',
-    coverImage: '',
-    releaseDate: '',
-    series: '',
-    seriesOrder: 0,
-    tropes: [],
-    isPublished: false
-  })
+interface BookFormProps {
+  book?: BookFormData
+  onSuccess: () => void
+}
 
-  const handleSubmit = (e: React.FormEvent) => {
+export default function BookForm({ book, onSuccess }: BookFormProps) {
+  const [formData, setFormData] = useState<BookFormData>(
+    book || {
+      title: '',
+      description: '',
+      amazon_link: '',
+      cover_image: '',
+      release_date: '',
+      series: '',
+      series_order: undefined,
+      tropes: [],
+      is_published: false
+    }
+  )
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    onSubmit(formData)
+    try {
+      const { error } = await supabase
+        .from('books')
+        .insert([formData])
+
+      if (error) throw error
+      onSuccess()
+    } catch (error) {
+      console.error('Error saving book:', error)
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
   }
 
   const handleTropesChange = (value: string) => {
@@ -49,8 +74,9 @@ export default function BookForm({ onSubmit }: { onSubmit: (data: BookFormData) 
         <Label htmlFor="title">Title</Label>
         <Input
           id="title"
+          name="title"
           value={formData.title}
-          onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+          onChange={handleChange}
           required
         />
       </div>
@@ -59,59 +85,65 @@ export default function BookForm({ onSubmit }: { onSubmit: (data: BookFormData) 
         <Label htmlFor="description">Description</Label>
         <Textarea
           id="description"
+          name="description"
           value={formData.description}
-          onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-          rows={4}
+          onChange={handleChange}
+          required
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="amazonLink">Amazon Link</Label>
+        <Label htmlFor="amazon_link">Amazon Link</Label>
         <Input
-          id="amazonLink"
-          value={formData.amazonLink}
-          onChange={(e) => setFormData(prev => ({ ...prev, amazonLink: e.target.value }))}
+          id="amazon_link"
+          name="amazon_link"
+          value={formData.amazon_link}
+          onChange={handleChange}
+          required
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="coverImage">Cover Image URL</Label>
+        <Label htmlFor="cover_image">Cover Image URL</Label>
         <Input
-          id="coverImage"
-          value={formData.coverImage}
-          onChange={(e) => setFormData(prev => ({ ...prev, coverImage: e.target.value }))}
+          id="cover_image"
+          name="cover_image"
+          value={formData.cover_image}
+          onChange={handleChange}
+          required
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="releaseDate">Release Date</Label>
+        <Label htmlFor="release_date">Release Date</Label>
         <Input
-          id="releaseDate"
+          id="release_date"
+          name="release_date"
           type="date"
-          value={formData.releaseDate}
-          onChange={(e) => setFormData(prev => ({ ...prev, releaseDate: e.target.value }))}
+          value={formData.release_date}
+          onChange={handleChange}
+          required
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="series">Series Name</Label>
+        <Label htmlFor="series">Series (Optional)</Label>
         <Input
           id="series"
+          name="series"
           value={formData.series}
-          onChange={(e) => setFormData(prev => ({ ...prev, series: e.target.value }))}
+          onChange={handleChange}
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="seriesOrder">Series Order</Label>
+        <Label htmlFor="series_order">Series Order (Optional)</Label>
         <Input
-          id="seriesOrder"
+          id="series_order"
+          name="series_order"
           type="number"
-          value={formData.seriesOrder || ''}
-          onChange={(e) => setFormData(prev => ({ 
-            ...prev, 
-            seriesOrder: e.target.value ? parseInt(e.target.value) : 0 
-          }))}
+          value={formData.series_order || ''}
+          onChange={handleChange}
         />
       </div>
 
@@ -119,26 +151,24 @@ export default function BookForm({ onSubmit }: { onSubmit: (data: BookFormData) 
         <Label htmlFor="tropes">Tropes (comma-separated)</Label>
         <Input
           id="tropes"
+          name="tropes"
           value={formData.tropes.join(', ')}
           onChange={(e) => handleTropesChange(e.target.value)}
-          placeholder="Romance, Mafia, Second Chance"
         />
       </div>
 
       <div className="flex items-center space-x-2">
         <input
           type="checkbox"
-          id="isPublished"
-          checked={formData.isPublished}
-          onChange={(e) => setFormData(prev => ({ ...prev, isPublished: e.target.checked }))}
-          className="h-4 w-4"
+          id="is_published"
+          name="is_published"
+          checked={formData.is_published}
+          onChange={(e) => setFormData(prev => ({ ...prev, is_published: e.target.checked }))}
         />
-        <Label htmlFor="isPublished">Published</Label>
+        <Label htmlFor="is_published">Published</Label>
       </div>
 
-      <Button type="submit" className="w-full">
-        Add Book
-      </Button>
+      <Button type="submit">Save Book</Button>
     </form>
   )
 }

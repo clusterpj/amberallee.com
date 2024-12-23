@@ -18,37 +18,6 @@ export default {
     },
     extend: {
       colors: {
-        // Custom color scheme
-        primary: {
-          DEFAULT: "#0A1933",
-          hover: "#0c1f3d",
-          foreground: "#ffffff"
-        },
-        secondary: {
-          DEFAULT: "#2851A3",
-          hover: "#2f5cba",
-          foreground: "#ffffff"
-        },
-        accent: {
-          DEFAULT: "#D1E3F9",
-          hover: "#bfd7f5",
-          foreground: "#0A1933"
-        },
-        metallic: {
-          DEFAULT: "#C0C0C0",
-          hover: "#b3b3b3",
-          foreground: "#0A1933"
-        },
-        highlight1: {
-          DEFAULT: "#EF8EA4",
-          hover: "#e57d95",
-          foreground: "#020202"
-        },
-        highlight2: {
-          DEFAULT: "#718089",
-          hover: "#5f6b73",
-          foreground: "#FEFEFE"
-        },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: "hsl(var(--card))",
