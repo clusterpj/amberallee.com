@@ -5,6 +5,8 @@ import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/useAuth'
+import { useState } from 'react'
+import { Menu, X } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,6 +26,7 @@ const NAV_ITEMS = [
 export default function Header() {
   const { user, signOut, loading } = useAuth()
   const pathname = usePathname()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   console.log('Header - Auth State:', { user, loading })
 
@@ -42,8 +45,21 @@ export default function Header() {
           Amber Allee
         </Link>
         
-        {/* Navigation with metallic hover effect */}
-        <nav className="space-x-8">
+        {/* Mobile menu button */}
+        <button
+          className="lg:hidden p-2"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          {mobileMenuOpen ? (
+            <X className="h-6 w-6" />
+          ) : (
+            <Menu className="h-6 w-6" />
+          )}
+        </button>
+
+        {/* Desktop Navigation */}
+        <nav className="hidden lg:flex space-x-8">
           {NAV_ITEMS.map((item) => (
             <Link 
               key={item.href} 
@@ -134,6 +150,29 @@ export default function Header() {
           )}
         </div>
       </div>
+
+      {/* Mobile Navigation Overlay */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden fixed inset-0 z-50 bg-background/95 backdrop-blur-sm">
+          <div className="container mx-auto px-4 py-8">
+            <div className="flex flex-col space-y-4">
+              {NAV_ITEMS.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={cn(
+                    "text-lg py-2 text-foreground/80 hover:text-foreground transition-colors",
+                    pathname === item.href && "text-primary font-medium"
+                  )}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   )
 }
