@@ -43,9 +43,7 @@ export default function EventsPage() {
         <div className="max-w-6xl mx-auto">
           {/* Hero Section */}
           <div className="text-center mb-16">
-            <h1 className="text-6xl font-heading font-bold text-center mb-4 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-shimmer">
-              Upcoming Events
-            </h1>
+            <h1 className="text-4xl font-bold title-gradient mb-4">Upcoming Events</h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Join me for book signings, workshops, and special events. Connect with other readers
               and celebrate our shared love of romance literature.
@@ -106,7 +104,7 @@ export default function EventsPage() {
           <div className="mt-16">
             <Card className="p-8 border border-accent/20 backdrop-blur-sm bg-white/70">
               <CardContent className="text-center">
-                <h2 className="text-3xl font-heading font-bold text-primary mb-4">
+                <h2 className="text-3xl font-heading font-bold text-primary mb-4 title-gradient">
                   Stay Updated
                 </h2>
                 <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">

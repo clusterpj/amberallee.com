@@ -3,17 +3,20 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
+import { motion } from "framer-motion"
+import { CalendarDays, BookOpen, Sparkles } from 'lucide-react'
 
 const UPCOMING_BOOKS = [
   {
     title: "Untitled Book 3",
     series: "Las Vegas Elite Series",
     releaseDate: "Coming Fall 2024",
-    coverImage: "/placeholder-cover.jpg", // Replace with actual cover image
+    coverImage: "/placeholder-cover.jpg",
     description: "The thrilling continuation of the Las Vegas Elite Series. More details coming soon!",
     teaserQuote: "\"Power, passion, and betrayal collide in this explosive next installment...\"",
-    status: "In Progress"
+    status: "In Progress",
+    progress: 65 // percentage of completion
   }
 ]
 
@@ -22,47 +25,79 @@ const TEASERS = [
     title: "Chapter Preview",
     type: "Excerpt",
     content: "Coming soon...",
-    releaseDate: "Available in Summer 2024"
+    releaseDate: "Available in Summer 2024",
+    icon: BookOpen
   },
   {
     title: "Character Spotlight",
     type: "Behind the Scenes",
     content: "Meet the new characters joining the Las Vegas Elite world...",
-    releaseDate: "Updates Monthly"
+    releaseDate: "Updates Monthly",
+    icon: Sparkles
   },
   {
     title: "Exclusive Artwork",
     type: "Visual",
     content: "Special character art and scene illustrations...",
-    releaseDate: "Revealed Monthly"
+    releaseDate: "Revealed Monthly",
+    icon: CalendarDays
   }
 ]
+
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+}
+
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 }
+}
 
 export default function ComingSoonPage() {
   const [activeTab, setActiveTab] = useState<'books' | 'teasers'>('books')
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 to-accent/10 py-16 animate-gradient-x">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-neutral-50/80 py-16">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="container mx-auto px-4"
+      >
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-6xl font-heading font-bold text-center mb-4 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-shimmer">
+          <motion.h1 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-5xl md:text-7xl font-heading font-bold text-center mb-6 bg-gradient-to-r from-stone-800 via-stone-600 to-stone-800 bg-clip-text text-transparent"
+          >
             Coming Soon
-          </h1>
-          <p className="text-center text-lg text-muted-foreground mb-12 max-w-2xl mx-auto">
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center text-lg text-muted-foreground mb-12 max-w-2xl mx-auto"
+          >
             Get a sneak peek at upcoming releases and exclusive content
-          </p>
+          </motion.p>
 
           {/* Tab Navigation */}
           <div className="flex justify-center gap-4 mb-12">
             <Button
               onClick={() => setActiveTab('books')}
-              className={`px-8 ${activeTab === 'books' ? 'bg-metallic' : 'bg-white/50'} hover:bg-metallic-hover text-primary font-medium`}
+              variant={activeTab === 'books' ? 'default' : 'outline'}
+              className="px-8 py-6 text-lg font-semibold transition-all duration-300"
             >
               Upcoming Books
             </Button>
             <Button
               onClick={() => setActiveTab('teasers')}
-              className={`px-8 ${activeTab === 'teasers' ? 'bg-metallic' : 'bg-white/50'} hover:bg-metallic-hover text-primary font-medium`}
+              variant={activeTab === 'teasers' ? 'default' : 'outline'}
+              className="px-8 py-6 text-lg font-semibold transition-all duration-300"
             >
               Teasers & Previews
             </Button>
@@ -70,92 +105,118 @@ export default function ComingSoonPage() {
 
           {/* Upcoming Books Section */}
           {activeTab === 'books' && (
-            <div className="grid gap-8">
+            <motion.div 
+              variants={container}
+              initial="hidden"
+              animate="show"
+              className="grid gap-8"
+            >
               {UPCOMING_BOOKS.map((book) => (
-                <Card key={book.title} className="group overflow-hidden hover:shadow-xl transition-all duration-300 border border-accent/20 backdrop-blur-sm bg-white/70 hover:bg-white/90">
-                  <div className="grid md:grid-cols-3 gap-6">
-                    <div className="relative h-96 md:h-full overflow-hidden bg-accent/10 flex items-center justify-center">
-                      {book.coverImage ? (
-                        <Image
-                          src={book.coverImage}
-                          alt={book.title}
-                          fill
-                          className="object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="text-center p-8">
-                          <span className="text-6xl mb-4">📚</span>
-                          <p className="text-muted-foreground">Cover Reveal Coming Soon</p>
+                <motion.div key={book.title} variants={item}>
+                  <Card className="group overflow-hidden hover:shadow-xl transition-all duration-500 border-0 bg-white/90 backdrop-blur-md">
+                    <div className="grid md:grid-cols-3 gap-6">
+                      <div className="relative h-[400px] md:h-full overflow-hidden bg-gradient-to-br from-stone-100 to-neutral-50">
+                        {book.coverImage ? (
+                          <Image
+                            src={book.coverImage}
+                            alt={book.title}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        ) : (
+                          <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-stone-50 to-neutral-100">
+                            <span className="text-6xl mb-4">📚</span>
+                            <p className="text-muted-foreground text-center px-4">Cover Reveal Coming Soon</p>
+                          </div>
+                        )}
+                        
+                        {/* Progress Bar */}
+                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-stone-200">
+                          <div 
+                            className="h-full bg-stone-700 transition-all duration-1000"
+                            style={{ width: `${book.progress}%` }}
+                          />
                         </div>
-                      )}
-                    </div>
-                    <div className="md:col-span-2 p-8">
-                      <CardHeader className="p-0 mb-6">
-                        <div className="flex items-center gap-4 mb-4">
-                          <span className="px-3 py-1 rounded-full bg-secondary/10 text-secondary text-sm font-medium">
-                            {book.status}
-                          </span>
-                          <span className="text-muted-foreground text-sm">
-                            {book.releaseDate}
-                          </span>
+                      </div>
+                      <div className="md:col-span-2 p-8">
+                        <div className="space-y-6">
+                          <div className="flex items-center gap-4">
+                            <span className="px-4 py-1.5 rounded-full bg-stone-800 text-white text-sm font-medium">
+                              {book.status}
+                            </span>
+                            <span className="text-muted-foreground">
+                              {book.releaseDate}
+                            </span>
+                          </div>
+                          
+                          <div>
+                            <h2 className="text-3xl font-bold mb-2 text-stone-800">{book.title}</h2>
+                            <p className="text-stone-600 font-semibold">{book.series}</p>
+                          </div>
+                          
+                          <p className="text-stone-600 leading-relaxed">
+                            {book.description}
+                          </p>
+                          
+                          <blockquote className="border-l-4 border-stone-300 pl-4 italic text-lg text-stone-700">
+                            {book.teaserQuote}
+                          </blockquote>
+                          
+                          <div className="pt-4">
+                            <p className="text-sm text-stone-500">
+                              Writing Progress: {book.progress}%
+                            </p>
+                          </div>
                         </div>
-                        <CardTitle className="text-3xl mb-2 group-hover:text-secondary transition-colors">
-                          {book.title}
-                        </CardTitle>
-                        <CardDescription className="text-lg font-medium text-primary/80">
-                          {book.series}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent className="p-0 space-y-6">
-                        <p className="text-muted-foreground">
-                          {book.description}
-                        </p>
-                        <blockquote className="border-l-4 border-secondary pl-4 italic text-primary/80">
-                          {book.teaserQuote}
-                        </blockquote>
-                      </CardContent>
+                      </div>
                     </div>
-                  </div>
-                </Card>
+                  </Card>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           )}
 
           {/* Teasers Section */}
           {activeTab === 'teasers' && (
-            <div className="grid md:grid-cols-3 gap-8">
+            <motion.div 
+              variants={container}
+              initial="hidden"
+              animate="show"
+              className="grid md:grid-cols-3 gap-6"
+            >
               {TEASERS.map((teaser) => (
-                <Card key={teaser.title} className="group hover:shadow-xl transition-all duration-300 border border-accent/20 backdrop-blur-sm bg-white/70 hover:bg-white/90">
-                  <CardHeader>
-                    <div className="flex items-center gap-2 mb-4">
-                      <span className="px-3 py-1 rounded-full bg-secondary/10 text-secondary text-sm font-medium">
-                        {teaser.type}
-                      </span>
-                    </div>
-                    <CardTitle className="text-2xl group-hover:text-secondary transition-colors">
-                      {teaser.title}
-                    </CardTitle>
-                    <CardDescription>
-                      {teaser.releaseDate}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground mb-6">
-                      {teaser.content}
-                    </p>
-                    <Button className="w-full bg-metallic hover:bg-metallic-hover text-primary font-medium group">
-                      Notify Me
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                      </svg>
-                    </Button>
-                  </CardContent>
-                </Card>
+                <motion.div key={teaser.title} variants={item}>
+                  <Card className="group h-full hover:shadow-xl transition-all duration-500 border-0 bg-white/90 backdrop-blur-md">
+                    <CardContent className="p-6 space-y-4">
+                      <div className="h-12 w-12 rounded-full bg-stone-100 flex items-center justify-center text-stone-700 mb-6">
+                        {<teaser.icon className="h-6 w-6" />}
+                      </div>
+                      
+                      <div>
+                        <h3 className="text-xl font-bold mb-1 text-stone-800 group-hover:text-stone-600 transition-colors">
+                          {teaser.title}
+                        </h3>
+                        <p className="text-sm text-stone-600 font-medium">
+                          {teaser.type}
+                        </p>
+                      </div>
+                      
+                      <p className="text-stone-600">
+                        {teaser.content}
+                      </p>
+                      
+                      <div className="pt-4 flex items-center text-sm text-stone-500">
+                        <CalendarDays className="h-4 w-4 mr-2" />
+                        {teaser.releaseDate}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           )}
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }

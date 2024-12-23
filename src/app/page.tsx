@@ -1,8 +1,9 @@
-import Image from "next/image"
-import Link from "next/link"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import Image from 'next/image'
+import Link from 'next/link'
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 import { NewsletterPopup } from "@/components/ui/NewsletterPopup"
 import { SocialBar } from "@/components/ui/SocialBar"
 
@@ -10,21 +11,23 @@ const FEATURED_BOOKS = [
   {
     title: "The Prince",
     cover: "/the-prince-cover.jpg",
-    description: "First book in the Las Vegas Mafia Series - A story of power, loyalty, and forbidden love.",
     link: "/books/the-prince",
-    excerpt: "In the glittering city of Las Vegas, where power is the ultimate currency, Dante Romano rules his empire with an iron fist. But when a mysterious woman from his past resurfaces, he finds himself caught between duty and desire, forced to confront the true meaning of loyalty.",
+    excerpt: "Luca Falcone has been groomed to be the next Don of his mafia family in Las Vegas. When he breaks the one rule to survive - leave no witnesses - his entire future is at risk. Can he leave his family's legacy behind, or will the mafia catch up to him?",
     details: {
-      series: "Las Vegas Mafia Series, Book 1"
+      series: "Las Vegas Mafia Series",
+      price: 19.99,
+      amazonLink: "https://www.amazon.com/Prince-Las-Vegas-Mafia-ebook/dp/B0CVV5XRK1"
     }
   },
   {
     title: "Hidden Queen",
     cover: "/hidden-queen-cover.jpg",
-    description: "A dark romance that will keep you on the edge of your seat.",
     link: "/books/hidden-queen",
-    excerpt: "She was meant to be just another pawn in his game. But when Alessandro discovers the truth about the woman he's been hunting, everything changes. Now, he must decide between his thirst for revenge and the undeniable pull of a love that could destroy them both.",
+    excerpt: "When Kendall Drake disregards her guardians' warning and arrives in Las Vegas to accept the summer internship of a lifetime, she doesn't expect to meet Wyatt Dawson. As she juggles her new position and Wyatt's irresistible seduction, she finds herself caught in a world of power plays, secrets, deception, and murder.",
     details: {
-      series: "Las Vegas Elite Series, Book 1"
+      series: "Las Vegas Mafia Series",
+      price: 19.99,
+      amazonLink: "https://www.amazon.com/Hidden-Queen-Las-Vegas-Mafia-ebook/dp/B0D3KMQ8XQ"
     }
   }
 ]
@@ -73,7 +76,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center relative z-10">
             <div className="space-y-8">
-              <h1 className="text-6xl font-bold">
+              <h1 className="text-6xl font-bold title-gradient">
                 Romance Novels
                 <br />
                 <span className="text-primary">
@@ -84,29 +87,35 @@ export default function Home() {
                 Experience the emotional depth and compelling storytelling of Amber Allee's novels.
                 Where romance meets unforgettable characters.
               </p>
-              <div className="flex space-x-4">
-                <Button 
-                  asChild 
-                  className="bg-secondary hover:bg-secondary-hover text-white font-medium"
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button
+                  asChild
+                  size="lg"
+                  variant="default"
+                  className="btn-gold text-black font-bold px-8 py-6 rounded-full transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-[#D4AF37]/20 group"
                 >
                   <Link href="/books" className="flex items-center">
-                    Explore Books
+                    <span className="text-xl font-bold">Explore Books</span>
                     <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
                   </Link>
                 </Button>
-                <Button 
-                  asChild 
-                  variant="outline" 
-                  className="border-highlight1 text-highlight1 hover:bg-highlight1/10"
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="border-2 border-[#004AAD] text-[#004AAD] hover:bg-[#004AAD] hover:text-white font-semibold px-8 py-6 rounded-full transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-[#004AAD]/20 group"
                 >
-                  <Link href="/newsletter">Join Newsletter</Link>
+                  <Link href="/newsletter" className="flex items-center">
+                    Join Newsletter
+                    <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+                  </Link>
                 </Button>
               </div>
             </div>
             <div className="flex justify-center">
               <Card className="relative group bg-white border-accent/20 shadow-lg hover:shadow-xl transition-all duration-300">
                 <CardHeader className="relative">
-                  <CardTitle className="text-center text-2xl font-bold text-primary pb-2 relative">
+                  <CardTitle className="text-center text-2xl font-bold text-primary pb-2 relative title-gradient">
                     Latest Release
                     <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/4 h-0.5 bg-highlight1"></span>
                   </CardTitle>
@@ -132,7 +141,7 @@ export default function Home() {
       <section className="py-24 bg-highlight2/5">
         <div className="container px-4 mx-auto">
           <div className="text-center mb-16 space-y-4">
-            <h2 className="text-5xl font-bold text-primary">
+            <h2 className="text-5xl font-bold text-primary title-gradient">
               Featured Books
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -142,55 +151,38 @@ export default function Home() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 max-w-[1800px] mx-auto">
             {FEATURED_BOOKS.map((book) => (
-              <Card key={book.title} className="group bg-white border-accent/20 hover:shadow-xl transition-all duration-300">
-                <div className="flex flex-col lg:min-h-[1000px]">
-                  <div className="relative w-full px-6 pt-8 pb-4">
-                    <div className="relative mx-auto" style={{ width: '500px', maxWidth: '100%', aspectRatio: '2/3' }}>
-                      <Image
-                        src={book.cover}
-                        alt={book.title}
-                        fill
-                        className="object-cover rounded-lg shadow-xl transition-all duration-300 group-hover:scale-[1.02]"
-                        priority
-                        sizes="(max-width: 768px) 90vw, (max-width: 1800px) 45vw, 500px"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col flex-grow p-8 space-y-6">
-                    <div className="space-y-6">
-                      <div>
-                        <h3 className="text-3xl font-bold mb-2 text-center lg:text-left text-primary">
-                          {book.title}
-                        </h3>
-                        <p className="text-lg text-highlight2 text-center lg:text-left">
-                          {book.details.series}
-                        </p>
-                      </div>
-
-                      <div className="space-y-4">
-                        <p className="text-lg text-highlight1 leading-relaxed italic">
-                          "{book.description}"
-                        </p>
-                        <p className="text-muted-foreground leading-relaxed">
-                          {book.excerpt}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="mt-auto">
-                      <Button 
-                        asChild
-                        className="w-full bg-secondary hover:bg-secondary-hover text-white font-medium text-lg py-6"
-                      >
-                        <Link href={book.link}>
-                          Explore Book
-                        </Link>
-                      </Button>
-                    </div>
-                  </div>
+              <div key={book.title} className="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div className="relative">
+                  <Image
+                    src={book.cover}
+                    alt={book.title}
+                    width={400}
+                    height={600}
+                    className="w-full h-auto object-cover"
+                  />
+                  <Badge className="absolute top-4 right-4" variant="secondary">
+                    Book {book.title === "Hidden Queen" ? "2" : "1"}
+                  </Badge>
                 </div>
-              </Card>
+                <div className="p-6">
+                  <h3 className="text-2xl font-bold mb-2">{book.title}</h3>
+                  <p className="text-gray-600 mb-4">
+                    {book.excerpt}
+                  </p>
+                  <p className="text-sm text-gray-500 mb-4">
+                    {book.details.series}
+                  </p>
+                  <Button
+                    asChild
+                    className="btn-gold text-black font-bold w-full px-6 py-3"
+                  >
+                    <Link href={book.link} className="flex items-center justify-center">
+                      <span>Explore Book</span>
+                      <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+                    </Link>
+                  </Button>
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -222,33 +214,18 @@ export default function Home() {
               </div>
 
               <div className="order-1 lg:order-2 space-y-8">
-                <div className="space-y-4">
-                  <h2 className="text-4xl lg:text-5xl font-bold text-primary">
-                    Meet Amber Allee
-                  </h2>
-                  <p className="text-xl text-highlight1">
-                    USA Today Bestselling Author
-                  </p>
-                </div>
-
-                <div className="space-y-6">
-                  <p className="text-lg leading-relaxed text-muted-foreground">
-                    Amber Allee is a passionate storyteller who weaves intricate tales of love, power, and redemption. 
-                    Her mafia romance novels have captivated readers worldwide with their blend of intense passion and 
-                    heart-stopping suspense.
-                  </p>
-                  <p className="text-lg leading-relaxed text-muted-foreground">
-                    Based in the heart of romance writing, Amber draws inspiration from the complex dynamics of 
-                    relationships and the transformative journey of finding love in unexpected places. Her stories 
-                    feature strong, complex characters who must navigate the dangerous waters of loyalty, betrayal, 
-                    and passion.
+                <div className="max-w-4xl">
+                  <h2 className="text-4xl font-bold mb-2 text-left">Meet Amber Allee</h2>
+                  <h3 className="text-xl text-muted-foreground mb-6 text-left">Author of The Las Vegas Mafia Series</h3>
+                  <p className="text-lg leading-relaxed text-muted-foreground text-left">
+                    From small-town Texas roots to penning steamy mafia romance, debut author Amber Allee burst onto the scene in 2024 with "The Prince" and "Hidden Queen" - the first installments of her Las Vegas Mafia Series. This self-proclaimed lover of animal print and bling brings together sizzling alpha heroes, intense drama, and nail-biting suspense in her work, drawing from nearly a decade of honing her craft before stepping into publishing. When she's not weaving tales of dangerous love, you'll find this family-oriented author curled up with a good book or creating memories with her husband and two children. Her highly anticipated series conclusion is set to release in early 2025.
                   </p>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4 pt-4">
                   <Button 
                     asChild
-                    className="bg-secondary hover:bg-secondary-hover text-white font-medium text-lg py-6 px-8"
+                    variant="secondary"
                   >
                     <Link href="/about">
                       Read Full Bio
@@ -258,7 +235,6 @@ export default function Home() {
                   <Button 
                     asChild
                     variant="outline"
-                    className="border-highlight1 text-highlight1 hover:bg-highlight1/10 text-lg py-6 px-8"
                   >
                     <Link href="/contact">Contact Amber</Link>
                   </Button>
@@ -272,7 +248,7 @@ export default function Home() {
       {/* Newsletter Signup */}
       <section className="bg-highlight2/5 py-24">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold text-primary mb-6">
+          <h2 className="text-4xl font-bold text-primary title-gradient mb-6">
             Stay Connected
           </h2>
           <p className="text-xl text-muted-foreground mb-8">
@@ -286,9 +262,12 @@ export default function Home() {
                 className="flex-grow px-4 py-3 rounded-md border-accent/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all duration-300"
               />
               <Button 
-                className="bg-secondary hover:bg-secondary-hover text-white font-medium"
+                variant="secondary"
+                size="lg"
+                className="bg-[#004AAD] hover:bg-[#69AAD4] text-white font-semibold px-8 py-6 rounded-full transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-[#004AAD]/20 group"
               >
                 Subscribe
+                <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
               </Button>
             </form>
           </div>
@@ -298,7 +277,7 @@ export default function Home() {
       {/* Testimonials */}
       <section className="bg-white py-24">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-primary text-center mb-12">
+          <h2 className="text-4xl font-bold text-primary title-gradient text-center mb-12">
             What Readers Say
           </h2>
           <div className="grid md:grid-cols-2 gap-8">

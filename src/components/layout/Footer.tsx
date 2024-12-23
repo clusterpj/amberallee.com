@@ -1,67 +1,128 @@
 'use client'
 
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { useState } from 'react'
 
 export default function Footer() {
   const [email, setEmail] = useState('')
 
-  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Implement newsletter signup logic
+    // Handle newsletter signup
     console.log('Newsletter signup:', email)
     setEmail('')
   }
 
   return (
-    <footer className="bg-gray-900 text-white py-12">
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
-        {/* About Section */}
-        <div>
-          <h3 className="text-xl font-bold mb-4 text-pink-400">About Amber Allee</h3>
-          <p className="text-gray-300">
-            Romance author specializing in mafia romance novels. 
-            Passionate storytelling with suspense and drama.
+    <footer className="bg-background border-t">
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid md:grid-cols-4 gap-8">
+          {/* Brand */}
+          <div className="space-y-4">
+            <Link 
+              href="/" 
+              className="text-2xl font-bold title-gradient"
+            >
+              Amber Allee
+            </Link>
+            <p className="text-muted-foreground">
+              Romance author crafting stories of passion, intrigue, and love.
+            </p>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h3 className="text-lg font-semibold title-gradient mb-4">Quick Links</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/about" className="text-muted-foreground hover:text-[#004AAD] transition-colors">
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link href="/books" className="text-muted-foreground hover:text-[#004AAD] transition-colors">
+                  Books
+                </Link>
+              </li>
+              <li>
+                <Link href="/events" className="text-muted-foreground hover:text-[#004AAD] transition-colors">
+                  Events
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="text-muted-foreground hover:text-[#004AAD] transition-colors">
+                  Contact
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Social Links */}
+          <div>
+            <h3 className="text-lg font-semibold title-gradient mb-4">Connect</h3>
+            <ul className="space-y-2">
+              <li>
+                <a 
+                  href="https://www.instagram.com/author.amberallee?igshid=dmdoMmw1N3o1cXU5&utm_source=qr" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-[#004AAD] transition-colors"
+                >
+                  Instagram
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="https://www.facebook.com/share/GoP2UGzzWMA78A89/?mibextid=K35XfP" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-[#004AAD] transition-colors"
+                >
+                  Facebook Group
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="https://www.goodreads.com/author/show/48624101.Amber_Allee" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-[#004AAD] transition-colors"
+                >
+                  Goodreads
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Newsletter */}
+          <div>
+            <h3 className="text-lg font-semibold title-gradient mb-4">Newsletter</h3>
+            <form onSubmit={handleNewsletterSubmit} className="space-y-4">
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="bg-background"
+              />
+              <Button 
+                type="submit" 
+                className="w-full bg-[#004AAD] hover:bg-[#69AAD4] text-white transition-colors"
+              >
+                Subscribe
+              </Button>
+            </form>
+          </div>
+        </div>
+
+        {/* Copyright */}
+        <div className="mt-12 pt-8 border-t border-border/50">
+          <p className="text-center text-muted-foreground">
+            &copy; {new Date().getFullYear()} Amber Allee. All rights reserved.
           </p>
         </div>
-
-        {/* Quick Links */}
-        <div>
-          <h3 className="text-xl font-bold mb-4 text-pink-400">Quick Links</h3>
-          <nav className="space-y-2">
-            <Link href="/books" className="block text-gray-300 hover:text-pink-400">Books</Link>
-            <Link href="/events" className="block text-gray-300 hover:text-pink-400">Events</Link>
-            <Link href="/contact" className="block text-gray-300 hover:text-pink-400">Contact</Link>
-          </nav>
-        </div>
-
-        {/* Newsletter Signup */}
-        <div>
-          <h3 className="text-xl font-bold mb-4 text-pink-400">Stay Connected</h3>
-          <form onSubmit={handleNewsletterSubmit} className="space-y-2">
-            <input 
-              type="email" 
-              placeholder="Enter your email" 
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-3 py-2 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
-            />
-            <button 
-              type="submit" 
-              className="w-full bg-pink-600 text-white px-4 py-2 rounded-md hover:bg-pink-700 transition-colors"
-            >
-              Subscribe
-            </button>
-          </form>
-        </div>
-      </div>
-
-      {/* Copyright */}
-      <div className="text-center mt-8 pt-4 border-t border-gray-700">
-        <p className="text-gray-400">
-          &copy; {new Date().getFullYear()} Amber Allee. All Rights Reserved.
-        </p>
       </div>
     </footer>
   )

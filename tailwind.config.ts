@@ -56,6 +56,15 @@ export default {
           '0%, 100%': { opacity: '0', transform: 'scale(0)' },
           '50%': { opacity: '1', transform: 'scale(1)' },
         },
+        "sparkle-spin": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(180deg)" }
+        },
+        "sparkle-fade": {
+          "0%": { transform: "scale(0)", opacity: "0" },
+          "50%": { transform: "scale(1)", opacity: "1" },
+          "100%": { transform: "scale(0)", opacity: "0" }
+        },
         shimmer: {
           '0%': { backgroundPosition: '200% 0' },
           '100%': { backgroundPosition: '-200% 0' },
@@ -74,7 +83,9 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "sparkle": "sparkle 1.5s ease-in-out infinite",
+        sparkle: "sparkle 1.5s ease-in-out infinite",
+        "sparkle-spin": "sparkle-spin 1000ms linear",
+        "sparkle-fade": "sparkle-fade 1000ms linear",
         "shimmer": "shimmer 3s linear infinite",
         "gradient-x": "gradient-x 15s ease infinite"
       },

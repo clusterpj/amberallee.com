@@ -2,6 +2,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent } from "@/components/ui/card"
 
 export default function AboutPage() {
   return (
@@ -21,13 +23,12 @@ export default function AboutPage() {
                     Amber Allee
                   </h1>
                   <p className="text-2xl text-highlight2">
-                    USA Today Bestselling Author of Heart-Stopping Romance
+                    Author of The Las Vegas Mafia Series
                   </p>
                 </div>
                 <p className="text-xl text-muted-foreground leading-relaxed">
-                  Crafting stories that blend passion, suspense, and the raw emotions 
-                  of forbidden love. Every page is an invitation to explore the depths 
-                  of human connection and the transformative power of love.
+                  A passionate storyteller who brings romance, drama, and suspense to life through 
+                  her compelling novels featuring irresistible alpha heroes.
                 </p>
               </div>
 
@@ -50,180 +51,161 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Biography Section */}
-      <section className="py-24 relative overflow-hidden bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto space-y-16">
-            <div className="space-y-8">
-              <h2 className="text-4xl font-bold text-center text-primary">
-                The Story Behind the Stories
-              </h2>
-              <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
-                <p>
-                  Amber Allee is a passionate storyteller who weaves intricate tales of love, 
-                  power, and redemption. Her journey into the world of romance writing began 
-                  with a deep fascination for the complex dynamics of relationships and the 
-                  transformative journey of finding love in unexpected places.
-                </p>
-                <p>
-                  Her mafia romance novels have captivated readers worldwide with their blend 
-                  of intense passion and heart-stopping suspense. Each story features strong, 
-                  complex characters who must navigate the dangerous waters of loyalty, betrayal, 
-                  and passion.
-                </p>
-                <p>
-                  As a USA Today bestselling author, Amber has established herself as a master 
-                  of the genre, known for creating worlds where love conquers even the darkest 
-                  of circumstances. Her writing style combines emotional depth with pulse-pounding 
-                  action, keeping readers on the edge of their seats until the very last page.
-                </p>
-              </div>
-            </div>
-
-            {/* Quote */}
-            <blockquote className="relative p-8 rounded-xl bg-highlight2/5 border border-highlight1/20">
-              <div className="absolute -top-4 -left-2 text-6xl text-highlight1">"</div>
-              <p className="text-xl italic text-highlight2 text-center">
-                Writing romance is about exploring the depths of human connection and the 
-                transformative power of love. Every story is a journey into the heart of 
-                what makes us human.
-              </p>
-              <footer className="mt-4 text-right text-highlight2">
-                - Amber Allee
-              </footer>
-            </blockquote>
-          </div>
+      {/* Decorative Divider */}
+      <div className="my-8 flex items-center justify-center space-x-4">
+        <div className="h-px w-32 bg-gradient-to-r from-transparent via-pink-200 to-transparent"></div>
+        <div className="flex items-center space-x-2">
+          <span className="text-pink-400 text-2xl">♥</span>
+          <span className="text-pink-300 text-xl">✧</span>
+          <span className="text-pink-400 text-2xl">♥</span>
         </div>
-      </section>
+        <div className="h-px w-32 bg-gradient-to-r from-transparent via-pink-200 to-transparent"></div>
+      </div>
 
-      {/* Amazon Book Launch Journey */}
-      <section className="py-24 relative overflow-hidden bg-background">
+      {/* About Section */}
+      <section className="py-12 bg-background">
         <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16 space-y-4">
-              <h2 className="text-4xl font-bold text-primary">
-                The Amazon Journey
-              </h2>
-              <p className="text-xl text-highlight2">
-                A Dream Launch That Became Reality
+          <div className="max-w-4xl mx-auto space-y-12">
+            <div className="prose prose-lg">
+              <h2 className="text-2xl font-semibold title-gradient mb-8">About Amber</h2>
+              
+              <p className="text-xl leading-relaxed mb-6">
+                Amber Allee is a brand-new author making her debut with "The Prince" in February 2024, 
+                followed by "Hidden Queen" in June 2024. These captivating novels are part of her 
+                Las Vegas Mafia Series, with the final installment set to release in early 2025. 
+                While she began her writing journey in 2015, she recently took the exciting step to 
+                share her stories with the world.
+              </p>
+
+              <p className="text-xl leading-relaxed mb-6">
+                She lives in the great state of Texas in the same town she grew up in, sharing her 
+                home with her loving husband and two wonderful kids. When she's not crafting 
+                her next steamy romance, you'll find Amber curled up under blankets with a good 
+                book or enjoying quality time playing games with her family.
+              </p>
+
+              <p className="text-xl leading-relaxed">
+                A true lover of life's adventures, Amber enjoys traveling and shopping. Her 
+                signature style? Animal print and all things bling! This vibrant personality 
+                shines through in her writing, where she expertly weaves together romance, 
+                drama, and suspense with unforgettable alpha heroes.
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              {/* Launch Story */}
-              <div className="space-y-6">
-                <div className="space-y-4 text-lg text-muted-foreground leading-relaxed">
-                  <p>
-                    When "The Prince" hit Amazon's virtual shelves, it wasn't just another 
-                    book launch – it was the culmination of countless hours of writing, 
-                    editing, and dreaming. The response was overwhelming, with readers 
-                    immediately connecting with Dante's complex world and the forbidden 
-                    romance at its heart.
-                  </p>
-                  <p>
-                    Within hours of its release, "The Prince" began climbing the Amazon 
-                    charts, eventually reaching #1 in multiple categories. The success 
-                    wasn't just in numbers – it was in the countless messages from readers 
-                    who found themselves unable to put the book down, staying up late into 
-                    the night to discover how the story would unfold.
-                  </p>
-                </div>
+            {/* Latest Releases */}
+            <section className="mt-16">
+              <h2 className="text-3xl font-bold title-gradient mb-8">Latest Releases</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Hidden Queen */}
+                <Card className="group relative overflow-hidden hover:shadow-xl transition-all duration-300">
+                  <Link href="/books/hidden-queen">
+                    <CardContent className="p-6">
+                      <div className="flex flex-col md:flex-row gap-6">
+                        {/* Book Cover */}
+                        <div className="relative w-full md:w-48 aspect-[2/3] rounded-lg overflow-hidden">
+                          <Image
+                            src="/hidden-queen-cover.jpg"
+                            alt="Hidden Queen Book Cover"
+                            fill
+                            className="object-cover transform transition-transform duration-500 group-hover:scale-105"
+                          />
+                          <div className="absolute top-2 right-2">
+                            <Badge className="bg-primary/90 text-white">
+                              Latest Release
+                            </Badge>
+                          </div>
+                        </div>
+                        
+                        {/* Book Details */}
+                        <div className="flex-1 space-y-4">
+                          <div>
+                            <h3 className="text-2xl font-bold text-primary mb-1">Hidden Queen</h3>
+                            <p className="text-muted-foreground">Las Vegas Mafia Series - Book 2</p>
+                            <p className="text-sm text-muted-foreground">Released June 27, 2024</p>
+                          </div>
+                          <div className="space-y-2">
+                            <Badge variant="outline" className="mr-2">Mafia Romance</Badge>
+                            <Badge variant="outline">Secrets</Badge>
+                          </div>
+                          <p className="text-foreground/80 line-clamp-3">
+                            When Kendall Drake disregards her guardians' warning and arrives in Las Vegas 
+                            to accept the summer internship of a lifetime, she doesn't expect to meet Wyatt Dawson...
+                          </p>
+                          <div className="flex items-center justify-between">
+                            <p className="text-lg font-bold text-primary">${(19.99).toFixed(2)}</p>
+                            <Button variant="link" className="group-hover:text-primary transition-colors">
+                              Read More →
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Link>
+                </Card>
 
-                {/* Achievement Cards */}
-                <div className="grid grid-cols-2 gap-4 mt-8">
-                  <div className="p-6 rounded-xl text-center bg-highlight2/5 border border-highlight1/20 hover:border-highlight1/40 transition-colors duration-300">
-                    <div className="text-3xl font-bold text-primary mb-2">#1</div>
-                    <div className="text-sm text-highlight2">
-                      Amazon Bestseller in Dark Romance
-                    </div>
-                  </div>
-                  <div className="p-6 rounded-xl text-center bg-highlight2/5 border border-highlight1/20 hover:border-highlight1/40 transition-colors duration-300">
-                    <div className="text-3xl font-bold text-primary mb-2">10K+</div>
-                    <div className="text-sm text-highlight2">
-                      Copies Sold in First Week
-                    </div>
-                  </div>
-                </div>
+                {/* The Prince */}
+                <Card className="group relative overflow-hidden hover:shadow-xl transition-all duration-300">
+                  <Link href="/books/the-prince">
+                    <CardContent className="p-6">
+                      <div className="flex flex-col md:flex-row gap-6">
+                        {/* Book Cover */}
+                        <div className="relative w-full md:w-48 aspect-[2/3] rounded-lg overflow-hidden">
+                          <Image
+                            src="/the-prince-cover.jpg"
+                            alt="The Prince Book Cover"
+                            fill
+                            className="object-cover transform transition-transform duration-500 group-hover:scale-105"
+                          />
+                          <div className="absolute top-2 right-2">
+                            <Badge className="bg-secondary/90 text-white">
+                              Available Now
+                            </Badge>
+                          </div>
+                        </div>
+                        
+                        {/* Book Details */}
+                        <div className="flex-1 space-y-4">
+                          <div>
+                            <h3 className="text-2xl font-bold text-primary mb-1">The Prince</h3>
+                            <p className="text-muted-foreground">Las Vegas Mafia Series - Book 1</p>
+                            <p className="text-sm text-muted-foreground">Released March 21, 2024</p>
+                          </div>
+                          <div className="space-y-2">
+                            <Badge variant="outline" className="mr-2">Mafia Romance</Badge>
+                            <Badge variant="outline">Dark Romance</Badge>
+                          </div>
+                          <p className="text-foreground/80 line-clamp-3">
+                            Luca Falcone has been groomed to be the next Don of his mafia family in Las Vegas. 
+                            His entire life has been about becoming the man his father can be proud to hand his legacy to...
+                          </p>
+                          <div className="flex items-center justify-between">
+                            <p className="text-lg font-bold text-primary">${(19.99).toFixed(2)}</p>
+                            <Button variant="link" className="group-hover:text-primary transition-colors">
+                              Read More →
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Link>
+                </Card>
               </div>
+            </section>
 
-              {/* Launch Images */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-4">
-                  <div className="relative aspect-[3/4] rounded-xl overflow-hidden group">
-                    <Image
-                      src="/amazon-launch-1.jpg"
-                      alt="Amazon Book Launch Celebration"
-                      fill
-                      className="object-cover transition-all duration-500 ease-in-out group-hover:scale-105"
-                    />
-                  </div>
-                  <div className="relative aspect-square rounded-xl overflow-hidden group">
-                    <Image
-                      src="/amazon-launch-2.jpg"
-                      alt="Book Signing Event"
-                      fill
-                      className="object-cover transition-all duration-500 ease-in-out group-hover:scale-105"
-                    />
-                  </div>
-                </div>
-                <div className="relative aspect-[3/4] rounded-xl overflow-hidden mt-8 group">
-                  <Image
-                    src="/amazon-launch-3.jpg"
-                    alt="Readers with The Prince"
-                    fill
-                    className="object-cover transition-all duration-500 ease-in-out group-hover:scale-105"
-                  />
-                </div>
+            {/* Contact CTA */}
+            <div className="mt-16 text-center">
+              <h3 className="text-3xl font-bold text-primary mb-4">Connect with Amber</h3>
+              <p className="text-xl text-muted-foreground mb-8">
+                Want to stay updated on new releases and exclusive content?
+              </p>
+              <div className="flex justify-center gap-4">
+                <Button asChild variant="secondary">
+                  <Link href="/newsletter">Join Newsletter</Link>
+                </Button>
+                <Button asChild variant="outline">
+                  <Link href="/contact">Contact</Link>
+                </Button>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Connect Section */}
-      <section className="py-24 relative overflow-hidden bg-background">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center space-y-8">
-            <h2 className="text-4xl font-bold text-primary">
-              Let's Connect
-            </h2>
-            <p className="text-xl text-highlight2">
-              Join me on this incredible journey of storytelling. Whether you're a 
-              longtime reader or just discovering my books, I'd love to hear from you.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                asChild
-                className={cn(
-                  "bg-highlight1 text-white font-semibold",
-                  "transform-gpu transition-all duration-300",
-                  "hover:scale-[1.02] hover:shadow-lg",
-                  "text-lg py-6 px-8",
-                  "group relative overflow-hidden"
-                )}
-              >
-                <Link href="/contact">
-                  <span className="relative z-10">Get in Touch</span>
-                  <div className={cn(
-                    "absolute inset-0",
-                    "bg-highlight1/50",
-                    "opacity-0 group-hover:opacity-100",
-                    "transition-opacity duration-300"
-                  )} />
-                </Link>
-              </Button>
-              <Button 
-                asChild
-                variant="outline"
-                className={cn(
-                  "border-highlight1 hover:bg-highlight1/10",
-                  "text-lg py-6 px-8",
-                  "transform-gpu transition-all duration-300",
-                  "hover:scale-[1.02]"
-                )}
-              >
-                <Link href="/newsletter">Join Newsletter</Link>
-              </Button>
             </div>
           </div>
         </div>

@@ -15,6 +15,12 @@ interface Book {
   price: number
 }
 
+// Map book titles to their URL-friendly paths
+const bookUrlMap: Record<string, string> = {
+  'The Prince': 'the-prince',
+  'Hidden Queen': 'hidden-queen'
+}
+
 async function getBooks() {
   const { data: books, error } = await supabase
     .from('books')
@@ -43,14 +49,7 @@ export default async function BooksPage() {
       >
         <div className="container mx-auto px-4">
           <div className="text-center space-y-6 max-w-3xl mx-auto">
-            <h1 className="text-6xl font-bold">
-              <span className={cn(
-                "bg-gradient-to-r from-[#0A1933] to-[#2851A3]",
-                "bg-clip-text text-transparent"
-              )}>
-                Explore My Books
-              </span>
-            </h1>
+            <h1 className="text-4xl font-bold title-gradient mb-4">Books</h1>
             <p className="text-xl text-foreground/80">
               Dive into a world of passion, intrigue, and romance. Each story is crafted to take you on an unforgettable journey.
             </p>
@@ -66,24 +65,22 @@ export default async function BooksPage() {
 
       <div className="container mx-auto px-4 py-16">
         {/* Books Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {books.map((book) => (
             <Card 
               key={book.id} 
               className={cn(
                 "group relative overflow-hidden",
                 "hover:shadow-2xl transition-all duration-500",
-                "bg-background/50 backdrop-blur-sm",
+                "bg-white",
                 "border border-primary/10 hover:border-primary/20"
               )}
             >
               <CardHeader className="text-center space-y-4">
-                <CardTitle className="text-2xl font-bold">
-                  <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                    {book.title}
-                  </span>
+                <CardTitle className="text-2xl font-bold text-primary">
+                  {book.title}
                 </CardTitle>
-                <CardDescription className="text-sm text-gray-500">
+                <CardDescription className="text-sm text-muted-foreground">
                   Published: {new Date(book.published_date).toLocaleDateString()}
                 </CardDescription>
               </CardHeader>
@@ -96,40 +93,36 @@ export default async function BooksPage() {
                       className="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-105"
                     />
                     <div className={cn(
-                      "absolute inset-0",
-                      "bg-gradient-to-t from-black/60 to-transparent",
-                      "opacity-0 group-hover:opacity-100",
-                      "transition-opacity duration-500",
-                      "flex items-end justify-center pb-8"
+                      "absolute inset-0 flex flex-col justify-end p-6",
+                      "bg-gradient-to-t from-black/80 via-black/50 to-transparent",
+                      "opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     )}>
-                      <Button 
-                        asChild 
-                        variant="default" 
-                        className="bg-primary text-primary-foreground px-6 py-2"
-                      >
-                        <Link href={`/books/${book.id}`}>View Details</Link>
-                      </Button>
+                      <p className="text-white mb-4 line-clamp-3">
+                        {book.description}
+                      </p>
+                      <div className="flex flex-col gap-2">
+                        <Button 
+                          asChild
+                          variant="secondary"
+                          className="w-full bg-white text-primary hover:bg-white/90"
+                        >
+                          <Link href={`/books/${bookUrlMap[book.title] || book.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`}>
+                            View Details
+                          </Link>
+                        </Button>
+                        <Button 
+                          asChild
+                          variant="outline"
+                          className="w-full bg-transparent text-white border-white hover:bg-white/10"
+                        >
+                          <a href={book.amazon_link} target="_blank" rel="noopener noreferrer">
+                            Buy on Amazon
+                          </a>
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 )}
-                <div className="space-y-4">
-                  <p className="text-gray-600 line-clamp-3">{book.description}</p>
-                  <div className="flex justify-between items-center pt-4 border-t border-gray-100">
-                    <span className="text-xl font-bold text-primary">
-                      ${(book.price / 100).toFixed(2)}
-                    </span>
-                    {book.amazon_link && (
-                      <a
-                        href={book.amazon_link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md text-primary bg-primary/5 hover:bg-primary/10 transition-colors duration-200"
-                      >
-                        Buy on Amazon
-                      </a>
-                    )}
-                  </div>
-                </div>
               </CardContent>
             </Card>
           ))}

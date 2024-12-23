@@ -1,147 +1,163 @@
-'use client'
-
-import { useState } from 'react'
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    setSubmitStatus('idle')
-
-    try {
-      // Using mailto link as a fallback
-      const mailtoLink = `mailto:author.amberallee@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`)}`
-      window.location.href = mailtoLink
-      setSubmitStatus('success')
-      
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
-      })
-    } catch (error) {
-      setSubmitStatus('error')
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 to-accent/10 py-16 animate-gradient-x">
-      <div className="container mx-auto px-4">
-        <div className="max-w-2xl mx-auto">
-          <h1 className="text-6xl font-heading font-bold text-center mb-4 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-shimmer">
-            Contact Me
-          </h1>
-          <p className="text-center text-lg text-muted-foreground mb-12 max-w-2xl mx-auto">
-            Have a question or want to get in touch? I'd love to hear from you!
-          </p>
-
-          <Card className="hover:shadow-xl transition-all duration-300 border border-accent/20 backdrop-blur-sm bg-white/70">
-            <CardHeader>
-              <CardTitle className="text-2xl text-center">Send a Message</CardTitle>
-              <CardDescription className="text-center">
-                Fill out the form below and I'll get back to you as soon as possible.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <label htmlFor="name" className="text-sm font-medium text-muted-foreground">
-                    Name
-                  </label>
-                  <input
-                    id="name"
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                    className="w-full px-4 py-2 rounded-lg border border-accent/20 focus:outline-none focus:ring-2 focus:ring-secondary/20"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium text-muted-foreground">
-                    Email
-                  </label>
-                  <input
-                    id="email"
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                    className="w-full px-4 py-2 rounded-lg border border-accent/20 focus:outline-none focus:ring-2 focus:ring-secondary/20"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="subject" className="text-sm font-medium text-muted-foreground">
-                    Subject
-                  </label>
-                  <input
-                    id="subject"
-                    type="text"
-                    required
-                    value={formData.subject}
-                    onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
-                    className="w-full px-4 py-2 rounded-lg border border-accent/20 focus:outline-none focus:ring-2 focus:ring-secondary/20"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="message" className="text-sm font-medium text-muted-foreground">
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    required
-                    rows={5}
-                    value={formData.message}
-                    onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
-                    className="w-full px-4 py-2 rounded-lg border border-accent/20 focus:outline-none focus:ring-2 focus:ring-secondary/20 resize-none"
-                  />
-                </div>
-
-                <Button 
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-metallic hover:bg-metallic-hover text-primary font-medium group"
-                >
-                  {isSubmitting ? 'Sending...' : 'Send Message'}
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" 
-                    viewBox="0 0 20 20" 
-                    fill="currentColor"
-                  >
-                    <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-                  </svg>
-                </Button>
-
-                {submitStatus === 'success' && (
-                  <p className="text-green-600 text-center">Message sent successfully!</p>
-                )}
-                {submitStatus === 'error' && (
-                  <p className="text-red-600 text-center">There was an error sending your message. Please try again.</p>
-                )}
-              </form>
-            </CardContent>
-          </Card>
+    <main className="min-h-screen bg-background">
+      {/* Hero Section */}
+      <section className="py-16 bg-gradient-to-b from-pink-50/50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center space-y-4">
+            <h1 className="text-4xl font-bold title-gradient">Get in Touch</h1>
+            <p className="text-lg text-muted-foreground">
+              Have a question or just want to say hello? I'd love to hear from you!
+            </p>
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
+
+      {/* Contact Form Section */}
+      <section className="py-12">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+            {/* Contact Form */}
+            <Card className="p-6 shadow-lg">
+              <CardContent className="space-y-6">
+                <div className="space-y-2">
+                  <h2 className="text-2xl font-semibold title-gradient">Send a Message</h2>
+                  <p className="text-muted-foreground">Fill out the form below and I'll get back to you soon!</p>
+                </div>
+                
+                <form className="space-y-4">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label htmlFor="firstName" className="text-sm font-medium">
+                        First Name
+                      </label>
+                      <Input id="firstName" placeholder="Jane" />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="lastName" className="text-sm font-medium">
+                        Last Name
+                      </label>
+                      <Input id="lastName" placeholder="Doe" />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <label htmlFor="email" className="text-sm font-medium">
+                      Email
+                    </label>
+                    <Input id="email" type="email" placeholder="jane@example.com" />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <label htmlFor="subject" className="text-sm font-medium">
+                      Subject
+                    </label>
+                    <Input id="subject" placeholder="How can I help you?" />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <label htmlFor="message" className="text-sm font-medium">
+                      Message
+                    </label>
+                    <Textarea
+                      id="message"
+                      placeholder="Your message here..."
+                      className="min-h-[150px]"
+                    />
+                  </div>
+                  
+                  <Button className="w-full" size="lg">
+                    Send Message
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+
+            {/* Contact Info */}
+            <div className="space-y-8">
+              <div className="space-y-4">
+                <h2 className="text-2xl font-semibold title-gradient">Connect With Me</h2>
+                <p className="text-muted-foreground">
+                  Follow me on social media to stay updated with my latest releases, behind-the-scenes content, and more!
+                </p>
+              </div>
+
+              <div className="space-y-6">
+                {/* Social Links */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-medium">Social Media</h3>
+                  <div className="grid gap-4">
+                    <a
+                      href="https://www.instagram.com/author.amberallee?igshid=dmdoMmw1N3o1cXU5&utm_source=qr"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center p-4 bg-background rounded-lg border hover:bg-secondary/5 transition-colors"
+                    >
+                      <span className="text-xl mr-4">📸</span>
+                      <div>
+                        <p className="font-medium">Instagram</p>
+                        <p className="text-sm text-muted-foreground">@author.amberallee</p>
+                      </div>
+                    </a>
+                    <a
+                      href="https://www.facebook.com/share/GoP2UGzzWMA78A89/?mibextid=K35XfP"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center p-4 bg-background rounded-lg border hover:bg-secondary/5 transition-colors"
+                    >
+                      <span className="text-xl mr-4">👥</span>
+                      <div>
+                        <p className="font-medium">Facebook Group</p>
+                        <p className="text-sm text-muted-foreground">Join the community</p>
+                      </div>
+                    </a>
+                    <a
+                      href="https://www.goodreads.com/author/show/48624101.Amber_Allee"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center p-4 bg-background rounded-lg border hover:bg-secondary/5 transition-colors"
+                    >
+                      <span className="text-xl mr-4">📚</span>
+                      <div>
+                        <p className="font-medium">Goodreads</p>
+                        <p className="text-sm text-muted-foreground">Follow and review</p>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Newsletter */}
+                <div className="bg-secondary/10 p-6 rounded-lg space-y-4">
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-medium">Join My Newsletter</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Subscribe to get exclusive content, early access to new releases, and special offers!
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Input placeholder="Enter your email" className="flex-1" />
+                    <Button>Subscribe</Button>
+                  </div>
+                </div>
+
+                {/* Additional Info */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-medium">Response Time</h3>
+                  <div className="flex items-center space-x-2">
+                    <Badge variant="secondary">Usually within 48 hours</Badge>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
   )
 }
