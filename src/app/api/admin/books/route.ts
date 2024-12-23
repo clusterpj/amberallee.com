@@ -1,9 +1,9 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { books } from '@/lib/db/schema'
 import { requireAdminAuth } from '@/lib/auth'
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const authResponse = await requireAdminAuth(request)
     if (authResponse) {
