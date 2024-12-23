@@ -68,9 +68,9 @@
     left: 0;
     background-image: var(--background-pattern);
     background-repeat: repeat;
-    background-blend-mode: soft-light;
+    background-blend-mode: multiply;
     background-size: 150px;
-    opacity: 0.1;
+    opacity: 0.08;
     z-index: -1;
   }
 }
