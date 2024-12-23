@@ -58,7 +58,8 @@
     font-family: Arial, Helvetica, sans-serif;
     background-image: var(--background-pattern);
     background-repeat: repeat;
-    background-blend-mode: overlay;
-    background-opacity: 0.1;
+    background-blend-mode: soft-light;
+    background-size: 75px;
+    opacity: 0.15;
   }
 }
