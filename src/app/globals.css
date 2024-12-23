@@ -69,7 +69,7 @@
     background-image: var(--background-pattern);
     background-repeat: repeat;
     background-blend-mode: soft-light;
-    background-size: 75px;
+    background-size: 150px;
     opacity: 0.2;
     z-index: -1;
   }
