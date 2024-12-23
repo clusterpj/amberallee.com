@@ -26,7 +26,7 @@ export default function BookForm({ onSubmit }: { onSubmit: (data: BookFormData) 
     coverImage: '',
     releaseDate: '',
     series: '',
-    seriesOrder: undefined,
+    seriesOrder: 0,
     tropes: [],
     isPublished: false
   })
@@ -107,8 +107,11 @@ export default function BookForm({ onSubmit }: { onSubmit: (data: BookFormData) 
         <Input
           id="seriesOrder"
           type="number"
-          value={formData.seriesOrder}
-          onChange={(e) => setFormData(prev => ({ ...prev, seriesOrder: parseInt(e.target.value) }))}
+          value={formData.seriesOrder || ''}
+          onChange={(e) => setFormData(prev => ({ 
+            ...prev, 
+            seriesOrder: e.target.value ? parseInt(e.target.value) : 0 
+          }))}
         />
       </div>
 
