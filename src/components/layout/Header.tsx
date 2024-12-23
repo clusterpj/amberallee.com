@@ -92,10 +92,10 @@ export default function Header() {
               </DropdownMenuTrigger>
               <DropdownMenuContent 
                 align="end" 
-                className="w-56 bg-white border border-border/50 shadow-lg rounded-md mt-2 z-[100]"
+                className="w-56 bg-background/95 backdrop-blur-sm border border-border/50 shadow-lg rounded-md mt-2 z-[100]"
                 sideOffset={5}
               >
-                <div className="flex items-center justify-start gap-2 p-3 border-b border-border/50">
+                <div className="flex items-center justify-start gap-2 p-3 border-b border-border/50 bg-accent/5">
                   <div className="flex flex-col space-y-1 leading-none">
                     {user.email && (
                       <p className="font-medium">
@@ -107,7 +107,7 @@ export default function Header() {
                 <div className="p-1">
                   <DropdownMenuItem 
                     asChild
-                    className="w-full px-3 py-2 text-sm cursor-pointer hover:bg-accent/10 rounded-md"
+                    className="w-full px-3 py-2 text-sm cursor-pointer hover:bg-accent/10 rounded-md transition-colors duration-200"
                   >
                     <Link href="/dashboard">
                       Dashboard
