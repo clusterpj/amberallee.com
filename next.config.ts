@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next'
 
-const config: NextConfig = {
+// Using const assertion for better type inference
+const config = {
   reactStrictMode: true,
   images: {
     domains: ['your-image-domain.com'],
@@ -20,4 +21,4 @@ const config: NextConfig = {
   }
 }
 
-export default config
+export default config satisfies NextConfig
