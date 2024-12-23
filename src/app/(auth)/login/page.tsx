@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { Playfair_Display } from 'next/font/google'
 import { useRouter } from 'next/navigation'
 import { corebillApi } from '@/lib/corebill/api'
 
@@ -43,7 +42,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-rose-100">
       <div className="max-w-md w-full space-y-8 p-8 bg-white/80 backdrop-blur-sm rounded-lg shadow-xl border border-pink-200">
         <div className="text-center">
-          <h2 className="text-4xl font-serif text-gray-900 mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+          <h2 className="text-4xl font-serif text-gray-900 mb-2">
             Author Portal
           </h2>
           <p className="text-pink-600 italic">Amber Allee</p>
