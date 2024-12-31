@@ -14,22 +14,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { createBrowserClient } from '@supabase/ssr'
 
 export default function Header() {
   const pathname = usePathname()
   const router = useRouter()
   const { user } = useAuth()
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    router.refresh()
+    await signOut()
   }
 
   useEffect(() => {

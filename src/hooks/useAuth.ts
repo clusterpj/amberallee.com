@@ -112,9 +112,24 @@ export function useAuth() {
     }
   }
 
+  const signIn = async (email: string, password: string) => {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      })
+      if (error) throw error
+      return data
+    } catch (error) {
+      console.error('Error signing in:', error)
+      throw error
+    }
+  }
+
   return {
     user,
     loading,
     signOut,
+    signIn,
   }
 }
