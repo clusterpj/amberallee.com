@@ -87,9 +87,6 @@ export function useAuth() {
         }
         setUser(customUser)
         
-        if (event === 'SIGNED_IN') {
-          router.push('/dashboard')
-        }
       } else if (mounted) {
         setUser(null)
         
