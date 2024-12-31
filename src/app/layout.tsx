@@ -1,5 +1,5 @@
 import { Inter as FontSans } from 'next/font/google'
-import { CoreBillProvider } from '@/context/CoreBillContext'
+import { SupabaseProvider } from '@/providers/SupabaseProvider'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import Banner from '@/components/layout/Banner'
@@ -18,14 +18,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${fontSans.variable} min-h-screen bg-background font-sans antialiased flex flex-col`}>
-        <CoreBillProvider>
+        <SupabaseProvider>
           <Header />
           <Banner />
           <main className="flex-grow">
             {children}
           </main>
           <Footer />
-        </CoreBillProvider>
+        </SupabaseProvider>
       </body>
     </html>
   )
