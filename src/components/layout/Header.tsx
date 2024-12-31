@@ -1,16 +1,33 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, User } from 'lucide-react'
 import { useState, useEffect } from 'react'
+import { useAuth } from '@/hooks/useAuth'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 export default function Header() {
   const pathname = usePathname()
+  const router = useRouter()
+  const { user } = useAuth()
+  const supabase = createClientComponentClient()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut()
+    router.refresh()
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,6 +67,7 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1">
+            {/* Main Navigation */}
             {navigation.map((item) => (
               <Link
                 key={item.name}
@@ -68,6 +86,48 @@ export default function Header() {
                 <span className="absolute inset-x-4 -bottom-px h-px bg-gradient-to-r from-transparent via-[#004AAD]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </Link>
             ))}
+
+            {/* Auth Navigation */}
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="relative h-10 w-10 rounded-full"
+                  >
+                    <User className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem>
+                    <Link href="/profile">Profile</Link>
+                  </DropdownMenuItem>
+                  {user.role === 'admin' && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>
+                        <Link href="/admin">Admin Dashboard</Link>
+                      </DropdownMenuItem>
+                    </>
+                  )}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link
+                href="/login"
+                className={cn(
+                  "px-4 py-2 rounded-full text-base font-semibold transition-all duration-300",
+                  "hover:text-[#004AAD] hover:bg-[#004AAD]/5",
+                  pathname === '/login' ? "text-[#004AAD] font-bold" : "text-muted-foreground"
+                )}
+              >
+                Login
+              </Link>
+            )}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -103,6 +163,60 @@ export default function Header() {
                   {item.name}
                 </Link>
               ))}
+              {/* Mobile Auth Navigation */}
+              {user ? (
+                <>
+                  <Link
+                    href="/profile"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={cn(
+                      "block px-4 py-3 rounded-full text-base font-semibold transition-all duration-300",
+                      "hover:text-[#004AAD] hover:bg-[#004AAD]/5",
+                      pathname === '/profile' ? "text-[#004AAD] font-bold bg-[#004AAD]/5" : "text-muted-foreground"
+                    )}
+                  >
+                    Profile
+                  </Link>
+                  {user.role === 'admin' && (
+                    <Link
+                      href="/admin"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={cn(
+                        "block px-4 py-3 rounded-full text-base font-semibold transition-all duration-300",
+                        "hover:text-[#004AAD] hover:bg-[#004AAD]/5",
+                        pathname === '/admin' ? "text-[#004AAD] font-bold bg-[#004AAD]/5" : "text-muted-foreground"
+                      )}
+                    >
+                      Admin Dashboard
+                    </Link>
+                  )}
+                  <button
+                    onClick={() => {
+                      handleSignOut();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className={cn(
+                      "block w-full text-left px-4 py-3 rounded-full text-base font-semibold transition-all duration-300",
+                      "hover:text-[#004AAD] hover:bg-[#004AAD]/5",
+                      "text-muted-foreground"
+                    )}
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <Link
+                  href="/login"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={cn(
+                    "block px-4 py-3 rounded-full text-base font-semibold transition-all duration-300",
+                    "hover:text-[#004AAD] hover:bg-[#004AAD]/5",
+                    pathname === '/login' ? "text-[#004AAD] font-bold bg-[#004AAD]/5" : "text-muted-foreground"
+                  )}
+                >
+                  Login
+                </Link>
+              )}
             </nav>
           </div>
         )}
