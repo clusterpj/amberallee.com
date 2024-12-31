@@ -2,39 +2,36 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { corebillApi } from '@/lib/corebill/api'
+import { createBrowserClient } from '@supabase/ssr'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const router = useRouter()
+  
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
 
     try {
-      const { token, user } = await corebillApi.auth.login({ 
-        email, 
-        password 
-      });
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      })
+
+      if (error) throw error
       
-      // Set token in localStorage with type and role
-      localStorage.setItem('corebill_token', token);
-      localStorage.setItem('corebill_token_type', 'Bearer');
-      localStorage.setItem('corebill_role', user.role.toLowerCase());
-      localStorage.setItem('corebill_user_id', user.id);
-      
-      // Redirect to admin dashboard
-      router.push('/admin/dashboard')
+      // Redirect to dashboard on success
+      router.push('/dashboard')
     } catch (err) {
-      console.error('Login Error:', err);
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('Invalid credentials');
-      }
+      console.error('Login Error:', err)
+      setError(err instanceof Error ? err.message : 'Failed to sign in')
     }
   }
 
