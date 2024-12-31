@@ -2,22 +2,19 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { UserRole } from '@/types/auth'
 
+import { supabase } from './supabase'
+
 if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
   throw new Error('NEXT_PUBLIC_SUPABASE_URL environment variable is not set')
 }
 
-if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
-  throw new Error('SUPABASE_SERVICE_ROLE_KEY environment variable is not set')
+if (!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+  throw new Error('NEXT_PUBLIC_SUPABASE_ANON_KEY environment variable is not set')
 }
-
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-)
 
 export async function checkUserRole(userId: string): Promise<UserRole> {
   try {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabase
       .from('users')
       .select('role')
       .eq('id', userId)

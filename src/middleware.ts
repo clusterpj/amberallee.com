@@ -19,7 +19,6 @@ export async function middleware(request: NextRequest) {
         persistSession: false,
         detectSessionInUrl: false,
         autoRefreshToken: false,
-        storage: undefined
       }
     }
   )
