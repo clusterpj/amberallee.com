@@ -18,11 +18,9 @@ import {
 export default function Header() {
   const pathname = usePathname()
   const router = useRouter()
-  const { user } = useAuth()
+  const { user, signOut } = useAuth()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-
-  const { user, signOut } = useAuth()
   
   const handleSignOut = async () => {
     await signOut()
