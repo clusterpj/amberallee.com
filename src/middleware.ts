@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
+import { createClient } from '@supabase/supabase-js'
 
 export async function middleware(request: NextRequest) {
   // Public routes that don't require authentication
@@ -11,10 +10,29 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    const cookieStore = cookies()
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false,
+        }
+      }
+    )
 
-    const { data: { session }, error } = await supabase.auth.getSession()
+    // Get session from cookie
+    const accessToken = request.cookies.get('sb-access-token')?.value
+    const refreshToken = request.cookies.get('sb-refresh-token')?.value
+
+    if (!accessToken) {
+      return NextResponse.redirect(new URL('/auth/signin', request.url))
+    }
+
+    const { data: { session }, error } = await supabase.auth.setSession({
+      access_token: accessToken,
+      refresh_token: refreshToken || ''
+    })
 
     if (error || !session) {
       console.error('Session error:', error)
