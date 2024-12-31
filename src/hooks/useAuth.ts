@@ -77,8 +77,6 @@ export function useAuth() {
     initializeAuth()
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('Auth state changed:', event, session)
-      
       if (session?.user && mounted) {
         const role = await ensureUserRecord(session.user)
         const customUser: CustomUser = {
@@ -87,6 +85,9 @@ export function useAuth() {
         }
         setUser(customUser)
         
+        if (event === 'SIGNED_IN') {
+          router.push('/dashboard')
+        }
       } else if (mounted) {
         setUser(null)
         
@@ -114,12 +115,22 @@ export function useAuth() {
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
         email,
         password
       })
-      if (error) throw error
-      return data
+      if (authError) throw authError
+
+      if (authData.user) {
+        const role = await ensureUserRecord(authData.user)
+        const customUser: CustomUser = {
+          ...authData.user,
+          role
+        }
+        setUser(customUser)
+      }
+
+      return authData
     } catch (error) {
       console.error('Error signing in:', error)
       throw error

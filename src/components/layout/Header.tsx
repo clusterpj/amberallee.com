@@ -22,8 +22,11 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
+  const { user, signOut } = useAuth()
+  
   const handleSignOut = async () => {
     await signOut()
+    router.refresh()
   }
 
   useEffect(() => {
