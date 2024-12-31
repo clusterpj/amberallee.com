@@ -8,18 +8,23 @@ const supabaseAdmin = createClient(
 )
 
 export async function checkUserRole(userId: string): Promise<UserRole> {
-  const { data, error } = await supabaseAdmin
-    .from('users')
-    .select('role')
-    .eq('id', userId)
-    .single()
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('users')
+      .select('role')
+      .eq('id', userId)
+      .single()
 
-  if (error) {
+    if (error) {
+      console.error('Error checking user role:', error)
+      return 'customer'
+    }
+
+    return (data?.role as UserRole) || 'customer'
+  } catch (error) {
     console.error('Error checking user role:', error)
     return 'customer'
   }
-
-  return (data?.role as UserRole) || 'customer'
 }
 
 // Server-side authentication helper
@@ -202,20 +207,6 @@ export async function signOut() {
   if (error) throw error
 }
 
-export async function checkUserRole(userId: string): Promise<string> {
-  const { data: { user }, error } = await supabase.auth.getUser()
-  
-  if (error || !user) throw new Error('Failed to fetch user role')
-
-  const { data: userData, error: userError } = await supabase
-    .from('users')
-    .select('role')
-    .eq('id', userId)
-    .single()
-
-  if (userError) throw new Error('Failed to fetch user role')
-  return userData?.role || 'customer'
-}
 
 export async function requireAuth(request: NextRequest) {
   const { data: { session }, error } = await supabase.auth.getSession()
