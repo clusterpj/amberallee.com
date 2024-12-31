@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { checkUserRole } from './lib/auth'
-import { createClient } from '@supabase/supabase-js'
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from 'next/headers'
 
 export async function middleware(request: NextRequest) {
   // Public routes that don't require authentication
@@ -10,34 +10,11 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  // Create a Supabase client for this request
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      auth: {
-        persistSession: false,
-        detectSessionInUrl: false,
-        autoRefreshToken: false,
-      }
-    }
-  )
-
-  // Get the session from the request cookie
-  const supabaseAccessToken = request.cookies.get('sb-access-token')?.value
-  const supabaseRefreshToken = request.cookies.get('sb-refresh-token')?.value
-
-  if (!supabaseAccessToken) {
-    console.log('No Supabase access token found, redirecting to signin')
-    return NextResponse.redirect(new URL('/auth/signin', request.url))
-  }
-
   try {
-    // Set the auth tokens
-    const { data: { session }, error } = await supabase.auth.setSession({
-      access_token: supabaseAccessToken,
-      refresh_token: supabaseRefreshToken || ''
-    })
+    const cookieStore = cookies()
+    const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
+
+    const { data: { session }, error } = await supabase.auth.getSession()
 
     if (error || !session) {
       console.error('Session error:', error)
@@ -49,16 +26,14 @@ export async function middleware(request: NextRequest) {
 
     // Check if the path starts with /admin
     if (request.nextUrl.pathname.startsWith('/admin')) {
-      try {
-        const role = await checkUserRole(session.user.id)
-        if (role === 'admin') {
-          return NextResponse.next()
-        }
+      const { data: userData } = await supabase
+        .from('users')
+        .select('role')
+        .eq('id', session.user.id)
+        .single()
 
+      if (userData?.role !== 'admin') {
         console.warn('Not authorized for admin route')
-        return NextResponse.redirect(new URL('/auth/signin', request.url))
-      } catch (error) {
-        console.error('Admin auth error:', error)
         return NextResponse.redirect(new URL('/auth/signin', request.url))
       }
     }
