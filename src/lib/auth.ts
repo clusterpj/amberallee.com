@@ -1,49 +1,49 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { apiConfig } from '@/config/corebill'
-import { supabase } from './supabase'
+import { createClient } from '@supabase/supabase-js'
 import { UserRole } from '@/types/auth'
 
-interface AuthResponse {
-  success: boolean
-  user?: {
-    id: string
-    role: UserRole
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
+
+export async function checkUserRole(userId: string): Promise<UserRole> {
+  const { data, error } = await supabaseAdmin
+    .from('users')
+    .select('role')
+    .eq('id', userId)
+    .single()
+
+  if (error) {
+    console.error('Error checking user role:', error)
+    return 'customer'
   }
-}
 
-export async function checkCoreBillAuth(token: string): Promise<boolean> {
-  try {
-    const response = await fetch(`${apiConfig.baseURL}${apiConfig.endpoints.auth.me}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    })
-
-    if (!response.ok) {
-      return false
-    }
-
-    const data: AuthResponse = await response.json()
-    return data.success && data.user?.role === 'admin'
-  } catch (error) {
-    console.error('Authentication check failed:', error)
-    return false
-  }
+  return (data?.role as UserRole) || 'customer'
 }
 
 // Server-side authentication helper
 export async function requireAdminAuth(request: NextRequest) {
-  const token = request.cookies.get('corebill_token')?.value
+  const supabaseAuthClient = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      }
+    }
+  )
 
-  if (!token) {
+  const { data: { session }, error } = await supabaseAuthClient.auth.getSession()
+
+  if (error || !session) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  const isAdmin = await checkCoreBillAuth(token)
+  const role = await checkUserRole(session.user.id)
   
-  if (!isAdmin) {
+  if (role !== 'admin') {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { checkCoreBillAuth, validateSession } from './lib/auth'
+import { checkUserRole } from './lib/auth'
 import { createClient } from '@supabase/supabase-js'
 
 export async function middleware(request: NextRequest) {
@@ -50,30 +50,10 @@ export async function middleware(request: NextRequest) {
 
     // Check if the path starts with /admin
     if (request.nextUrl.pathname.startsWith('/admin')) {
-      const token = request.cookies.get('corebill_token')?.value
-      const sessionToken = request.cookies.get('session_token')?.value
-
       try {
-        // Check if user has admin role
-        const { data: userData } = await supabase
-          .from('users')
-          .select('role')
-          .eq('id', session.user.id)
-          .single()
-
-        if (userData?.role === 'admin') {
+        const role = await checkUserRole(session.user.id)
+        if (role === 'admin') {
           return NextResponse.next()
-        }
-
-        // Fallback to CoreBill authentication
-        if (token && sessionToken) {
-          const isValidSession = await validateSession(sessionToken)
-          if (isValidSession) {
-            const isAdmin = await checkCoreBillAuth(token)
-            if (isAdmin) {
-              return NextResponse.next()
-            }
-          }
         }
 
         console.warn('Not authorized for admin route')
