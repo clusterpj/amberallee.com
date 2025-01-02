@@ -3,6 +3,7 @@ import { SupabaseProvider } from '@/providers/SupabaseProvider'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import Banner from '@/components/layout/Banner'
+import { SocialBar } from '@/components/ui/SocialBar'
 import './globals.css'
 
 const fontSans = FontSans({
@@ -21,7 +22,8 @@ export default function RootLayout({
         <SupabaseProvider>
           <Header />
           <Banner />
-          <main className="flex-grow">
+          <main className="flex-grow relative">
+            <SocialBar />
             {children}
           </main>
           <Footer />
