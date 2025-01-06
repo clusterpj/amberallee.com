@@ -39,7 +39,7 @@ function SignInForm() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-primary">
+    <div className="min-h-screen flex items-start justify-center bg-primary pt-20">
       <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-lg">
         <div>
           <h2 className="mt-6 text-center text-3xl font-bold text-primary">
