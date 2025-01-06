@@ -149,9 +149,9 @@ export default function AdminEventsPage() {
             <DialogTitle id="event-form-title">
               {selectedEvent ? 'Edit Event' : 'Create New Event'}
             </DialogTitle>
-            <p id="event-form-description" className="sr-only">
+            <DialogDescription id="event-form-description">
               {selectedEvent ? 'Edit existing event details' : 'Create a new event'}
-            </p>
+            </DialogDescription>
           </DialogHeader>
           <EventForm
             initialData={selectedEvent || undefined}

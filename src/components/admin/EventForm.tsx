@@ -41,13 +41,12 @@ export function EventForm({
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: {
-      title: '',
-      description: '',
-      date: new Date(),
-      location: '',
-      registration_link: '',
-      ...initialData,
-      date: initialData?.date ? new Date(initialData.date) : new Date()
+      title: initialData?.title || '',
+      description: initialData?.description || '',
+      date: initialData?.date ? new Date(initialData.date) : new Date(),
+      location: initialData?.location || '',
+      registration_link: initialData?.registration_link || '',
+      image_url: initialData?.image_url || ''
     }
   })
 
