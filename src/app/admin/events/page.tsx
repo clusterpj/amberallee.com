@@ -138,9 +138,10 @@ export default function AdminEventsPage() {
         <DialogContent 
           className="sm:max-w-[600px] bg-white"
           aria-describedby="event-form-description"
+          aria-labelledby="event-form-title"
         >
           <DialogHeader>
-            <DialogTitle>
+            <DialogTitle id="event-form-title">
               {selectedEvent ? 'Edit Event' : 'Create New Event'}
             </DialogTitle>
             <p id="event-form-description" className="sr-only">
