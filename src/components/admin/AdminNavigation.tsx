@@ -1,7 +1,14 @@
+'use client'
+
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { cn } from '@/lib/utils'
 
 export default function AdminNavigation() {
+  const pathname = usePathname()
+
+  const isActive = (href: string) => pathname === href
+
   return (
     <nav className="w-64 bg-white shadow-md fixed top-20 left-0 bottom-0 z-40">
       <div className="py-4 px-6">
@@ -11,9 +18,10 @@ export default function AdminNavigation() {
         <li>
           <Link 
             href="/admin/dashboard" 
-            className={`block py-2 px-6 hover:bg-gray-100 ${
-              usePathname() === '/admin/dashboard' ? 'bg-pink-50 font-semibold' : ''
-            }`}
+            className={cn(
+              'block py-2 px-6 hover:bg-gray-100',
+              isActive('/admin/dashboard') && 'bg-pink-50 font-semibold'
+            )}
           >
             Dashboard
           </Link>
@@ -21,9 +29,10 @@ export default function AdminNavigation() {
         <li>
           <Link 
             href="/admin/books" 
-            className={`block py-2 px-6 hover:bg-gray-100 ${
-              usePathname() === '/admin/books' ? 'bg-pink-50 font-semibold' : ''
-            }`}
+            className={cn(
+              'block py-2 px-6 hover:bg-gray-100',
+              isActive('/admin/books') && 'bg-pink-50 font-semibold'
+            )}
           >
             Books
           </Link>
@@ -31,15 +40,19 @@ export default function AdminNavigation() {
         <li>
           <Link 
             href="/admin/events" 
-            className={`block py-2 px-6 hover:bg-gray-100 ${
-              usePathname() === '/admin/events' ? 'bg-pink-50 font-semibold' : ''
-            }`}
+            className={cn(
+              'block py-2 px-6 hover:bg-gray-100',
+              isActive('/admin/events') && 'bg-pink-50 font-semibold'
+            )}
           >
             Events
           </Link>
         </li>
         <li>
-          <Link href="/logout" className="block py-2 px-6 hover:bg-gray-100 text-red-600">
+          <Link 
+            href="/logout" 
+            className="block py-2 px-6 hover:bg-gray-100 text-red-600"
+          >
             Logout
           </Link>
         </li>
