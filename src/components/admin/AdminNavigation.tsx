@@ -2,11 +2,11 @@ import Link from 'next/link'
 
 export default function AdminNavigation() {
   return (
-    <nav className="w-64 bg-white shadow-md">
+    <nav className="w-64 bg-white shadow-md fixed top-20 left-0 bottom-0">
       <div className="py-4 px-6">
         <h1 className="text-2xl font-bold text-gray-800">Admin Section</h1>
       </div>
-      <ul className="py-4">
+      <ul className="py-4 overflow-y-auto">
         <li>
           <Link href="/admin/dashboard" className="block py-2 px-6 hover:bg-gray-100">
             Dashboard
