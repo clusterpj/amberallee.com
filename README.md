@@ -1,132 +1,143 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AmberAllee.com
+
+Official website for romance author Amber Allee, featuring her book catalog, blog, and special edition store.
+
+## Overview
+
+AmberAllee.com is a Next.js-powered author platform that combines elegant design with modern e-commerce capabilities. The site features pink leopard print patterns, vintage typewriter motifs, and art deco elements that reflect Amber's brand identity.
+
+## Features
+
+- 📚 Book catalog with series grouping and trope tags
+- 🛍️ Special editions store with Stripe payments
+- 📝 Author blog with rich content management
+- 📅 Events calendar and announcements
+- 📧 Newsletter integration
+- 🔐 Secure admin dashboard
+- 🔄 Real-time updates with Supabase
+
+## Tech Stack
+
+- **Frontend:** Next.js 14 (App Router), React, TypeScript
+- **Styling:** TailwindCSS, shadcn/ui components
+- **Backend:** Supabase (Database, Authentication, Storage)
+- **Payments:** Stripe integration
+- **Infrastructure:** Digital Ocean, Ubuntu, Nginx
+
+## Prerequisites
+
+- Node.js v20 LTS
+- Git
+- Ubuntu/Linux environment (recommended)
+- Supabase account
+- Stripe account
 
 ## Getting Started
 
-First, run the development server:
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/clusterpj/amberallee.com.git
+   cd amberallee.com
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment variables:**
+   Create a `.env.local` file with:
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+   STRIPE_SECRET_KEY=your_stripe_secret_key
+   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+   JWT_SECRET=your_jwt_secret
+   ```
+
+4. **Set up Supabase:**
+   - Create a new Supabase project
+   - Run the database migrations in your Supabase project
+   - Configure authentication settings
+   - Set up storage buckets for media files
+
+5. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+
+Visit `http://localhost:3000` to see the application.
+
+## Project Structure
+
+```
+amberallee.com/
+├── src/
+│   ├── app/          # Next.js 14 App Router pages
+│   ├── components/   # React components
+│   ├── lib/          # Utilities and configurations
+│   │   ├── supabase/ # Supabase client and helpers
+│   │   └── stripe/   # Stripe integration
+│   ├── actions/      # Server actions
+│   └── types/       # TypeScript types
+├── public/          # Static assets
+├── supabase/       # Supabase configurations and types
+└── docker/         # Deployment configuration
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Available Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `npm run dev` - Start development server
+- `npm run build` - Build production application
+- `npm run start` - Start production server
+- `npm run lint` - Run linting
+- `npm run generate:types` - Generate Supabase types
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Development Phases
 
-## Learn More
+1. **Core Layout & Authentication** (Current)
+   - Base layout components
+   - Supabase authentication
+   - Protected routes
 
-To learn more about Next.js, take a look at the following resources:
+2. **Public Pages**
+   - Homepage with featured books
+   - Books catalog
+   - Author information
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Admin Dashboard**
+   - Content management
+   - Statistics overview
+   - Quick actions
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. **E-commerce Integration**
+   - Stripe payment setup
+   - Shopping cart
+   - Order management
 
-## Deploy on Vercel
+5. **Blog & Community**
+   - Blog implementation
+   - Newsletter integration
+   - Events calendar
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+6. **Testing & Launch**
+   - Performance optimization
+   - SEO implementation
+   - Production deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Contributing
 
-## Production Deployment
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-### Environment Variables
+## License
 
-Create a `.env` file in the root directory with the following variables:
+This project is proprietary software. All rights reserved.
 
-```bash
-# Database
-DATABASE_URL=postgresql://user:password@localhost:5432/amberallee
-POSTGRES_URL=postgresql://user:password@localhost:5432/amberallee
-POSTGRES_PRISMA_URL=postgresql://user:password@localhost:5432/amberallee
-POSTGRES_URL_NON_POOLING=postgresql://user:password@localhost:5432/amberallee
+## Contact
 
-# Authentication
-COREBILL_API_URL=https://api.corebill.com
-JWT_SECRET=your-jwt-secret
-
-# Next.js
-NEXT_PUBLIC_APP_URL=https://amberallee.com
-```
-### Production Build
-
-1. Install dependencies:
-```bash
-pnpm install
-```
-2. Build the application:
-```bash
-pnpm run build
-```
-3. Start the production server:
-```bash
-pnpm start
-```
-### Using PM2 (Recommended)
-
-1. Install PM2 globally:
-```bash
-npm install -g pm2
-```
-2. Start the application with PM2:
-```bash
-pm2 start npm --name "amberallee" -- start
-pm2 save
-pm2 startup
-```
-### Nginx Configuration
-
-1. Copy the Nginx configuration file:
-```bash
-sudo cp nginx.conf /etc/nginx/sites-available/amberallee.com
-sudo ln -s /etc/nginx/sites-available/amberallee.com /etc/nginx/sites-enabled/
-```
-2. Test and restart Nginx:
-```bash
-sudo nginx -t
-sudo systemctl restart nginx
-```
-### SSL Configuration
-
-1. Install Certbot:
-```bash
-sudo snap install --classic certbot
-sudo ln -s /snap/bin/certbot /usr/bin/certbot
-```
-2. Obtain SSL certificate:
-```bash
-sudo certbot --nginx -d amberallee.com -d www.amberallee.com
-```
-### Systemd Service
-
-1. Copy the service file:
-```bash
-sudo cp amberallee.service /etc/systemd/system/
-```
-2. Start and enable the service:
-```bash
-sudo systemctl daemon-reload
-sudo systemctl enable amberallee
-sudo systemctl start amberallee
-```
-### Monitoring
-
-Monitor your application using PM2:
-```bash
-pm2 monit
-```
-View logs:
-```bash
-# Application logs
-sudo journalctl -u amberallee
-# Nginx logs
-sudo tail -f /var/log/nginx/access.log
-sudo tail -f /var/log/nginx/error.log
-```
+Project Link: [https://github.com/clusterpj/amberallee.com](https://github.com/clusterpj/amberallee.com)
