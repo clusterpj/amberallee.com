@@ -101,10 +101,12 @@ export default function Header() {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="relative h-10 w-10 rounded-full bg-white/50 hover:bg-white/80 backdrop-blur-sm border border-[#004AAD]/10 hover:border-[#004AAD]/20 transition-all"
+                    className="relative h-10 px-4 rounded-full bg-white/50 hover:bg-white/80 backdrop-blur-sm border border-[#004AAD]/10 hover:border-[#004AAD]/20 transition-all flex items-center gap-2"
                   >
-                    <User className="h-5 w-5 text-[#004AAD]" />
-                    <span className="sr-only">User menu</span>
+                    <User className="h-5 w-5 text-[#004AAD] flex-shrink-0" />
+                    <span className="text-[#004AAD] font-medium truncate max-w-[120px]">
+                      {user?.email.split('@')[0]}
+                    </span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-white shadow-lg rounded-lg">
