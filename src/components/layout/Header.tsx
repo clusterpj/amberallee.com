@@ -46,10 +46,11 @@ export default function Header() {
   ]
 
   const userNavigation = [
-    { name: 'Profile', href: '/profile', role: ['customer', 'admin'] },
-    { name: 'Dashboard', href: '/dashboard', role: ['customer'] },
-    { name: 'Admin Dashboard', href: '/admin', role: ['admin'] },
-    { name: 'Orders', href: '/orders', role: ['customer'] },
+    { name: 'Profile', href: '/dashboard/profile', role: ['customer', 'admin'] },
+    { name: 'Dashboard', href: '/dashboard', role: ['customer', 'admin'] },
+    { name: 'Admin Dashboard', href: '/admin/dashboard', role: ['admin'] },
+    { name: 'Orders', href: '/dashboard/orders', role: ['customer'] },
+    { name: 'Settings', href: '/dashboard/settings', role: ['customer', 'admin'] },
   ]
 
   return (
