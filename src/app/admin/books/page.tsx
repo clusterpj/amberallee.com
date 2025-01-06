@@ -10,13 +10,9 @@ interface Book {
   id: string
   title: string
   description: string
-  amazon_link: string
-  cover_image: string
-  release_date: string
-  series?: string
-  series_order?: number
-  tropes: string[]
-  is_published: boolean
+  cover_image_url: string
+  published_date: string
+  price: number
 }
 
 export default function AdminBooksPage() {
@@ -24,6 +20,7 @@ export default function AdminBooksPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [showAddForm, setShowAddForm] = useState(false)
+  const [editingBook, setEditingBook] = useState<Book | null>(null)
 
   useEffect(() => {
     fetchBooks()
@@ -48,6 +45,15 @@ export default function AdminBooksPage() {
 
   const handleAddSuccess = () => {
     setShowAddForm(false)
+    fetchBooks()
+  }
+
+  const handleEdit = (book: Book) => {
+    setEditingBook(book)
+  }
+
+  const handleEditSuccess = () => {
+    setEditingBook(null)
     fetchBooks()
   }
 
@@ -77,16 +83,58 @@ export default function AdminBooksPage() {
         </Card>
       )}
 
+      {editingBook && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Edit Book</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <BookForm book={editingBook} onSuccess={handleEditSuccess} />
+          </CardContent>
+        </Card>
+      )}
+
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {books.map((book) => (
-          <Card key={book.id}>
-            <CardHeader>
-              <CardTitle>{book.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-gray-600">{book.description}</p>
-            </CardContent>
-          </Card>
+          <div key={book.id} className="group relative">
+            <Card className="h-full flex flex-col">
+              <CardHeader className="flex-row items-start gap-4 p-4">
+                {book.cover_image_url && (
+                  <div className="w-24 h-36 shrink-0 relative rounded-md overflow-hidden">
+                    <img
+                      src={book.cover_image_url}
+                      alt={book.title}
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                )}
+                <div className="space-y-1">
+                  <CardTitle className="text-lg">{book.title}</CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    Published: {new Date(book.published_date).toLocaleDateString()}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Price: ${(book.price / 100).toFixed(2)}
+                  </p>
+                </div>
+              </CardHeader>
+              <CardContent className="p-4 pt-0 flex-1">
+                <p className="text-sm text-gray-600 line-clamp-3">
+                  {book.description}
+                </p>
+              </CardContent>
+              <CardFooter className="p-4 pt-0">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full"
+                  onClick={() => handleEdit(book)}
+                >
+                  Edit Book
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
         ))}
       </div>
     </div>
