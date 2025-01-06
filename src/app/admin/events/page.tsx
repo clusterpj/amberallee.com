@@ -39,8 +39,7 @@ export default function AdminEventsPage() {
       }
       setEvents(data || [])
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'Unknown error'
-      setError(error.message);
+      setError(error instanceof Error ? error.message : 'Unknown error');
       console.error('Error fetching events:', error);
     } finally {
       setLoading(false)
@@ -65,8 +64,7 @@ export default function AdminEventsPage() {
       }
       fetchEvents()
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'Unknown error'
-      setError(error.message);
+      setError(error instanceof Error ? error.message : 'Unknown error');
       console.error('Error deleting event:', error);
     }
   }
@@ -86,13 +84,13 @@ export default function AdminEventsPage() {
 
       if (selectedEvent) {
         // Update existing event
-        const { error } = await supabase
+        const { error: updateError } = await supabase
           .from('events')
           .update(eventData)
           .eq('id', selectedEvent.id)
       } else {
         // Create new event
-        const { error } = await supabase
+        const { error: insertError } = await supabase
           .from('events')
           .insert([eventData])
       }
