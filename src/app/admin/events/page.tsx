@@ -135,11 +135,17 @@ export default function AdminEventsPage() {
       </Card>
 
       <Dialog open={showForm} onOpenChange={setShowForm}>
-        <DialogContent className="sm:max-w-[600px]">
+        <DialogContent 
+          className="sm:max-w-[600px] bg-white"
+          aria-describedby="event-form-description"
+        >
           <DialogHeader>
             <DialogTitle>
               {selectedEvent ? 'Edit Event' : 'Create New Event'}
             </DialogTitle>
+            <p id="event-form-description" className="sr-only">
+              {selectedEvent ? 'Edit existing event details' : 'Create a new event'}
+            </p>
           </DialogHeader>
           <EventForm
             initialData={selectedEvent || undefined}
