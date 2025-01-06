@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { Menu, X, User } from 'lucide-react'
+import { Menu, X, User, LayoutDashboard, Settings, ShoppingBag, LogOut } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import {
@@ -178,54 +178,72 @@ export default function Header() {
               ))}
               {/* Mobile Auth Navigation */}
               {!isLoading && (
-                <>
-                  {isAuthenticated ? (
-                <>
-                  {userNavigation
-                    .filter(item => item.role.includes(user?.role || 'customer'))
-                    .map((item) => (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className={cn(
-                          "block px-4 py-3 rounded-full text-base font-semibold transition-all duration-300",
-                          "hover:text-[#004AAD] hover:bg-[#004AAD]/5",
-                          pathname === item.href ? "text-[#004AAD] font-bold bg-[#004AAD]/5" : "text-muted-foreground"
-                        )}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  <button
-                    onClick={() => {
-                      handleSignOut();
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className={cn(
-                      "block w-full text-left px-4 py-3 rounded-full text-base font-semibold transition-all duration-300",
-                      "hover:text-[#004AAD] hover:bg-[#004AAD]/5",
-                      "text-muted-foreground"
-                    )}
-                  >
-                    Sign Out
-                  </button>
-                </>
-              ) : (
-                <Link
-                  href="/login"
+  <>
+    {isAuthenticated ? (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            className="relative h-10 w-10 rounded-full flex items-center justify-center hover:bg-[#004AAD]/5 transition-colors"
+          >
+            {user?.email && (
+              <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
+            )}
+            <User className="h-5 w-5 text-[#004AAD]" />
+            <span className="sr-only">User menu</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-56">
+          <div className="px-2 py-1.5 text-sm">
+            <p className="font-medium text-[#004AAD] truncate">
+              {user?.email}
+            </p>
+            <p className="text-muted-foreground text-xs capitalize">
+              {user?.role || 'customer'}
+            </p>
+          </div>
+          <DropdownMenuSeparator />
+          {userNavigation
+            .filter(item => item.role.includes(user?.role || 'customer'))
+            .map((item) => (
+              <DropdownMenuItem key={item.name} className="p-0">
+                <Link 
+                  href={item.href}
+                  className="w-full flex items-center px-2 py-1.5 hover:text-[#004AAD]"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={cn(
-                    "block px-4 py-3 rounded-full text-base font-semibold transition-all duration-300",
-                    "hover:text-[#004AAD] hover:bg-[#004AAD]/5",
-                    pathname === '/login' ? "text-[#004AAD] font-bold bg-[#004AAD]/5" : "text-muted-foreground"
-                  )}
                 >
-                  Login
+                  {item.name === 'Profile' && <User className="mr-2 h-4 w-4" />}
+                  {item.name === 'Dashboard' && <LayoutDashboard className="mr-2 h-4 w-4" />}
+                  {item.name === 'Admin Dashboard' && <Settings className="mr-2 h-4 w-4" />}
+                  {item.name === 'Orders' && <ShoppingBag className="mr-2 h-4 w-4" />}
+                  {item.name}
                 </Link>
-              )}
-              </>
-              )}
+              </DropdownMenuItem>
+            ))}
+          <DropdownMenuSeparator />
+          <DropdownMenuItem 
+            onClick={handleSignOut}
+            className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer"
+          >
+            <LogOut className="mr-2 h-4 w-4" />
+            Sign Out
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    ) : (
+      <Link
+        href="/login"
+        className={cn(
+          "px-4 py-2 rounded-full text-base font-semibold transition-all duration-300",
+          "hover:text-[#004AAD] hover:bg-[#004AAD]/5",
+          pathname === '/login' ? "text-[#004AAD] font-bold" : "text-muted-foreground"
+        )}
+      >
+        Login
+      </Link>
+    )}
+  </>
+)}
             </nav>
           </div>
         )}
