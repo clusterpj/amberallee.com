@@ -5,6 +5,7 @@ export interface Event {
   date: string | Date
   location?: string
   registration_link?: string
+  image_url?: string
   created_at?: string
   updated_at?: string
 }
