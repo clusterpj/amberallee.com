@@ -9,7 +9,7 @@ Amber Allee is a rising romance author specializing in mafia romance novels, com
 
 ## Core Objectives
 1. Create a professional author platform showcasing books and brand
-2. Enable direct sales of special editions via CoreBill integration
+2. Enable direct sales of special editions via Supabase and Stripe integration
 3. Build and engage "Amber's Army of Readers" community
 4. Streamline content management for regular updates
 5. Drive traffic through social media integration and newsletter growth
@@ -45,19 +45,20 @@ Amber Allee is a rising romance author specializing in mafia romance novels, com
   - Server Actions for form handling
   - Server-side rendering for SEO
 
-### API Integration
-- **CoreBill API**
+### Backend & API
+- **Supabase**
   - Authentication & user management
-  - Payment processing
-  - Order management
-  - Inventory tracking
+  - Database
+  - Storage for media files
+  - Edge Functions for custom logic
+  - Row Level Security (RLS)
 
-### Database
-- **PostgreSQL**
-  - Content management
-  - Blog posts
-  - Events
-  - Book information
+### Payment Processing
+- **Authorize.net**
+  - Payment processing and gateway
+  - Credit card transaction handling
+  - Secure payment data handling
+  - Transaction reporting and management
 
 ### Infrastructure
 - **Single Digital Ocean Droplet**
@@ -68,93 +69,131 @@ Amber Allee is a rising romance author specializing in mafia romance novels, com
 
 ## Database Schema
 ```sql
--- Books (Content Only - Inventory in CoreBill)
+-- Users
+CREATE TABLE users (
+    id UUID PRIMARY KEY,
+    email TEXT,
+    role TEXT,
+    created_at TIMESTAMPTZ,
+    updated_at TIMESTAMPTZ
+);
+
+-- Books
 CREATE TABLE books (
-    id SERIAL PRIMARY KEY,
-    title TEXT NOT NULL,
+    id UUID PRIMARY KEY,
+    title TEXT,
     description TEXT,
+    cover_image_url TEXT,
     amazon_link TEXT,
-    release_date DATE,
-    cover_image TEXT,
-    tropes TEXT[],
-    series TEXT,
-    corebill_item_id TEXT,
-    created_at TIMESTAMP DEFAULT NOW()
+    published_date DATE,
+    created_at TIMESTAMPTZ,
+    updated_at TIMESTAMPTZ,
+    price INT4
 );
 
 -- Blog Posts
 CREATE TABLE blog_posts (
-    id SERIAL PRIMARY KEY,
-    title TEXT NOT NULL,
-    content TEXT NOT NULL,
-    published_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT NOW()
+    id UUID PRIMARY KEY,
+    title TEXT,
+    content TEXT,
+    excerpt TEXT,
+    cover_image_url TEXT,
+    published_at TIMESTAMPTZ,
+    author_id UUID,
+    created_at TIMESTAMPTZ,
+    updated_at TIMESTAMPTZ
 );
 
 -- Events
 CREATE TABLE events (
-    id SERIAL PRIMARY KEY,
-    title TEXT NOT NULL,
+    id UUID PRIMARY KEY,
+    title TEXT,
     description TEXT,
-    date DATE NOT NULL,
+    date TIMESTAMPTZ,
     location TEXT,
-    created_at TIMESTAMP DEFAULT NOW()
-);
-
--- User Sessions (CoreBill Auth)
-CREATE TABLE sessions (
-    id SERIAL PRIMARY KEY,
-    user_id TEXT NOT NULL,
-    token TEXT NOT NULL,
-    expires_at TIMESTAMP NOT NULL,
-    created_at TIMESTAMP DEFAULT NOW()
+    registration_link TEXT,
+    created_at TIMESTAMPTZ,
+    updated_at TIMESTAMPTZ
 );
 ```
 
+## Row Level Security Policies
+
+```sql
+-- Books table policies
+ALTER TABLE books ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Books are viewable by everyone" 
+ON books FOR SELECT 
+TO authenticated, anon
+USING (true);
+
+CREATE POLICY "Only admins can modify books" 
+ON books FOR ALL 
+TO authenticated
+USING (auth.jwt() ->> 'role' = 'admin');
+
+-- Blog posts table policies
+ALTER TABLE blog_posts ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Published blog posts are viewable by everyone" 
+ON blog_posts FOR SELECT 
+TO authenticated, anon
+USING (published_at IS NOT NULL);
+
+CREATE POLICY "Only admins can modify blog posts" 
+ON blog_posts FOR ALL 
+TO authenticated
+USING (auth.jwt() ->> 'role' = 'admin');
+
+-- Events table policies
+ALTER TABLE events ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Events are viewable by everyone" 
+ON events FOR SELECT 
+TO authenticated, anon
+USING (true);
+
+CREATE POLICY "Only admins can modify events" 
+ON events FOR ALL 
+TO authenticated
+USING (auth.jwt() ->> 'role' = 'admin');
+```
+
 ## API Integration
-### CoreBill Endpoints
-```javascript
-export const apiConfig = {
-  baseURL: process.env.COREBILL_API_URL,
-  endpoints: {
-    auth: {
-      login: 'auth/login',
-      logout: 'auth/logout',
-      me: 'me'
-    },
-    orders: {
-      create: 'invoices',
-      get: 'invoices'
-    },
-    payments: {
-      methods: 'payments/multiple/get-payment-methods',
-      create: 'payments/multiple/create'
-    },
-    items: 'items'
-  }
-}
+### Supabase Client Setup
+```typescript
+import { createClient } from '@supabase/supabase-js'
+
+export const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+)
 ```
 
 ## Core Features
 
 ### Authentication & User Management
-- JWT-based authentication via CoreBill
-- Session management
-- Role-based access control
-- Admin user management
+- Supabase Auth with email provider
+- Row Level Security (RLS) policies based on user roles
+- Two-tier role system:
+  - "admin": Full access to content management and user data
+  - "customer": Limited access to public content and their own data
+- Admin dashboard for user management
 
 ### Content Management
 - Book information and links
 - Blog post editor with rich text
 - Event calendar management
-- Media uploads
+- Media uploads to Supabase Storage
 
-### E-commerce (CoreBill Integration)
+### E-commerce (Authorize.net Integration)
 - Special editions listing
 - Shopping cart functionality
-- Secure checkout process
-- Order tracking
-- Inventory sync
+- Secure checkout process via Authorize.net Accept.js
+- Transaction management and reporting
+- Inventory management
+- Order status tracking
 
 ### Public Features
 - Book showcase
@@ -168,7 +207,7 @@ export const apiConfig = {
 ### Phase 1: Core Setup (Current)
 - ✅ Project initialization
 - ✅ Basic layout and components
-- ⏳ CoreBill integration
+- ⏳ Supabase integration
 - ⏳ Database setup
 - ⏳ Authentication implementation
 
@@ -180,10 +219,51 @@ export const apiConfig = {
 - ⏳ Social media components
 
 ### Phase 3: E-commerce
-- Special editions store setup
+- Authorize.net integration
+  - Accept.js implementation for secure payment form
+  - Server-side transaction processing
+  - Payment response handling
+  - Error handling and validation
 - Shopping cart implementation
-- Checkout flow integration
+- Checkout flow with Authorize.net
 - Order management system
+- Inventory tracking
+
+### Authorize.net Implementation
+```typescript
+// Accept.js initialization
+const initializeAcceptJs = () => {
+  const acceptInstance = new Accept({
+    environment: process.env.NEXT_PUBLIC_AUTHORIZENET_ENVIRONMENT,
+    clientKey: process.env.NEXT_PUBLIC_AUTHORIZENET_CLIENT_KEY,
+    apiLoginId: process.env.NEXT_PUBLIC_AUTHORIZENET_API_LOGIN_ID
+  });
+  return acceptInstance;
+};
+
+// Payment handling
+const handlePayment = async (cardData: CardData) => {
+  const acceptInstance = initializeAcceptJs();
+  const paymentNonce = await acceptInstance.dispatchData({
+    cardNumber: cardData.number,
+    month: cardData.expMonth,
+    year: cardData.expYear,
+    cardCode: cardData.cvv
+  });
+
+  // Process payment on server
+  const response = await fetch('/api/process-payment', {
+    method: 'POST',
+    body: JSON.stringify({
+      paymentNonce,
+      amount: cartTotal,
+      orderId: generatedOrderId
+    })
+  });
+
+  return response.json();
+};
+```
 
 ### Phase 4: Launch
 - Comprehensive testing
@@ -194,25 +274,27 @@ export const apiConfig = {
 
 ## Environment Variables
 ```
-# CoreBill API
-COREBILL_API_URL=
-COREBILL_API_KEY=
-COREBILL_SECRET=
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+
+# Authorize.net
+NEXT_PUBLIC_AUTHORIZENET_API_LOGIN_ID=
+NEXT_PUBLIC_AUTHORIZENET_CLIENT_KEY=
+AUTHORIZENET_TRANSACTION_KEY=
+AUTHORIZENET_ENVIRONMENT=sandbox|production
 
 # Database
 DATABASE_URL=
 
-# Auth
-JWT_SECRET=
-SESSION_SECRET=
-
 # Email (Optional)
 EMAIL_FROM=
-EMAIL_API_KEY=
+EMAIL_PROVIDER_API_KEY=
 ```
 
 ## Success Metrics
-1. Special edition sales through CoreBill
+1. Special edition sales through Stripe
 2. Newsletter signups
 3. Blog engagement
 4. Website traffic
