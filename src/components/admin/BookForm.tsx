@@ -10,13 +10,9 @@ import { supabase } from '@/lib/supabase'
 interface BookFormData {
   title: string
   description: string
-  amazon_link: string
-  cover_image: string
-  release_date: string
-  series?: string
-  series_order?: number
-  tropes: string[]
-  is_published: boolean
+  cover_image_url: string
+  published_date: string
+  price: number
 }
 
 interface BookFormProps {
@@ -29,13 +25,9 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
     book || {
       title: '',
       description: '',
-      amazon_link: '',
-      cover_image: '',
-      release_date: '',
-      series: '',
-      series_order: undefined,
-      tropes: [],
-      is_published: false
+      cover_image_url: '',
+      published_date: new Date().toISOString().split('T')[0],
+      price: 0
     }
   )
 
@@ -93,79 +85,38 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="amazon_link">Amazon Link</Label>
+        <Label htmlFor="cover_image_url">Cover Image URL</Label>
         <Input
-          id="amazon_link"
-          name="amazon_link"
-          value={formData.amazon_link}
+          id="cover_image_url"
+          name="cover_image_url"
+          value={formData.cover_image_url}
           onChange={handleChange}
           required
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="cover_image">Cover Image URL</Label>
+        <Label htmlFor="price">Price</Label>
         <Input
-          id="cover_image"
-          name="cover_image"
-          value={formData.cover_image}
-          onChange={handleChange}
-          required
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="release_date">Release Date</Label>
-        <Input
-          id="release_date"
-          name="release_date"
-          type="date"
-          value={formData.release_date}
-          onChange={handleChange}
-          required
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="series">Series (Optional)</Label>
-        <Input
-          id="series"
-          name="series"
-          value={formData.series}
-          onChange={handleChange}
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="series_order">Series Order (Optional)</Label>
-        <Input
-          id="series_order"
-          name="series_order"
+          id="price"
+          name="price"
           type="number"
-          value={formData.series_order || ''}
+          value={formData.price}
           onChange={handleChange}
+          required
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="tropes">Tropes (comma-separated)</Label>
+        <Label htmlFor="published_date">Published Date</Label>
         <Input
-          id="tropes"
-          name="tropes"
-          value={formData.tropes.join(', ')}
-          onChange={(e) => handleTropesChange(e.target.value)}
+          id="published_date"
+          name="published_date"
+          type="date"
+          value={formData.published_date}
+          onChange={handleChange}
+          required
         />
-      </div>
-
-      <div className="flex items-center space-x-2">
-        <input
-          type="checkbox"
-          id="is_published"
-          name="is_published"
-          checked={formData.is_published}
-          onChange={(e) => setFormData(prev => ({ ...prev, is_published: e.target.checked }))}
-        />
-        <Label htmlFor="is_published">Published</Label>
       </div>
 
       <Button type="submit">Save Book</Button>
