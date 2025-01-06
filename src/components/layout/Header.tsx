@@ -106,7 +106,7 @@ export default function Header() {
                   >
                     <User className="h-5 w-5 text-[#004AAD] flex-shrink-0" />
                     <span className="text-[#004AAD] font-medium truncate max-w-[120px]">
-                      {user?.email.split('@')[0]}
+                      {user?.email?.split('@')[0] || 'Account'}
                     </span>
                   </Button>
                 </DropdownMenuTrigger>
