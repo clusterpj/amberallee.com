@@ -61,17 +61,22 @@ export default function AdminEventsPage() {
 
   const handleSubmit = async (values: Event) => {
     try {
+      const eventData = {
+        ...values,
+        image_url: values.image_url || '/default-event.jpg'
+      }
+
       if (selectedEvent) {
         // Update existing event
         const { error } = await supabase
           .from('events')
-          .update(values)
+          .update(eventData)
           .eq('id', selectedEvent.id)
       } else {
         // Create new event
         const { error } = await supabase
           .from('events')
-          .insert([values])
+          .insert([eventData])
       }
       fetchEvents()
       setShowForm(false)

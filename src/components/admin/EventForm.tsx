@@ -26,6 +26,7 @@ const eventFormSchema = z.object({
   date: z.date(),
   location: z.string().optional(),
   registration_link: z.string().url('Must be a valid URL').optional(),
+  image_url: z.string().url('Must be a valid URL').optional(),
 })
 
 export function EventForm({ 
@@ -151,6 +152,32 @@ export function EventForm({
                 />
               </FormControl>
               <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="image_url"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Event Image URL</FormLabel>
+              <FormControl>
+                <Input 
+                  placeholder="https://example.com/event-image.jpg" 
+                  {...field} 
+                />
+              </FormControl>
+              <FormMessage />
+              {field.value && (
+                <div className="mt-2">
+                  <img 
+                    src={field.value} 
+                    alt="Event preview" 
+                    className="w-64 h-64 object-cover rounded-lg"
+                  />
+                </div>
+              )}
             </FormItem>
           )}
         />
