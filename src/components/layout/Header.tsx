@@ -132,11 +132,11 @@ export default function Header() {
               </DropdownMenu>
             ) : (
               <Link
-                href="/login"
+                href="/auth/signin"
                 className={cn(
                   "px-4 py-2 rounded-full text-base font-semibold transition-all duration-300",
                   "hover:text-[#004AAD] hover:bg-[#004AAD]/5",
-                  pathname === '/login' ? "text-[#004AAD] font-bold" : "text-muted-foreground"
+                  pathname === '/auth/signin' ? "text-[#004AAD] font-bold" : "text-muted-foreground"
                 )}
               >
                 Login
