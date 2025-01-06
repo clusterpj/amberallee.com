@@ -54,10 +54,13 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       if (error) throw error
       onSuccess()
     } catch (error) {
-      console.error('Error saving book:', error.message || error)
+      if (error instanceof Error) {
+        console.error('Error saving book:', error.message);
+      } else {
+        console.error('Error saving book:', error);
+      }
     }
   }
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({
