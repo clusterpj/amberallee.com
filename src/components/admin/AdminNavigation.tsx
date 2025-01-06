@@ -4,7 +4,7 @@ export default function AdminNavigation() {
   return (
     <nav className="w-64 bg-white shadow-md">
       <div className="py-4 px-6">
-        <h1 className="text-2xl font-bold text-gray-800">Amber Allee Admin</h1>
+        <h1 className="text-2xl font-bold text-gray-800">Admin Section</h1>
       </div>
       <ul className="py-4">
         <li>
