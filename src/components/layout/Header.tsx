@@ -44,6 +44,13 @@ export default function Header() {
     { name: 'Contact', href: '/contact' },
   ]
 
+  const userNavigation = [
+    { name: 'Profile', href: '/profile', role: ['customer', 'admin'] },
+    { name: 'Dashboard', href: '/dashboard', role: ['customer'] },
+    { name: 'Admin Dashboard', href: '/admin', role: ['admin'] },
+    { name: 'Orders', href: '/orders', role: ['customer'] },
+  ]
+
   return (
     <header className={cn(
       "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
@@ -97,17 +104,13 @@ export default function Header() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem>
-                    <Link href="/profile">Profile</Link>
-                  </DropdownMenuItem>
-                  {user.role === 'admin' && (
-                    <>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem>
-                        <Link href="/admin">Admin Dashboard</Link>
+                  {userNavigation
+                    .filter(item => item.role.includes(user.role || 'customer'))
+                    .map((item) => (
+                      <DropdownMenuItem key={item.name}>
+                        <Link href={item.href}>{item.name}</Link>
                       </DropdownMenuItem>
-                    </>
-                  )}
+                    ))}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
                     Sign Out
@@ -164,30 +167,22 @@ export default function Header() {
               {/* Mobile Auth Navigation */}
               {user ? (
                 <>
-                  <Link
-                    href="/profile"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={cn(
-                      "block px-4 py-3 rounded-full text-base font-semibold transition-all duration-300",
-                      "hover:text-[#004AAD] hover:bg-[#004AAD]/5",
-                      pathname === '/profile' ? "text-[#004AAD] font-bold bg-[#004AAD]/5" : "text-muted-foreground"
-                    )}
-                  >
-                    Profile
-                  </Link>
-                  {user.role === 'admin' && (
-                    <Link
-                      href="/admin"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={cn(
-                        "block px-4 py-3 rounded-full text-base font-semibold transition-all duration-300",
-                        "hover:text-[#004AAD] hover:bg-[#004AAD]/5",
-                        pathname === '/admin' ? "text-[#004AAD] font-bold bg-[#004AAD]/5" : "text-muted-foreground"
-                      )}
-                    >
-                      Admin Dashboard
-                    </Link>
-                  )}
+                  {userNavigation
+                    .filter(item => item.role.includes(user.role || 'customer'))
+                    .map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className={cn(
+                          "block px-4 py-3 rounded-full text-base font-semibold transition-all duration-300",
+                          "hover:text-[#004AAD] hover:bg-[#004AAD]/5",
+                          pathname === item.href ? "text-[#004AAD] font-bold bg-[#004AAD]/5" : "text-muted-foreground"
+                        )}
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
                   <button
                     onClick={() => {
                       handleSignOut();
