@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
+import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
 import BookForm from '@/components/admin/BookForm'
 import { supabase } from '@/lib/supabase'
@@ -101,9 +102,11 @@ export default function AdminBooksPage() {
               <CardHeader className="flex-row items-start gap-4 p-4">
                 {book.cover_image_url && (
                   <div className="w-24 h-36 shrink-0 relative rounded-md overflow-hidden">
-                    <img
+                    <Image
                       src={book.cover_image_url}
                       alt={book.title}
+                      width={96}
+                      height={144}
                       className="object-cover w-full h-full"
                     />
                   </div>

@@ -18,7 +18,8 @@ export default function AdminEventsPage() {
   const [showForm, setShowForm] = useState(false)
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
   const [events, setEvents] = useState<Event[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchEvents()
@@ -34,8 +35,9 @@ export default function AdminEventsPage() {
 
       if (error) throw error
       setEvents(data || [])
-    } catch (error) {
-      console.error('Error fetching events:', error)
+    } catch (error: any) {
+      setError(error.message);
+      console.error('Error fetching events:', error);
     } finally {
       setLoading(false)
     }
@@ -55,8 +57,9 @@ export default function AdminEventsPage() {
       
       if (error) throw error
       fetchEvents()
-    } catch (error) {
-      console.error('Error deleting event:', error)
+    } catch (error: any) {
+      setError(error.message);
+      console.error('Error deleting event:', error);
     }
   }
 
@@ -69,7 +72,8 @@ export default function AdminEventsPage() {
     try {
       const eventData = {
         ...values,
-        image_url: values.image_url || '/default-event.jpg'
+        image_url: values.image_url || '/default-event.jpg',
+        id: selectedEvent?.id || ''
       }
 
       if (selectedEvent) {

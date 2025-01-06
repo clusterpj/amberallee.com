@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
+import Image from 'next/image'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { CalendarIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
@@ -170,9 +171,11 @@ export function EventForm({
               <FormMessage />
               {field.value && (
                 <div className="mt-2">
-                  <img 
-                    src={field.value} 
-                    alt="Event preview" 
+                  <Image
+                    src={field.value}
+                    alt="Event preview"
+                    width={256}
+                    height={256}
                     className="w-64 h-64 object-cover rounded-lg"
                   />
                 </div>

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
@@ -115,9 +116,11 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="relative p-6">
                   <div className="relative group/image overflow-hidden rounded-xl">
-                    <img 
-                      src="/hidden-queen-cover.jpg" 
-                      alt="Hidden Queen - Latest Release" 
+                    <Image
+                      src="/hidden-queen-cover.jpg"
+                      alt="Hidden Queen - Latest Release"
+                      width={400}
+                      height={600}
                       className="rounded-xl shadow-lg transition-all duration-500 ease-in-out group-hover/image:scale-110 group-hover/image:rotate-3 group-hover/image:shadow-xl"
                     />
                   </div>
@@ -182,9 +185,11 @@ export default function Home() {
               <div className="relative order-2 lg:order-1">
                 <div className="relative group">
                   <div className="relative aspect-[3/4] rounded-xl overflow-hidden">
-                    <img 
-                      src="/author-photo.jpg" 
-                      alt="Amber Allee" 
+                    <Image
+                      src="/author-photo.jpg"
+                      alt="Amber Allee"
+                      width={400}
+                      height={600}
                       className="object-cover rounded-xl transition-all duration-300 group-hover:scale-[1.02]"
                     />
                   </div>
