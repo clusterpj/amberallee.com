@@ -9,14 +9,31 @@ export default function CallbackPage() {
   const supabase = createClientComponentClient()
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const handleAuthStateChange = async (event: string) => {
       if (event === 'SIGNED_IN') {
-        router.push('/')
+        // Check if this is an email confirmation
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user?.email_confirmed_at) {
+          router.push('/dashboard')
+        } else {
+          router.push('/')
+        }
       }
+    }
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      handleAuthStateChange(event)
     })
 
     return () => subscription.unsubscribe()
   }, [router, supabase])
 
-  return null
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-2xl font-bold mb-4">Completing sign in...</h1>
+        <p className="text-muted-foreground">Please wait while we complete your authentication.</p>
+      </div>
+    </div>
+  )
 }
