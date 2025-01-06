@@ -18,7 +18,7 @@ import {
 export default function Header() {
   const pathname = usePathname()
   const router = useRouter()
-  const { user, signOut, isLoading } = useAuth()
+  const { user, signOut, isLoading, isAuthenticated } = useAuth()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   
@@ -96,7 +96,7 @@ export default function Header() {
             {/* Auth Navigation */}
             {!isLoading && (
               <>
-                {user ? (
+                {isAuthenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
@@ -109,7 +109,7 @@ export default function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   {userNavigation
-                    .filter(item => item.role.includes(user.role || 'customer'))
+                    .filter(item => item.role.includes(user?.role || 'customer'))
                     .map((item) => (
                       <DropdownMenuItem key={item.name}>
                         <Link 
@@ -179,10 +179,10 @@ export default function Header() {
               {/* Mobile Auth Navigation */}
               {!isLoading && (
                 <>
-                  {user ? (
+                  {isAuthenticated ? (
                 <>
                   {userNavigation
-                    .filter(item => item.role.includes(user.role || 'customer'))
+                    .filter(item => item.role.includes(user?.role || 'customer'))
                     .map((item) => (
                       <Link
                         key={item.name}
