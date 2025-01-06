@@ -18,12 +18,13 @@ import {
 export default function Header() {
   const pathname = usePathname()
   const router = useRouter()
-  const { user, signOut } = useAuth()
+  const { user, signOut, isLoading } = useAuth()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   
   const handleSignOut = async () => {
     await signOut()
+    router.push('/')
     router.refresh()
   }
 
@@ -93,7 +94,9 @@ export default function Header() {
             ))}
 
             {/* Auth Navigation */}
-            {user ? (
+            {!isLoading && (
+              <>
+                {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
@@ -101,6 +104,7 @@ export default function Header() {
                     className="relative h-10 w-10 rounded-full"
                   >
                     <User className="h-5 w-5" />
+                    <span className="sr-only">User menu</span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -108,7 +112,13 @@ export default function Header() {
                     .filter(item => item.role.includes(user.role || 'customer'))
                     .map((item) => (
                       <DropdownMenuItem key={item.name}>
-                        <Link href={item.href}>{item.name}</Link>
+                        <Link 
+                          href={item.href}
+                          className="w-full"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          {item.name}
+                        </Link>
                       </DropdownMenuItem>
                     ))}
                   <DropdownMenuSeparator />
@@ -128,6 +138,8 @@ export default function Header() {
               >
                 Login
               </Link>
+            )}
+            </>
             )}
           </nav>
 
@@ -165,7 +177,9 @@ export default function Header() {
                 </Link>
               ))}
               {/* Mobile Auth Navigation */}
-              {user ? (
+              {!isLoading && (
+                <>
+                  {user ? (
                 <>
                   {userNavigation
                     .filter(item => item.role.includes(user.role || 'customer'))
@@ -209,6 +223,8 @@ export default function Header() {
                 >
                   Login
                 </Link>
+              )}
+              </>
               )}
             </nav>
           </div>
