@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label'
 import { supabase } from '@/lib/supabase'
 
 interface BookFormData {
+  id?: string
   title: string
   description: string
   cover_image_url: string
@@ -22,7 +23,7 @@ interface BookFormProps {
 
 export default function BookForm({ book, onSuccess }: BookFormProps) {
   const [formData, setFormData] = useState<BookFormData>(
-    book || {
+    book ? { ...book } : {
       title: '',
       description: '',
       cover_image_url: '',
