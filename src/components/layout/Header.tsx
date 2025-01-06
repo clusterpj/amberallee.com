@@ -107,7 +107,7 @@ export default function Header() {
                     <span className="sr-only">User menu</span>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent align="end" className="bg-white shadow-lg rounded-lg">
                   {userNavigation
                     .filter(item => item.role.includes(user?.role || 'customer'))
                     .map((item) => (
@@ -193,7 +193,7 @@ export default function Header() {
             <span className="sr-only">User menu</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuContent align="end" className="w-56 bg-white shadow-lg rounded-lg">
           <div className="px-2 py-1.5 text-sm">
             <p className="font-medium text-[#004AAD] truncate">
               {user?.email}
