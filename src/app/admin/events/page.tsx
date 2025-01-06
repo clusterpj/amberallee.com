@@ -19,7 +19,7 @@ export default function AdminEventsPage() {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchEvents()
@@ -33,9 +33,13 @@ export default function AdminEventsPage() {
         .select('*')
         .order('date', { ascending: true })
 
-      if (error) throw error
+      if (error) {
+        setError(error.message)
+        throw error
+      }
       setEvents(data || [])
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Unknown error'
       setError(error.message);
       console.error('Error fetching events:', error);
     } finally {
@@ -55,9 +59,13 @@ export default function AdminEventsPage() {
         .delete()
         .eq('id', id)
       
-      if (error) throw error
+      if (error) {
+        setError(error.message)
+        throw error
+      }
       fetchEvents()
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Unknown error'
       setError(error.message);
       console.error('Error deleting event:', error);
     }

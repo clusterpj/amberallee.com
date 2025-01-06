@@ -41,26 +41,6 @@ const TESTIMONIALS = [
   }
 ]
 
-const BLOG_POSTS = [
-  {
-    title: "The Art of Writing Mafia Romance",
-    excerpt: "Discover how real-world research and imagination blend to create compelling mafia romance stories that captivate readers...",
-    date: "March 15, 2024",
-    link: "/blog/writing-mafia-romance"
-  },
-  {
-    title: "Behind the Scenes: Las Vegas Elite Series",
-    excerpt: "Take a peek behind the curtain of my latest series and learn about the inspiration behind Hidden Queen...",
-    date: "March 1, 2024",
-    link: "/blog/las-vegas-elite-series"
-  },
-  {
-    title: "Romance Writing Tips: Creating Chemistry",
-    excerpt: "Learn the secrets to writing sizzling chemistry between your characters that keeps readers turning pages...",
-    date: "February 15, 2024",
-    link: "/blog/writing-character-chemistry"
-  }
-]
 
 export default function Home() {
   return (
@@ -147,9 +127,11 @@ export default function Home() {
             {FEATURED_BOOKS.map((book) => (
               <div key={book.title} className="bg-white rounded-lg shadow-lg overflow-hidden">
                 <div className="relative">
-                  <img
+                  <Image
                     src={book.cover}
                     alt={book.title}
+                    width={400}
+                    height={600}
                     className="w-full h-auto object-cover"
                   />
                 </div>

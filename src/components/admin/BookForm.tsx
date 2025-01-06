@@ -65,12 +65,6 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
     }))
   }
 
-  const handleTropesChange = (value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      tropes: value.split(',').map(trope => trope.trim())
-    }))
-  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">

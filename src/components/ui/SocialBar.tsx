@@ -1,6 +1,6 @@
 'use client';
 
-import { Facebook, Users, Instagram, Book } from 'lucide-react';
+import { Facebook, Instagram, Book } from 'lucide-react';
 
 export function SocialBar() {
   return (

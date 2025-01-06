@@ -6,7 +6,7 @@ import { X } from 'lucide-react';
 export function NewsletterPopup() {
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState('');
-  const [hasSeenPopup, setHasSeenPopup] = useState(false);
+  const [, setHasSeenPopup] = useState(false);
 
   useEffect(() => {
     // Check if user has seen the popup before

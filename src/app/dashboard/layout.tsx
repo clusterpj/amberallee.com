@@ -10,7 +10,6 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   const { user, loading } = useAuth()
-  const router = useRouter()
 
   useEffect(() => {
     console.log('Dashboard Layout - Auth State:', { user, loading })

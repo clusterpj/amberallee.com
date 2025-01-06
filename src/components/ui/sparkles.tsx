@@ -97,7 +97,7 @@ export const Sparkles = dynamic<ComponentProps<typeof import('./SparklesImpl').d
   }
 )
 
-const SparklesImpl = ({ children, className, color = DEFAULT_COLOR, enabled = true }: SparklesProps) => {
+export const SparklesImpl = ({ children, className, color = DEFAULT_COLOR, enabled = true }: SparklesProps) => {
   const [mounted, setMounted] = useState(false)
   const [sparkles, setSparkles] = useState<ReturnType<typeof generateSparkle>[]>([])
 
