@@ -34,14 +34,26 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const { error } = await supabase
-        .from('books')
-        .insert([formData])
+      let error
+      if (book) {
+        // Update existing book
+        const { error: updateError } = await supabase
+          .from('books')
+          .update(formData)
+          .eq('id', book.id)
+        error = updateError
+      } else {
+        // Create new book
+        const { error: insertError } = await supabase
+          .from('books')
+          .insert([formData])
+        error = insertError
+      }
 
       if (error) throw error
       onSuccess()
     } catch (error) {
-      console.error('Error saving book:', error)
+      console.error('Error saving book:', error.message || error)
     }
   }
 
