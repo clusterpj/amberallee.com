@@ -61,7 +61,7 @@ export default function AdminBooksPage() {
   if (error) return <div>Error: {error}</div>
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pt-24">
       <div className="flex justify-between items-center bg-white p-6 rounded-lg shadow-sm">
         <div>
           <h1 className="text-3xl font-bold text-gray-800">Book Management</h1>
