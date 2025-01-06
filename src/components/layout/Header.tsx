@@ -18,7 +18,7 @@ import {
 export default function Header() {
   const pathname = usePathname()
   const router = useRouter()
-  const { user, signOut, isLoading, isAuthenticated } = useAuth()
+  const { user, signOut, loading } = useAuth()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   
@@ -94,9 +94,9 @@ export default function Header() {
             ))}
 
             {/* Auth Navigation */}
-            {!isLoading && (
+            {!loading && (
               <>
-                {isAuthenticated ? (
+                {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
@@ -177,9 +177,9 @@ export default function Header() {
                 </Link>
               ))}
               {/* Mobile Auth Navigation */}
-              {!isLoading && (
+              {!loading && (
   <>
-    {isAuthenticated ? (
+    {user ? (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
