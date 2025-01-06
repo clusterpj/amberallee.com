@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 export default function AdminNavigation() {
   return (
@@ -8,17 +9,32 @@ export default function AdminNavigation() {
       </div>
       <ul className="py-4 overflow-y-auto h-[calc(100vh-7rem)]">
         <li>
-          <Link href="/admin/dashboard" className="block py-2 px-6 hover:bg-gray-100">
+          <Link 
+            href="/admin/dashboard" 
+            className={`block py-2 px-6 hover:bg-gray-100 ${
+              usePathname() === '/admin/dashboard' ? 'bg-pink-50 font-semibold' : ''
+            }`}
+          >
             Dashboard
           </Link>
         </li>
         <li>
-          <Link href="/admin/books" className="block py-2 px-6 hover:bg-gray-100">
+          <Link 
+            href="/admin/books" 
+            className={`block py-2 px-6 hover:bg-gray-100 ${
+              usePathname() === '/admin/books' ? 'bg-pink-50 font-semibold' : ''
+            }`}
+          >
             Books
           </Link>
         </li>
         <li>
-          <Link href="/events" className="block py-2 px-6 hover:bg-gray-100">
+          <Link 
+            href="/admin/events" 
+            className={`block py-2 px-6 hover:bg-gray-100 ${
+              usePathname() === '/admin/events' ? 'bg-pink-50 font-semibold' : ''
+            }`}
+          >
             Events
           </Link>
         </li>
