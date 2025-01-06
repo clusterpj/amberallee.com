@@ -143,7 +143,10 @@ export default function AdminEventsPage() {
                     <Button 
                       variant="destructive" 
                       size="sm"
-                      onClick={() => handleDeleteEvent(event.id)}
+                      onClick={() => {
+                        if (!event.id) return
+                        handleDeleteEvent(event.id)
+                      }}
                     >
                       Delete
                     </Button>
