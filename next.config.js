@@ -2,7 +2,11 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['your-image-domain.com', 'm.media-amazon.com'],
+    domains: [
+      'your-image-domain.com',
+      'm.media-amazon.com',
+      'static.independent.co.uk'
+    ],
   },
   experimental: {
     serverActions: {
