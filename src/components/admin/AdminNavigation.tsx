@@ -1,8 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 export default function AdminNavigation() {
   const pathname = usePathname()
@@ -49,12 +50,16 @@ export default function AdminNavigation() {
           </Link>
         </li>
         <li>
-          <Link 
-            href="/logout" 
-            className="block py-2 px-6 hover:bg-gray-100 text-red-600"
+          <button
+            onClick={async () => {
+              const supabase = createClientComponentClient()
+              await supabase.auth.signOut()
+              window.location.href = '/'
+            }}
+            className="w-full text-left block py-2 px-6 hover:bg-gray-100 text-red-600"
           >
             Logout
-          </Link>
+          </button>
         </li>
       </ul>
     </nav>
