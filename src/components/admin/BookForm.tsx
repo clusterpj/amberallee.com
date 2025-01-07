@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { supabase } from '@/lib/supabase'
+import { Progress } from '@/components/ui/progress'
+import { Switch } from '@/components/ui/switch'
 
 interface BookFormData {
   id?: string
@@ -31,6 +33,10 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       price: 0
     }
   )
+  const [uploading, setUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [useFileUpload, setUseFileUpload] = useState(false)
+  const [imagePreview, setImagePreview] = useState(book?.cover_image_url || '')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -94,15 +100,108 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         />
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="cover_image_url">Cover Image URL</Label>
-        <Input
-          id="cover_image_url"
-          name="cover_image_url"
-          value={formData.cover_image_url}
-          onChange={handleChange}
-          required
-        />
+      <div className="space-y-4">
+        <div className="flex items-center space-x-2">
+          <Switch
+            id="upload-mode"
+            checked={useFileUpload}
+            onCheckedChange={setUseFileUpload}
+          />
+          <Label htmlFor="upload-mode">
+            {useFileUpload ? 'Upload Image' : 'Use Image URL'}
+          </Label>
+        </div>
+
+        {useFileUpload ? (
+          <div className="space-y-2">
+            <Label>Upload Cover Image</Label>
+            <Input
+              id="cover_image_file"
+              name="cover_image_file"
+              type="file"
+              accept="image/*"
+              disabled={uploading}
+              onChange={async (e) => {
+                const file = e.target.files?.[0]
+                if (file) {
+                  try {
+                    setUploading(true)
+                    setUploadProgress(0)
+                    
+                    // Upload to Supabase storage
+                    const fileExt = file.name.split('.').pop()
+                    const fileName = `${Math.random()}.${fileExt}`
+                    const filePath = `book-covers/${fileName}`
+
+                    const { data, error } = await supabase.storage
+                      .from('book-covers')
+                      .upload(filePath, file, {
+                        cacheControl: '3600',
+                        upsert: false,
+                        onProgress: (progress) => {
+                          setUploadProgress((progress.loaded / progress.total) * 100)
+                        }
+                      })
+
+                    if (error) throw error
+
+                    // Get public URL
+                    const { data: urlData } = supabase
+                      .storage
+                      .from('book-covers')
+                      .getPublicUrl(filePath)
+
+                    setFormData(prev => ({
+                      ...prev,
+                      cover_image_url: urlData.publicUrl
+                    }))
+                    setImagePreview(urlData.publicUrl)
+                  } catch (error) {
+                    console.error('Error uploading image:', error)
+                  } finally {
+                    setUploading(false)
+                  }
+                }
+              }}
+            />
+            {uploading && (
+              <div className="space-y-2">
+                <Progress value={uploadProgress} className="h-2" />
+                <p className="text-sm text-muted-foreground">
+                  Uploading... {Math.round(uploadProgress)}%
+                </p>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="space-y-2">
+            <Label htmlFor="cover_image_url">Cover Image URL</Label>
+            <Input
+              id="cover_image_url"
+              name="cover_image_url"
+              value={formData.cover_image_url}
+              onChange={(e) => {
+                handleChange(e)
+                setImagePreview(e.target.value)
+              }}
+              required
+            />
+          </div>
+        )}
+
+        {imagePreview && (
+          <div className="mt-4">
+            <Label>Preview</Label>
+            <div className="mt-2 border rounded-lg overflow-hidden w-48">
+              <img
+                src={imagePreview}
+                alt="Cover preview"
+                className="w-full h-auto object-cover"
+                onError={() => setImagePreview('')}
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="space-y-2">
