@@ -136,7 +136,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
                   // Upload to Supabase storage
                   const { error } = await supabase.storage
                     .from('book-covers')
-                    .upload(filePath, file, {
+                    .upload(`book-covers/${filePath}`, file, {
                       cacheControl: '3600',
                       upsert: false,
                       onProgress: (progress) => {
