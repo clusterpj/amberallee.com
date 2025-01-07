@@ -1,10 +1,10 @@
 ALTER TABLE books
-  ADD COLUMN categories text[],
-  ADD COLUMN purchase_now_button text,
-  ADD COLUMN series text,
-  ADD COLUMN book_number integer,
-  ADD COLUMN teasers text[],
-  ADD COLUMN tropes text[];
+  ADD COLUMN IF NOT EXISTS categories text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS purchase_now_button text DEFAULT '',
+  ADD COLUMN IF NOT EXISTS series text DEFAULT '',
+  ADD COLUMN IF NOT EXISTS book_number integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS teasers text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS tropes text[] DEFAULT '{}';
 
 COMMENT ON COLUMN books.categories IS 'Array of categories the book belongs to';
 COMMENT ON COLUMN books.purchase_now_button IS 'Purchase button configuration (in development)';
