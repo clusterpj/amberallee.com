@@ -6,8 +6,6 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { supabase } from '@/lib/supabase'
-import { Progress } from '@/components/ui/progress'
-import { Switch } from '@/components/ui/switch'
 
 interface BookFormData {
   id?: string
@@ -103,10 +101,12 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
 
       <div className="space-y-4">
         <div className="flex items-center space-x-2">
-          <Switch
+          <input
+            type="checkbox"
             id="upload-mode"
             checked={useFileUpload}
-            onCheckedChange={setUseFileUpload}
+            onChange={(e) => setUseFileUpload(e.target.checked)}
+            className="w-4 h-4"
           />
           <Label htmlFor="upload-mode">
             {useFileUpload ? 'Upload Image' : 'Use Image URL'}
@@ -185,7 +185,12 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
             )}
             {uploading && (
               <div className="space-y-2">
-                <Progress value={uploadProgress} className="h-2" />
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="bg-blue-600 h-2 rounded-full" 
+                    style={{ width: `${uploadProgress}%` }}
+                  ></div>
+                </div>
                 <p className="text-sm text-muted-foreground">
                   Uploading... {Math.round(uploadProgress)}%
                 </p>
