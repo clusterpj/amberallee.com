@@ -131,7 +131,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
                   // Generate unique filename
                   const fileExt = file.name.split('.').pop()
                   const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`
-                  const filePath = `book-covers/${fileName}`
+                  const filePath = `${fileName}`
 
                   // Upload to Supabase storage
                   const { error } = await supabase.storage
