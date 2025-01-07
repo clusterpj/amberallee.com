@@ -2,10 +2,21 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [
-      'your-image-domain.com',
-      'm.media-amazon.com',
-      'static.independent.co.uk'
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'bdififwytjactxqekism.supabase.co',
+        port: '',
+        pathname: '/storage/v1/object/public/book-covers/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'm.media-amazon.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'static.independent.co.uk',
+      }
     ],
   },
   experimental: {
