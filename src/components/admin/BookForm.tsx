@@ -33,7 +33,6 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
   )
   const [uploading, setUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
-  const [useFileUpload, setUseFileUpload] = useState(false)
   const [imagePreview, setImagePreview] = useState(book?.cover_image_url || '')
   const [uploadError, setUploadError] = useState('')
 
@@ -70,7 +69,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
     const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: name === 'price' ? Number(value) : value
     }))
   }
 
@@ -100,20 +99,6 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       </div>
 
       <div className="space-y-4">
-        <div className="flex items-center space-x-2">
-          <input
-            type="checkbox"
-            id="upload-mode"
-            checked={useFileUpload}
-            onChange={(e) => setUseFileUpload(e.target.checked)}
-            className="w-4 h-4"
-          />
-          <Label htmlFor="upload-mode">
-            {useFileUpload ? 'Upload Image' : 'Use Image URL'}
-          </Label>
-        </div>
-
-        {useFileUpload ? (
           <div className="space-y-2">
             <Label>Upload Cover Image</Label>
             <Input
@@ -197,21 +182,6 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
               </div>
             )}
           </div>
-        ) : (
-          <div className="space-y-2">
-            <Label htmlFor="cover_image_url">Cover Image URL</Label>
-            <Input
-              id="cover_image_url"
-              name="cover_image_url"
-              value={formData.cover_image_url}
-              onChange={(e) => {
-                handleChange(e)
-                setImagePreview(e.target.value)
-              }}
-              required
-            />
-          </div>
-        )}
 
         {imagePreview && (
           <div className="mt-4 space-y-2">
