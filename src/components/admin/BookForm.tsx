@@ -14,6 +14,12 @@ interface BookFormData {
   cover_image_url: string
   published_date: string
   price: number
+  categories: string[]
+  purchase_now_button: string
+  series: string
+  book_number: number
+  teasers: string[]
+  tropes: string[]
 }
 
 interface BookFormProps {
@@ -23,12 +29,26 @@ interface BookFormProps {
 
 export default function BookForm({ book, onSuccess }: BookFormProps) {
   const [formData, setFormData] = useState<BookFormData>(
-    book ? { ...book } : {
+    book ? { 
+      ...book,
+      categories: book.categories || [],
+      purchase_now_button: book.purchase_now_button || '',
+      series: book.series || '',
+      book_number: book.book_number || 0,
+      teasers: book.teasers || [],
+      tropes: book.tropes || []
+    } : {
       title: '',
       description: '',
       cover_image_url: '',
       published_date: new Date().toISOString().split('T')[0],
-      price: 0
+      price: 0,
+      categories: [],
+      purchase_now_button: '',
+      series: '',
+      book_number: 0,
+      teasers: [],
+      tropes: []
     }
   )
   const [uploading, setUploading] = useState(false)
@@ -213,15 +233,94 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         )}
       </div>
 
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="price">Price</Label>
+          <Input
+            id="price"
+            name="price"
+            type="number"
+            value={formData.price}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="book_number">Book Number</Label>
+          <Input
+            id="book_number"
+            name="book_number"
+            type="number"
+            value={formData.book_number}
+            onChange={handleChange}
+          />
+        </div>
+      </div>
+
       <div className="space-y-2">
-        <Label htmlFor="price">Price</Label>
+        <Label htmlFor="series">Series</Label>
         <Input
-          id="price"
-          name="price"
-          type="number"
-          value={formData.price}
+          id="series"
+          name="series"
+          value={formData.series}
           onChange={handleChange}
-          required
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="categories">Categories (comma separated)</Label>
+        <Input
+          id="categories"
+          name="categories"
+          value={formData.categories.join(', ')}
+          onChange={(e) => {
+            const categories = e.target.value
+              .split(',')
+              .map(c => c.trim())
+              .filter(c => c.length > 0)
+            setFormData(prev => ({ ...prev, categories }))
+          }}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="tropes">Tropes (comma separated)</Label>
+        <Input
+          id="tropes"
+          name="tropes"
+          value={formData.tropes.join(', ')}
+          onChange={(e) => {
+            const tropes = e.target.value
+              .split(',')
+              .map(t => t.trim())
+              .filter(t => t.length > 0)
+            setFormData(prev => ({ ...prev, tropes }))
+          }}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="teasers">Teasers (one per line)</Label>
+        <Textarea
+          id="teasers"
+          name="teasers"
+          value={formData.teasers.join('\n')}
+          onChange={(e) => {
+            const teasers = e.target.value.split('\n').filter(t => t.trim().length > 0)
+            setFormData(prev => ({ ...prev, teasers }))
+          }}
+          rows={3}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="purchase_now_button">Purchase Button Configuration</Label>
+        <Input
+          id="purchase_now_button"
+          name="purchase_now_button"
+          value={formData.purchase_now_button}
+          onChange={handleChange}
         />
       </div>
 
