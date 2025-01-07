@@ -14,6 +14,12 @@ interface Book {
   cover_image_url: string
   published_date: string
   price: number
+  series: string
+  book_number: number
+  tropes: string[]
+  teasers: string[]
+  amazon_link: string
+  is_published: boolean
 }
 
 export default function AdminBooksPage() {

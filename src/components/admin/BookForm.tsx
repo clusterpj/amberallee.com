@@ -20,6 +20,8 @@ interface BookFormData {
   book_number: number
   teasers: string[]
   tropes: string[]
+  amazon_link: string
+  is_published: boolean
 }
 
 interface BookFormProps {
@@ -36,7 +38,9 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       series: book.series || '',
       book_number: book.book_number || 0,
       teasers: book.teasers || [],
-      tropes: book.tropes || []
+      tropes: book.tropes || [],
+      amazon_link: book.amazon_link || '',
+      is_published: book.is_published || false
     } : {
       title: '',
       description: '',
@@ -48,7 +52,9 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       series: '',
       book_number: 0,
       teasers: [],
-      tropes: []
+      tropes: [],
+      amazon_link: '',
+      is_published: false
     }
   )
   const [uploading, setUploading] = useState(false)
@@ -314,14 +320,44 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         />
       </div>
 
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="purchase_now_button">Purchase Button Link</Label>
+          <Input
+            id="purchase_now_button"
+            name="purchase_now_button"
+            value={formData.purchase_now_button}
+            onChange={handleChange}
+            placeholder="https://..."
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="amazon_link">Amazon Link</Label>
+          <Input
+            id="amazon_link"
+            name="amazon_link"
+            value={formData.amazon_link}
+            onChange={handleChange}
+            placeholder="https://www.amazon.com/..."
+          />
+        </div>
+      </div>
+
       <div className="space-y-2">
-        <Label htmlFor="purchase_now_button">Purchase Button Configuration</Label>
-        <Input
-          id="purchase_now_button"
-          name="purchase_now_button"
-          value={formData.purchase_now_button}
-          onChange={handleChange}
-        />
+        <div className="flex items-center space-x-2">
+          <input
+            id="is_published"
+            type="checkbox"
+            checked={formData.is_published}
+            onChange={(e) => setFormData(prev => ({
+              ...prev,
+              is_published: e.target.checked
+            }))}
+            className="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
+          />
+          <Label htmlFor="is_published">Published</Label>
+        </div>
       </div>
 
       <div className="space-y-2">
