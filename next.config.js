@@ -7,7 +7,7 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'bdififwytjactxqekism.supabase.co',
         port: '',
-        pathname: '/storage/v1/object/public/book-covers/amber-images/**',
+        pathname: '/storage/v1/object/public/book-covers/**',
       },
       {
         protocol: 'https',
