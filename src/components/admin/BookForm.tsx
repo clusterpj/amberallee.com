@@ -37,6 +37,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
   const [uploadProgress, setUploadProgress] = useState(0)
   const [useFileUpload, setUseFileUpload] = useState(false)
   const [imagePreview, setImagePreview] = useState(book?.cover_image_url || '')
+  const [uploadError, setUploadError] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -123,47 +124,65 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
               disabled={uploading}
               onChange={async (e) => {
                 const file = e.target.files?.[0]
-                if (file) {
-                  try {
-                    setUploading(true)
-                    setUploadProgress(0)
-                    
-                    // Upload to Supabase storage
-                    const fileExt = file.name.split('.').pop()
-                    const fileName = `${Math.random()}.${fileExt}`
-                    const filePath = `book-covers/${fileName}`
+                if (!file) return
+                
+                // Validate file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                  setUploadError('File size must be less than 5MB')
+                  return
+                }
 
-                    const { data, error } = await supabase.storage
-                      .from('book-covers')
-                      .upload(filePath, file, {
-                        cacheControl: '3600',
-                        upsert: false,
-                        onProgress: (progress) => {
-                          setUploadProgress((progress.loaded / progress.total) * 100)
-                        }
-                      })
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                  setUploadError('Only image files are allowed')
+                  return
+                }
 
-                    if (error) throw error
+                try {
+                  setUploadError('')
+                  setUploading(true)
+                  setUploadProgress(0)
+                  
+                  // Generate unique filename
+                  const fileExt = file.name.split('.').pop()
+                  const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`
+                  const filePath = `book-covers/${fileName}`
 
-                    // Get public URL
-                    const { data: urlData } = supabase
-                      .storage
-                      .from('book-covers')
-                      .getPublicUrl(filePath)
+                  // Upload to Supabase storage
+                  const { error } = await supabase.storage
+                    .from('book-covers')
+                    .upload(filePath, file, {
+                      cacheControl: '3600',
+                      upsert: false,
+                      onProgress: (progress) => {
+                        setUploadProgress((progress.loaded / progress.total) * 100)
+                      }
+                    })
 
-                    setFormData(prev => ({
-                      ...prev,
-                      cover_image_url: urlData.publicUrl
-                    }))
-                    setImagePreview(urlData.publicUrl)
-                  } catch (error) {
-                    console.error('Error uploading image:', error)
-                  } finally {
-                    setUploading(false)
-                  }
+                  if (error) throw error
+
+                  // Get public URL
+                  const { data: urlData } = supabase
+                    .storage
+                    .from('book-covers')
+                    .getPublicUrl(filePath)
+
+                  setFormData(prev => ({
+                    ...prev,
+                    cover_image_url: urlData.publicUrl
+                  }))
+                  setImagePreview(urlData.publicUrl)
+                } catch (error) {
+                  console.error('Error uploading image:', error)
+                  setUploadError('Failed to upload image. Please try again.')
+                } finally {
+                  setUploading(false)
                 }
               }}
             />
+            {uploadError && (
+              <p className="text-sm text-red-600">{uploadError}</p>
+            )}
             {uploading && (
               <div className="space-y-2">
                 <Progress value={uploadProgress} className="h-2" />
@@ -190,15 +209,30 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         )}
 
         {imagePreview && (
-          <div className="mt-4">
+          <div className="mt-4 space-y-2">
             <Label>Preview</Label>
-            <div className="mt-2 border rounded-lg overflow-hidden w-48">
-              <img
-                src={imagePreview}
-                alt="Cover preview"
-                className="w-full h-auto object-cover"
-                onError={() => setImagePreview('')}
-              />
+            <div className="relative">
+              <div className="border rounded-lg overflow-hidden w-48">
+                <img
+                  src={imagePreview}
+                  alt="Cover preview"
+                  className="w-full h-auto object-cover"
+                  onError={() => setImagePreview('')}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setFormData(prev => ({ ...prev, cover_image_url: '' }))
+                  setImagePreview('')
+                }}
+                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+                title="Remove cover image"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
             </div>
           </div>
         )}
