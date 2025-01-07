@@ -40,6 +40,80 @@ export async function POST(request: NextRequest) {
         tropes: body.tropes || null,
         created_at: sql`${now}`,
         updated_at: sql`${now}`,
+        book_number: body.bookNumber || null,
+        is_published: body.isPublished || false
+      })
+      .returning()
+
+    return NextResponse.json(insertedBook[0])
+  } catch (error) {
+    console.error('Error creating book:', error)
+    return NextResponse.json({ error: 'Failed to create book' }, { status: 500 })
+  try {
+    const authResponse = await requireAdminAuth(request)
+    if (authResponse) {
+      return authResponse
+    }
+
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get('id')
+    
+    if (!id) {
+      return NextResponse.json({ error: 'Book ID is required' }, { status: 400 })
+    }
+
+    const body = await request.json() as BookInput
+    const now = new Date().toISOString()
+
+    const updatedBook = await db
+      .update(books)
+      .set({
+        title: sql`${body.title}`,
+        description: body.description ? sql`${body.description}` : null,
+        amazon_link: body.amazonLink ? sql`${body.amazonLink}` : null,
+        cover_image_url: body.coverImage ? sql`${body.coverImage}` : null,
+        published_date: body.publishedDate ? sql`${new Date(body.publishedDate).toISOString()}` : null,
+        price: body.price || null,
+        series: body.series ? sql`${body.series}` : null,
+        tropes: body.tropes || null,
+        updated_at: sql`${now}`,
+        book_number: body.bookNumber || null,
+        is_published: body.isPublished || false
+      })
+      .where(sql`id = ${id}`)
+      .returning()
+
+    return NextResponse.json(updatedBook[0])
+  } catch (error) {
+    console.error('Error updating book:', error)
+    return NextResponse.json({ error: 'Failed to update book' }, { status: 500 })
+  }
+}
+
+export async function PUT(request: NextRequest) {
+  try {
+    const authResponse = await requireAdminAuth(request)
+    if (authResponse) {
+      return authResponse
+    }
+
+    const body = await request.json() as BookInput
+    
+    const now = new Date().toISOString()
+    
+    const insertedBook = await db
+      .insert(books)
+      .values({
+        title: sql`${body.title}`,
+        description: body.description ? sql`${body.description}` : null,
+        amazon_link: body.amazonLink ? sql`${body.amazonLink}` : null,
+        cover_image_url: body.coverImage ? sql`${body.coverImage}` : null,
+        published_date: body.publishedDate ? sql`${new Date(body.publishedDate).toISOString()}` : null,
+        price: body.price || null,
+        series: body.series ? sql`${body.series}` : null,
+        tropes: body.tropes || null,
+        created_at: sql`${now}`,
+        updated_at: sql`${now}`,
       })
       .returning()
 

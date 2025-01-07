@@ -65,23 +65,29 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      let error
-      if (book) {
-        // Update existing book
-        const { error: updateError } = await supabase
-          .from('books')
-          .update(formData)
-          .eq('id', book.id)
-        error = updateError
-      } else {
-        // Create new book
-        const { error: insertError } = await supabase
-          .from('books')
-          .insert([formData])
-        error = insertError
+      const url = book ? `/api/admin/books/${book.id}` : '/api/admin/books'
+      const method = book ? 'PUT' : 'POST'
+      
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          price: formData.price * 100, // Convert to cents
+          publishedDate: formData.published_date,
+          amazonLink: formData.amazon_link,
+          coverImage: formData.cover_image_url,
+          isPublished: formData.is_published,
+          bookNumber: formData.book_number
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to save book')
       }
 
-      if (error) throw error
       onSuccess()
     } catch (error) {
       if (error instanceof Error) {
