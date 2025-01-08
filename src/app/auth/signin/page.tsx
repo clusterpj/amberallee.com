@@ -2,7 +2,7 @@
 
 import { useState, Suspense } from 'react'
 import { supabase } from '@/lib/supabase'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 function SignInForm() {
@@ -11,6 +11,7 @@ function SignInForm() {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const searchParams = useSearchParams()
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -30,8 +31,10 @@ function SignInForm() {
 
       if (data?.user) {
         console.log('Sign in successful, redirecting...')
-        // Force a hard navigation to the admin dashboard
-        window.location.href = searchParams.get('returnUrl') || '/admin/dashboard'
+        // Use router.push instead of window.location for smoother navigation
+        const returnUrl = searchParams.get('returnUrl') || '/admin/dashboard'
+        router.push(returnUrl)
+        return // Return early to prevent further state updates
       } else {
         console.log('No user data returned')
         setError('Invalid credentials')
