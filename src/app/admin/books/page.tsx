@@ -15,11 +15,15 @@ interface Book {
   published_date: string
   price: number
   series: string
-  book_number: number
+  series_order: number
   tropes: string[]
   teasers: string[]
   amazon_link: string
   is_published: boolean
+  created_at: string
+  updated_at: string
+  categories?: string[]
+  purchase_now_button?: string
 }
 
 export default function AdminBooksPage() {
@@ -39,13 +43,28 @@ export default function AdminBooksPage() {
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
       )
+      
+      // Get session first
+      const { data: { session } } = await supabase.auth.getSession()
+      
+      if (!session) {
+        throw new Error('Session expired. Please log in again.')
+      }
+
       const { data, error } = await supabase
         .from('books')
         .select('*')
         .order('created_at', { ascending: false })
 
       if (error) throw error
-      setBooks(data || [])
+      
+      // Transform data to match our Book interface
+      const transformedData = data.map(book => ({
+        ...book,
+        book_number: book.series_order // Map series_order to book_number
+      }))
+      
+      setBooks(transformedData || [])
     } catch (error) {
       setError('Error fetching books')
       console.error('Error:', error)

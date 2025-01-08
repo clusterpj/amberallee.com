@@ -18,7 +18,7 @@ interface BookFormData {
   categories: string[]
   purchase_now_button: string
   series: string
-  book_number: number
+  series_order: number
   teasers: string[]
   tropes: string[]
   amazon_link: string
@@ -78,7 +78,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         published_date: formData.published_date,
         price: Math.round(formData.price * 100), // Convert to cents and round
         series: formData.series,
-        book_number: formData.book_number,
+        series_order: formData.series_order,
         tropes: formData.tropes,
         teasers: formData.teasers,
         is_published: formData.is_published,
@@ -162,8 +162,8 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       ...prev,
       [name]: name === 'price' ? 
         Math.max(0, Number((Number(value).toFixed(2)))) : // Ensure valid price format
-        name === 'book_number' ?
-        Number(value) : // Convert book_number to number
+        name === 'series_order' ?
+        Number(value) : // Convert series_order to number
         value
     }))
   }
@@ -334,12 +334,12 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="book_number">Book Number</Label>
+          <Label htmlFor="series_order">Series Order</Label>
           <Input
-            id="book_number"
-            name="book_number"
+            id="series_order"
+            name="series_order"
             type="number"
-            value={formData.book_number}
+            value={formData.series_order}
             onChange={handleChange}
           />
         </div>
