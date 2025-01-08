@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button'
 import { Menu, X, User, LayoutDashboard, Settings, ShoppingBag, LogOut } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
-import { useRouter } from 'next/navigation'
 import {
   DropdownMenu,
   DropdownMenuContent,
