@@ -91,7 +91,9 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         method,
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`
         },
+        credentials: 'include',
         body: JSON.stringify(requestData)
       })
       
@@ -109,13 +111,26 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       }
 
       const responseText = await response.text()
+      
+      // Check if we got HTML instead of JSON (likely auth redirect)
+      if (responseText.startsWith('<!DOCTYPE html>')) {
+        console.error('Received HTML response, likely auth redirect:', responseText)
+        throw new Error('Authentication required - please log in again')
+      }
+
       try {
         const result = JSON.parse(responseText)
+        if (!result.success) {
+          throw new Error(result.error || 'Failed to save book')
+        }
         onSuccess()
-        return result
+        return result.data
       } catch (error) {
         console.error('Failed to parse response:', responseText)
-        throw new Error('Invalid response from server')
+        if (response.status === 401) {
+          throw new Error('Session expired - please log in again')
+        }
+        throw new Error('Failed to save book. Please check your connection and try again.')
       }
     } catch (error) {
       if (error instanceof Error) {
