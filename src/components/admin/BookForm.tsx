@@ -88,21 +88,17 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       console.log('Sending request to:', url)
       console.log('Request data:', requestData)
       
-      // Get session using server-side auth
-      const authResponse = await fetch('/api/auth/session', {
-        method: 'GET',
-        credentials: 'include'
-      })
+      // Create a client-side Supabase client
+      const supabase = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      )
 
-      if (!authResponse.ok) {
-        setUploadError('Session expired. Please refresh the page.')
-        return
-      }
-
-      const { session: serverSession } = await authResponse.json()
+      // Get the current session
+      const { data: { session } } = await supabase.auth.getSession()
       
-      if (!serverSession?.access_token) {
-        setUploadError('Session expired. Please refresh the page.')
+      if (!session) {
+        setUploadError('Session expired. Please log in again.')
         return
       }
 
@@ -110,7 +106,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         method,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${serverSession.access_token}`
+          'Authorization': `Bearer ${session.access_token}`
         },
         body: JSON.stringify(requestData)
       })
@@ -166,6 +162,8 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       ...prev,
       [name]: name === 'price' ? 
         Math.max(0, Number((Number(value).toFixed(2)))) : // Ensure valid price format
+        name === 'book_number' ?
+        Number(value) : // Convert book_number to number
         value
     }))
   }
