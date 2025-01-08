@@ -139,9 +139,9 @@ export function useAuth() {
         
         // Use window.location for initial redirect to avoid RSC issues
         if (typeof window !== 'undefined') {
-          window.location.href = '/dashboard'
+          window.location.href = '/admin/dashboard'
         } else {
-          router.replace('/dashboard')
+          router.replace('/admin/dashboard')
         }
       }
 
