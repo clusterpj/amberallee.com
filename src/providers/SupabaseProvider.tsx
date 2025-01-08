@@ -1,6 +1,6 @@
 'use client'
 
-import { createClient } from '@/utils/supabase/client'
+import { createBrowserClient } from '@supabase/ssr'
 import { SessionContextProvider } from '@supabase/auth-helpers-react'
 
 export default function SupabaseProvider({
@@ -8,7 +8,10 @@ export default function SupabaseProvider({
 }: {
   children: React.ReactNode
 }) {
-  const supabase = createClient()
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
 
   return (
     <SessionContextProvider supabaseClient={supabase}>
