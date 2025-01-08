@@ -88,25 +88,11 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       console.log('Sending request to:', url)
       console.log('Request data:', requestData)
       
-      // Create a client-side Supabase client
-      const supabase = createBrowserClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      )
-
-      // Get the current session
-      const { data: { session } } = await supabase.auth.getSession()
-      
-      if (!session) {
-        setUploadError('Session expired. Please log in again.')
-        return
-      }
-
+      // Use the same auth flow as signin route
       const apiResponse = await fetch(url, {
         method,
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(requestData)
       })
@@ -228,20 +214,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
                   const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`
                   const filePath = `${fileName}`
 
-                  // Upload to Supabase storage
-                  const supabase = createBrowserClient(
-                    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-                    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-                  )
-      
-                  // Get current session from client
-                  const { data: { session } } = await supabase.auth.getSession()
-                  
-                  if (!session) {
-                    setUploadError('Session expired. Please log in again.')
-                    return
-                  }
-
+                  // Use the same auth flow as signin route
                   const { data, error } = await supabase.storage
                     .from('book-covers')
                     .upload(`amber-images/${filePath}`, file, {
