@@ -19,6 +19,7 @@ interface BookFormData {
   purchase_now_button: string
   series: string
   series_order: number
+  book_number: number
   teasers: string[]
   tropes: string[]
   amazon_link: string
@@ -223,7 +224,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
                   const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`
                   const filePath = `${fileName}`
 
-                  const { data, error } = await supabase.storage
+                  const { error: uploadError } = await supabase.storage
                     .from('book-covers')
                     .upload(`amber-images/${filePath}`, file, {
                       cacheControl: '3600',
