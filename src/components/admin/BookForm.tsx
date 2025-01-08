@@ -84,6 +84,9 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         categories: formData.categories
       }
 
+      console.log('Sending request to:', url)
+      console.log('Request data:', requestData)
+      
       const response = await fetch(url, {
         method,
         headers: {
@@ -91,10 +94,18 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         },
         body: JSON.stringify(requestData)
       })
+      
+      console.log('Response status:', response.status)
 
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || 'Failed to save book')
+        let errorMessage = 'Failed to save book'
+        try {
+          const errorData = await response.text()
+          errorMessage = errorData || errorMessage
+        } catch (parseError) {
+          console.error('Error parsing error response:', parseError)
+        }
+        throw new Error(errorMessage)
       }
 
       const result = await response.json()
