@@ -98,11 +98,12 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         return
       }
 
-      const { session } = await authResponse.json()
+      const { session: serverSession } = await authResponse.json()
       
-      let session;
-      try {
-        const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession()
+      if (!serverSession) {
+        setUploadError('Session expired. Please refresh the page.')
+        return
+      }
         
         if (sessionError) {
           console.error('Session error:', sessionError)
