@@ -101,7 +101,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
 
       const { session: serverSession } = await authResponse.json()
       
-      if (!serverSession) {
+      if (!serverSession?.access_token) {
         setUploadError('Session expired. Please refresh the page.')
         return
       }
@@ -247,20 +247,16 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
                     return
                   }
 
-                  const { session } = await authResponse.json()
+                  const { session: authSession } = await authResponse.json()
 
-                  const uploadTask = supabase.storage
+                  const { data, error } = await supabase.storage
                     .from('book-covers')
                     .upload(`amber-images/${filePath}`, file, {
                       cacheControl: '3600',
                       upsert: false
                     })
 
-                  uploadTask.on('progress', (progress) => {
-                    setUploadProgress((progress.loadedBytes / progress.totalBytes) * 100)
-                  })
-
-                  const { error } = await uploadTask
+                  if (error) throw error
 
                   if (error) throw error
 
