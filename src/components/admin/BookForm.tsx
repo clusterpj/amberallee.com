@@ -87,19 +87,32 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       console.log('Sending request to:', url)
       console.log('Request data:', requestData)
       
-      // Use server-side auth from our lib
+      // Check if we have a valid session
       const authResponse = await fetch('/api/auth/session', {
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
       })
       
       if (!authResponse.ok) {
-        throw new Error('Authentication required')
+        // If auth fails, redirect to login
+        window.location.href = '/auth/signin'
+        return
       }
       
-      const { session } = await authResponse.json()
-      
-      if (!session) {
-        throw new Error('Please log in to continue')
+      let session
+      try {
+        const authData = await authResponse.json()
+        session = authData.session
+        if (!session) {
+          window.location.href = '/auth/signin'
+          return
+        }
+      } catch (error) {
+        console.error('Error parsing auth response:', error)
+        window.location.href = '/auth/signin'
+        return
       }
 
       const apiResponse = await fetch(url, {
@@ -108,8 +121,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${session.access_token}`
         },
-        body: JSON.stringify(requestData),
-        credentials: 'include'
+        body: JSON.stringify(requestData)
       })
       
       console.log('Response status:', response.status)
