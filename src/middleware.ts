@@ -36,9 +36,10 @@ export async function middleware(request: NextRequest) {
     const sessionResponse = await fetch(new URL('/api/auth/session', request.url), {
       headers: {
         'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache'
+        'Cache-Control': 'no-store, max-age=0'
       },
-      credentials: 'include'
+      credentials: 'include',
+      cache: 'no-store'
     })
     
     if (!sessionResponse.ok) {

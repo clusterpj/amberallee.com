@@ -5,11 +5,10 @@ import { cookies } from 'next/headers'
 export async function GET(request: Request) {
   const cookieStore = cookies()
   
-  // Set headers to ensure JSON response
-  const headers = new Headers({
-    'Content-Type': 'application/json',
-    'Cache-Control': 'no-store, max-age=0'
-  })
+  // Create response with proper headers
+  const response = NextResponse.next()
+  response.headers.set('Content-Type', 'application/json')
+  response.headers.set('Cache-Control', 'no-store, max-age=0')
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -33,21 +32,16 @@ export async function GET(request: Request) {
     const { data: { session }, error } = await supabase.auth.getSession()
 
     if (error || !session) {
-      return new Response(JSON.stringify({ 
-        error: 'Not authenticated',
-        redirect: '/auth/signin'
-      }), { 
-        status: 401,
-        headers
-      })
+      return NextResponse.json(
+        { error: 'Not authenticated', redirect: '/auth/signin' },
+        { status: 401, headers: response.headers }
+      )
     }
 
-    return new Response(JSON.stringify({ session }), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'no-store, max-age=0'
-      }
-    })
+    return NextResponse.json(
+      { session },
+      { headers: response.headers }
+    )
   } catch (error) {
     console.error('Session error:', error)
     return new Response(JSON.stringify({ error: 'Internal server error' }), {

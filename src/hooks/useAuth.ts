@@ -62,9 +62,10 @@ export function useAuth() {
           const validationResponse = await fetch('/api/auth/session', {
             headers: {
               'Content-Type': 'application/json',
-              'Cache-Control': 'no-cache'
+              'Cache-Control': 'no-store, max-age=0'
             },
-            credentials: 'include'
+            credentials: 'include',
+            cache: 'no-store'
           })
         
           if (!validationResponse.ok) {
