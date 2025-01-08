@@ -87,30 +87,16 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       console.log('Sending request to:', url)
       console.log('Request data:', requestData)
       
-      // Check if we have a valid session
-      const authResponse = await fetch('/api/auth/session', {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
+      // Get session from server-side
+      const supabase = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      )
       
-      if (!authResponse.ok) {
-        // If auth fails, redirect to login
-        window.location.href = '/auth/signin'
-        return
-      }
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession()
       
-      let session
-      try {
-        const authData = await authResponse.json()
-        session = authData.session
-        if (!session) {
-          window.location.href = '/auth/signin'
-          return
-        }
-      } catch (error) {
-        console.error('Error parsing auth response:', error)
+      if (sessionError || !session) {
+        console.error('Session error:', sessionError)
         window.location.href = '/auth/signin'
         return
       }

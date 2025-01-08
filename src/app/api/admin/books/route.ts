@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { books } from '@/lib/db/schema'
-import { requireAdminAuth } from '@/lib/auth'
+import { createServerClient } from '@supabase/ssr'
 import { sql } from 'drizzle-orm'
 
 type BookInput = {
@@ -18,9 +18,25 @@ type BookInput = {
 
 export async function POST(request: NextRequest) {
   try {
-    const authResponse = await requireAdminAuth(request)
-    if (authResponse) {
-      return authResponse
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          get(name: string) {
+            return request.cookies.get(name)?.value
+          }
+        }
+      }
+    )
+    
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+    
+    if (sessionError || !session) {
+      return NextResponse.json(
+        { error: 'Not authenticated' }, 
+        { status: 401 }
+      )
     }
 
     const body = await request.json() as BookInput
