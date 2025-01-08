@@ -204,10 +204,11 @@ export async function signIn(email: string, password: string) {
       await createUserRecord(authData.user.id, authData.user.email!)
     }
 
-    // Store session tokens in cookies
+    // Store session tokens in cookies with proper SameSite attribute
     if (authData.session) {
-      document.cookie = `sb-access-token=${authData.session.access_token}; path=/; max-age=${60 * 60}`
-      document.cookie = `sb-refresh-token=${authData.session.refresh_token}; path=/; max-age=${60 * 60 * 24 * 7}`
+      const cookieOptions = `path=/; max-age=${60 * 60}; SameSite=Lax; Secure`
+      document.cookie = `sb-access-token=${authData.session.access_token}; ${cookieOptions}`
+      document.cookie = `sb-refresh-token=${authData.session.refresh_token}; path=/; max-age=${60 * 60 * 24 * 7}; ${cookieOptions}`
     }
   }
 
@@ -215,9 +216,10 @@ export async function signIn(email: string, password: string) {
 }
 
 export async function signOut() {
-  // Clear session cookies
-  document.cookie = 'sb-access-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT'
-  document.cookie = 'sb-refresh-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT'
+  // Clear session cookies with SameSite attribute
+  const clearOptions = 'path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Lax; Secure'
+  document.cookie = `sb-access-token=; ${clearOptions}`
+  document.cookie = `sb-refresh-token=; ${clearOptions}`
   
   const { error } = await supabase.auth.signOut()
   if (error) throw error

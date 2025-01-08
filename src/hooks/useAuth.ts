@@ -90,7 +90,8 @@ export function useAuth() {
           
           // Only redirect if we're not already on the admin dashboard
           if (event === 'SIGNED_IN' && !window.location.pathname.startsWith('/admin/dashboard')) {
-            router.replace('/admin/dashboard')
+            // Use full page reload to avoid RSC issues
+            window.location.href = '/admin/dashboard'
           }
         } else {
           setUser(null)
