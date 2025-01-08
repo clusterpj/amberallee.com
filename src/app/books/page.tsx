@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createServerSupabaseClient } from '@/lib/supabase/server-only'
 import Image from "next/image"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
@@ -22,7 +22,7 @@ const bookUrlMap: Record<string, string> = {
 }
 
 async function getBooks() {
-  const supabase = createClient()
+  const supabase = createServerSupabaseClient()
   const { data: books, error } = await supabase
     .from('books')
     .select('*')
