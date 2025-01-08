@@ -261,35 +261,18 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
                     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
                   )
       
-                  // Get current session with error handling
-                  let session;
-                  try {
-                    const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession()
-        
-                    if (sessionError) {
-                      console.error('Session error:', sessionError)
-                      throw new Error('Session error - please refresh the page and try again')
-                    }
-        
-                    if (!currentSession) {
-                      // Attempt to refresh session
-                      const { data: { session: refreshedSession }, error: refreshError } = await supabase.auth.refreshSession()
-          
-                      if (refreshError || !refreshedSession) {
-                        console.error('Refresh session error:', refreshError)
-                        setUploadError('Session expired. Please refresh the page.')
-                        return
-                      }
-          
-                      session = refreshedSession
-                    } else {
-                      session = currentSession
-                    }
-                  } catch (error) {
-                    console.error('Session handling error:', error)
-                    setUploadError('Authentication error. Please refresh the page.')
+                  // Get session token from server
+                  const authResponse = await fetch('/api/auth/session', {
+                    method: 'GET',
+                    credentials: 'include'
+                  })
+
+                  if (!authResponse.ok) {
+                    setUploadError('Session expired. Please refresh the page.')
                     return
                   }
+
+                  const { session } = await authResponse.json()
 
                   const { error } = await supabase.storage
                     .from('book-covers')
