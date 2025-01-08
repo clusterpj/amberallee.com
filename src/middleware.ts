@@ -12,10 +12,10 @@ export async function middleware(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value
+        async get(name: string) {
+          return (await request.cookies.get(name))?.value
         },
-        set(name: string, value: string, options) {
+        async set(name: string, value: string, options) {
           request.cookies.set({
             name,
             value,
@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
             ...options
           })
         },
-        remove(name: string, options) {
+        async remove(name: string, options) {
           request.cookies.set({
             name,
             value: '',
@@ -93,9 +93,10 @@ export async function middleware(request: NextRequest) {
     // Clear auth cookies and redirect to login
     const response = NextResponse.redirect(new URL('/auth/signin', request.url))
     
-    // Use proper cookie clearing through Supabase client
-    const supabase = createMiddlewareClient({ req: request, res: response })
-    await supabase.auth.signOut()
+    // Clear cookies directly
+    response.cookies.delete('sb-access-token')
+    response.cookies.delete('sb-refresh-token')
+    response.cookies.delete('sb-bdififwytjactxqekism-auth-token.3')
     
     return response
   }
