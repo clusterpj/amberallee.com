@@ -1,77 +1,75 @@
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
 
 export async function middleware(request: NextRequest) {
+  const res = NextResponse.next()
+  
+  // Create middleware client
+  const supabase = createMiddlewareClient({ req: request, res })
+  
   // Public routes that don't require authentication
-  const publicRoutes = ['/auth/signin', '/auth/signup', '/login', '/']
+  const publicRoutes = ['/auth/signin', '/auth/signup', '/login', '/', '/books']
   if (publicRoutes.includes(request.nextUrl.pathname)) {
-    return NextResponse.next()
+    return res
   }
 
   try {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        auth: {
-          persistSession: false,
-          autoRefreshToken: false,
-        }
-      }
-    )
-
-    // Get session from cookie
-    const accessToken = request.cookies.get('sb-access-token')?.value
-    const refreshToken = request.cookies.get('sb-refresh-token')?.value
-
-    if (!accessToken) {
-      return NextResponse.redirect(new URL('/auth/signin', request.url))
+    // Check session
+    const { data: { session }, error } = await supabase.auth.getSession()
+    
+    if (error) {
+      throw error
     }
 
-    const { data: { session }, error } = await supabase.auth.setSession({
-      access_token: accessToken,
-      refresh_token: refreshToken || ''
-    })
-
-    if (error || !session) {
-      console.error('Session error:', error)
-      const response = NextResponse.redirect(new URL('/auth/signin', request.url))
-      response.cookies.delete('sb-access-token')
-      response.cookies.delete('sb-refresh-token')
-      return response
+    if (!session) {
+      // Store the attempted URL to redirect back after login
+      const redirectUrl = new URL('/auth/signin', request.url)
+      redirectUrl.searchParams.set('redirect', request.nextUrl.pathname)
+      return NextResponse.redirect(redirectUrl)
     }
 
-    // Check if the path starts with /admin
+    // For admin routes, check role
     if (request.nextUrl.pathname.startsWith('/admin')) {
-      const { data: userData } = await supabase
+      const { data: userData, error: roleError } = await supabase
         .from('users')
         .select('role')
         .eq('id', session.user.id)
         .single()
 
-      if (userData?.role !== 'admin') {
-        console.warn('Not authorized for admin route')
-        return NextResponse.redirect(new URL('/auth/signin', request.url))
+      if (roleError || userData?.role !== 'admin') {
+        console.warn('Unauthorized access attempt to admin route')
+        return NextResponse.redirect(new URL('/', request.url))
       }
     }
 
-    // User is authenticated, allow access to protected routes
-    return NextResponse.next()
+    // Update response with new tokens if they were refreshed
+    return res
+
   } catch (error) {
     console.error('Middleware error:', error)
+    
+    // Clear auth cookies and redirect to login
     const response = NextResponse.redirect(new URL('/auth/signin', request.url))
-    response.cookies.delete('sb-access-token')
-    response.cookies.delete('sb-refresh-token')
+    
+    // Use proper cookie clearing through Supabase client
+    const supabase = createMiddlewareClient({ req: request, res: response })
+    await supabase.auth.signOut()
+    
     return response
   }
 }
 
+// Update matcher to be more specific and include all routes that need protection
 export const config = {
   matcher: [
-    '/admin/:path*',
-    '/dashboard/:path*',
-    '/profile/:path*',
-    '/auth/:path*'
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public folder
+     */
+    '/((?!_next/static|_next/image|favicon.ico|public|auth/signin|auth/signup|login).*)',
   ]
 }
