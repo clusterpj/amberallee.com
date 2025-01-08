@@ -11,7 +11,7 @@ export const books = pgTable('books', {
   title: text('title').notNull(),
   description: text('description'),
   amazon_link: text('amazon_link'),
-  published_date: timestamp('published_date'), // Change to timestamp with time zone
+  published_date: timestamp('published_date', { mode: 'date' }), // Change to date type
   cover_image_url: text('cover_image_url'),
   price: integer('price').default(0), // Set default value to 0
   categories: text('categories').array().default([]), // Add categories field
