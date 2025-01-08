@@ -90,8 +90,8 @@ interface SparklesProps {
   enabled?: boolean
 }
 
-export const Sparkles = dynamic<ComponentProps<typeof import('./SparklesImpl.jsx').default>>(
-  () => import('./SparklesImpl.jsx'),
+export const Sparkles = dynamic<ComponentProps<typeof import('./SparklesImpl').default>>(
+  () => import('./SparklesImpl'),
   {
     ssr: false
   }
