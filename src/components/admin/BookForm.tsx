@@ -6,8 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import { createBrowserClient } from '@/lib/supabase'
-const supabase = createBrowserClient
+import { supabase } from '@/lib/supabase'
 
 interface BookFormData {
   id?: string

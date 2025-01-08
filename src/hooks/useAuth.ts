@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { User } from '@supabase/supabase-js'
-import { createBrowserClient } from '@/lib/supabase'
-const supabase = createBrowserClient
+import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 
 export interface CustomUser extends User {
