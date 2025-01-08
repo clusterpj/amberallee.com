@@ -77,23 +77,30 @@ export function useAuth() {
     initializeAuth()
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (session?.user && mounted) {
-        const role = await ensureUserRecord(session.user)
-        const customUser: CustomUser = {
-          ...session.user,
-          role
+      if (!mounted) return;
+      
+      try {
+        if (session?.user) {
+          const role = await ensureUserRecord(session.user)
+          const customUser: CustomUser = {
+            ...session.user,
+            role
+          }
+          setUser(customUser)
+          
+          // Only redirect if we're not already on the dashboard
+          if (event === 'SIGNED_IN' && window.location.pathname !== '/dashboard') {
+            router.replace('/dashboard')
+          }
+        } else {
+          setUser(null)
+          
+          if (event === 'SIGNED_OUT' && window.location.pathname !== '/') {
+            router.replace('/')
+          }
         }
-        setUser(customUser)
-        
-        if (event === 'SIGNED_IN') {
-          router.push('/dashboard')
-        }
-      } else if (mounted) {
-        setUser(null)
-        
-        if (event === 'SIGNED_OUT') {
-          router.push('/')
-        }
+      } catch (error) {
+        console.error('Auth state change error:', error)
       }
     })
 
@@ -119,6 +126,7 @@ export function useAuth() {
         email,
         password
       })
+      
       if (authError) throw authError
 
       if (authData.user) {
@@ -128,6 +136,13 @@ export function useAuth() {
           role
         }
         setUser(customUser)
+        
+        // Use window.location for initial redirect to avoid RSC issues
+        if (typeof window !== 'undefined') {
+          window.location.href = '/dashboard'
+        } else {
+          router.replace('/dashboard')
+        }
       }
 
       return authData
