@@ -88,11 +88,19 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       console.log('Sending request to:', url)
       console.log('Request data:', requestData)
       
-      // Use the same auth flow as signin route
+      // Get current session
+      const { data: { session } } = await supabase.auth.getSession()
+      
+      if (!session) {
+        throw new Error('No active session - please log in again')
+      }
+
+      // Include auth token in request
       const apiResponse = await fetch(url, {
         method,
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`
         },
         body: JSON.stringify(requestData)
       })
