@@ -54,6 +54,20 @@ export function useAuth() {
 
     const initializeAuth = async () => {
       try {
+        // First check localStorage for existing session
+        const storedSession = localStorage.getItem('supabase.auth.token')
+        if (storedSession) {
+          const { currentSession } = JSON.parse(storedSession)
+          if (currentSession && new Date(currentSession.expires_at * 1000) > new Date()) {
+            // Restore session from localStorage
+            await supabase.auth.setSession(currentSession)
+          } else {
+            // Clear expired session
+            localStorage.removeItem('supabase.auth.token')
+          }
+        }
+
+        // Then check server session
         const { data: { session } } = await supabase.auth.getSession()
         
         if (session?.user && mounted) {
@@ -114,6 +128,10 @@ export function useAuth() {
   const signOut = async () => {
     try {
       await supabase.auth.signOut()
+      // Clear all auth-related storage
+      localStorage.removeItem('supabase.auth.token')
+      document.cookie = 'sb-access-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Lax; Secure'
+      document.cookie = 'sb-refresh-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Lax; Secure'
       setUser(null)
       router.push('/')
     } catch (error) {

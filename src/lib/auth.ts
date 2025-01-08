@@ -209,6 +209,12 @@ export async function signIn(email: string, password: string) {
       const cookieOptions = `path=/; max-age=${60 * 60}; SameSite=Lax; Secure`
       document.cookie = `sb-access-token=${authData.session.access_token}; ${cookieOptions}`
       document.cookie = `sb-refresh-token=${authData.session.refresh_token}; path=/; max-age=${60 * 60 * 24 * 7}; ${cookieOptions}`
+        
+      // Also store session in localStorage for immediate client-side access
+      localStorage.setItem('supabase.auth.token', JSON.stringify({
+        currentSession: authData.session,
+        expiresAt: authData.session.expires_at
+      }))
     }
   }
 
