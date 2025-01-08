@@ -108,8 +108,8 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
           
           if (refreshError || !refreshedSession) {
             console.error('Refresh session error:', refreshError)
-            // Redirect to login if refresh fails
-            window.location.href = '/login'
+            // Show error message instead of redirecting
+            setUploadError('Session expired. Please refresh the page and try again.')
             return
           }
           
@@ -119,8 +119,8 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         }
       } catch (error) {
         console.error('Session handling error:', error)
-        // Redirect to login if session handling fails
-        window.location.href = '/login'
+        // Show error message instead of redirecting
+        setUploadError('Authentication error. Please refresh the page and try again.')
         return
       }
 
@@ -164,7 +164,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       } catch (error) {
         console.error('Failed to parse response:', responseText)
         if (apiResponse.status === 401) {
-          throw new Error('Session expired - please log in again')
+          throw new Error('Session expired - please refresh the page and try again')
         }
         throw new Error('Failed to save book. Please check your connection and try again.')
       }
