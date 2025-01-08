@@ -87,11 +87,18 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       console.log('Sending request to:', url)
       console.log('Request data:', requestData)
       
-      // Get session with proper error handling
-      const supabase = createBrowserClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      )
+      // Get session using server-side auth
+      const authResponse = await fetch('/api/auth/session', {
+        method: 'GET',
+        credentials: 'include'
+      })
+
+      if (!authResponse.ok) {
+        setUploadError('Session expired. Please refresh the page.')
+        return
+      }
+
+      const { session } = await authResponse.json()
       
       let session;
       try {
@@ -270,8 +277,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
           
                       if (refreshError || !refreshedSession) {
                         console.error('Refresh session error:', refreshError)
-                        // Redirect to login if refresh fails
-                        window.location.href = '/login'
+                        setUploadError('Session expired. Please refresh the page.')
                         return
                       }
           
@@ -281,8 +287,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
                     }
                   } catch (error) {
                     console.error('Session handling error:', error)
-                    // Redirect to login if session handling fails
-                    window.location.href = '/login'
+                    setUploadError('Authentication error. Please refresh the page.')
                     return
                   }
 
