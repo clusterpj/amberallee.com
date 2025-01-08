@@ -20,11 +20,17 @@ export async function GET() {
   const { data: { session }, error } = await supabase.auth.getSession()
 
   if (error || !session) {
-    return NextResponse.json(
-      { error: 'Not authenticated' },
-      { status: 401 }
-    )
+    return new Response(JSON.stringify({ error: 'Not authenticated' }), {
+      status: 401,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
   }
 
-  return NextResponse.json({ session })
+  return new Response(JSON.stringify({ session }), {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
 }

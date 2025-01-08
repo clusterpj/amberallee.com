@@ -59,14 +59,36 @@ export function useAuth() {
         
         if (cookieSession) {
           // Validate session with server
-          const validationResponse = await fetch('/api/auth/session')
+          const validationResponse = await fetch('/api/auth/session', {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+        
           if (!validationResponse.ok) {
+            console.error('Session validation failed with status:', validationResponse.status)
             throw new Error('Session validation failed')
           }
-          
-          const { session: validatedSession } = await validationResponse.json()
+
+          const responseText = await validationResponse.text()
+          if (!responseText) {
+            throw new Error('Empty response from session validation')
+          }
+
+          let validatedSession
+          try {
+            validatedSession = JSON.parse(responseText).session
+          } catch (parseError) {
+            console.error('Failed to parse session response:', responseText)
+            throw new Error('Invalid session data')
+          }
+
           if (validatedSession) {
-            await supabase.auth.setSession(validatedSession)
+            const { error } = await supabase.auth.setSession(validatedSession)
+            if (error) {
+              console.error('Error setting session:', error)
+              throw error
+            }
           }
         }
 

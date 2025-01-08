@@ -25,17 +25,46 @@ function SignInForm() {
       })
       
       if (error) {
+        console.error('Sign in error:', error)
         throw error
       }
-      console.log('Sign in response:', data)
 
-      if (data?.user) {
+      if (!data?.user) {
+        console.error('No user data returned')
+        throw new Error('Invalid credentials')
+      }
+
+      // Wait for session to be fully established
+      await new Promise(resolve => setTimeout(resolve, 500))
+      
+      // Validate session with server
+      const validationResponse = await fetch('/api/auth/session', {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+
+      if (!validationResponse.ok) {
+        console.error('Session validation failed after sign in')
+        throw new Error('Session validation failed')
+      }
+
+      const responseText = await validationResponse.text()
+      if (!responseText) {
+        throw new Error('Empty response from session validation')
+      }
+
+      try {
+        const { session } = JSON.parse(responseText)
+        if (!session) {
+          throw new Error('No session returned')
+        }
+
         console.log('Sign in successful, redirecting...')
-        // Force a hard navigation to the dashboard
         window.location.href = searchParams.get('returnUrl') || '/dashboard'
-      } else {
-        console.log('No user data returned')
-        setError('Invalid credentials')
+      } catch (parseError) {
+        console.error('Failed to parse session response:', responseText)
+        throw new Error('Invalid session data')
       }
     } catch (err) {
       console.error('Sign in error:', err)
