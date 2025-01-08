@@ -50,14 +50,20 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    // Check session
-    const { data: { session }, error } = await supabase.auth.getSession()
+    // Validate session with server
+    const sessionResponse = await fetch(new URL('/api/auth/session', request.url))
     
-    if (error) {
-      throw error
+    if (!sessionResponse.ok) {
+      // Clear auth cookies and redirect to login
+      const response = NextResponse.redirect(new URL('/auth/signin', request.url))
+      response.cookies.delete('sb-access-token')
+      response.cookies.delete('sb-refresh-token')
+      return response
     }
 
-    if (!session) {
+    const { session } = await sessionResponse.json()
+    
+    if (!session || !session.user) {
       // Store the attempted URL to redirect back after login
       const redirectUrl = new URL('/auth/signin', request.url)
       redirectUrl.searchParams.set('redirect', request.nextUrl.pathname)

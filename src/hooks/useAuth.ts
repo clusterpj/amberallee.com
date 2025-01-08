@@ -54,16 +54,19 @@ export function useAuth() {
 
     const initializeAuth = async () => {
       try {
-        // First check localStorage for existing session
-        const storedSession = localStorage.getItem('supabase.auth.token')
-        if (storedSession) {
-          const { currentSession } = JSON.parse(storedSession)
-          if (currentSession && new Date(currentSession.expires_at * 1000) > new Date()) {
-            // Restore session from localStorage
-            await supabase.auth.setSession(currentSession)
-          } else {
-            // Clear expired session
-            localStorage.removeItem('supabase.auth.token')
+        // Check for existing session in cookies first
+        const { data: { session: cookieSession } } = await supabase.auth.getSession()
+        
+        if (cookieSession) {
+          // Validate session with server
+          const validationResponse = await fetch('/api/auth/session')
+          if (!validationResponse.ok) {
+            throw new Error('Session validation failed')
+          }
+          
+          const { session: validatedSession } = await validationResponse.json()
+          if (validatedSession) {
+            await supabase.auth.setSession(validatedSession)
           }
         }
 

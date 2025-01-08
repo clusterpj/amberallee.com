@@ -52,9 +52,18 @@ export default function AdminNavigation() {
         <li>
           <button
             onClick={async () => {
-              await supabase.auth.signOut()
-              await supabase.auth.signOut()
-              window.location.href = '/'
+              try {
+                const { error } = await supabase.auth.signOut()
+                if (error) throw error
+                // Clear all auth-related storage
+                localStorage.removeItem('supabase.auth.token')
+                document.cookie = 'sb-access-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Lax; Secure'
+                document.cookie = 'sb-refresh-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Lax; Secure'
+                window.location.href = '/auth/signin'
+              } catch (error) {
+                console.error('Error signing out:', error)
+                window.location.href = '/auth/signin'
+              }
             }}
             className="w-full text-left block py-2 px-6 hover:bg-gray-100 text-red-600"
           >
