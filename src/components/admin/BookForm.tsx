@@ -87,17 +87,40 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       console.log('Sending request to:', url)
       console.log('Request data:', requestData)
       
-      // Get session from server-side
+      // Get session with proper error handling
       const supabase = createBrowserClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
       )
       
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-      
-      if (sessionError || !session) {
-        console.error('Session error:', sessionError)
-        window.location.href = '/auth/signin'
+      let session;
+      try {
+        const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession()
+        
+        if (sessionError) {
+          console.error('Session error:', sessionError)
+          throw new Error('Session error - please refresh the page and try again')
+        }
+        
+        if (!currentSession) {
+          // Attempt to refresh session
+          const { data: { session: refreshedSession }, error: refreshError } = await supabase.auth.refreshSession()
+          
+          if (refreshError || !refreshedSession) {
+            console.error('Refresh session error:', refreshError)
+            // Redirect to login if refresh fails
+            window.location.href = '/login'
+            return
+          }
+          
+          session = refreshedSession
+        } else {
+          session = currentSession
+        }
+      } catch (error) {
+        console.error('Session handling error:', error)
+        // Redirect to login if session handling fails
+        window.location.href = '/login'
         return
       }
 
@@ -110,13 +133,13 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         body: JSON.stringify(requestData)
       })
       
-      console.log('Response status:', response.status)
+      console.log('Response status:', apiResponse.status)
 
       if (!apiResponse.ok) {
         let errorMessage = 'Failed to save book'
         try {
-          const errorData = await apiResponse.text()
-          errorMessage = errorData || errorMessage
+          const errorData = await apiResponse.json()
+          errorMessage = errorData.error || errorMessage
         } catch (parseError) {
           console.error('Error parsing error response:', parseError)
         }
@@ -140,7 +163,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         return result.data
       } catch (error) {
         console.error('Failed to parse response:', responseText)
-        if (response.status === 401) {
+        if (apiResponse.status === 401) {
           throw new Error('Session expired - please log in again')
         }
         throw new Error('Failed to save book. Please check your connection and try again.')
