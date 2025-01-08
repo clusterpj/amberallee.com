@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
 import BookForm from '@/components/admin/BookForm'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase/server'
 
 interface Book {
   id: string
@@ -35,6 +35,7 @@ export default function AdminBooksPage() {
 
   async function fetchBooks() {
     try {
+      const supabase = createClient()
       const { data, error } = await supabase
         .from('books')
         .select('*')
