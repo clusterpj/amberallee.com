@@ -1,10 +1,8 @@
 'use client'
 
-'use client'
-
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
+import { supabase } from '@/lib/supabase/client'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -32,7 +30,6 @@ export default function LoginPage() {
     setLoading(true)
     setError('')
 
-    const supabase = createClient()
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
