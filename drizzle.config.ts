@@ -5,7 +5,7 @@ dotenv.config({ path: '.env.local' });
 export default {
   schema: './src/lib/db/schema.ts',
   out: './drizzle',
-  dialect: 'postgresql',
+  driver: 'pg', // Changed from 'dialect: postgresql' to 'driver: pg'
   dbCredentials: {
     host: 'localhost',
     user: 'amberallee',
