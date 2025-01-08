@@ -1,12 +1,47 @@
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
+import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { cookies } from 'next/headers'
 
 export async function middleware(request: NextRequest) {
   const res = NextResponse.next()
   
-  // Create middleware client
-  const supabase = createMiddlewareClient({ req: request, res })
+  // Create Supabase client
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return request.cookies.get(name)?.value
+        },
+        set(name: string, value: string, options) {
+          request.cookies.set({
+            name,
+            value,
+            ...options
+          })
+          res.cookies.set({
+            name,
+            value,
+            ...options
+          })
+        },
+        remove(name: string, options) {
+          request.cookies.set({
+            name,
+            value: '',
+            ...options
+          })
+          res.cookies.set({
+            name,
+            value: '',
+            ...options
+          })
+        }
+      }
+    }
+  )
   
   // Public routes that don't require authentication
   const publicRoutes = ['/auth/signin', '/auth/signup', '/login', '/', '/books']
