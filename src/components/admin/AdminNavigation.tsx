@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/utils/supabase/client'
 
 export default function AdminNavigation() {
   const pathname = usePathname()
@@ -53,6 +53,7 @@ export default function AdminNavigation() {
           <button
             onClick={async () => {
               try {
+                const supabase = createClient()
                 const { error } = await supabase.auth.signOut()
                 if (error) throw error
                 // Clear all auth-related storage
