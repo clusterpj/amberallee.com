@@ -35,10 +35,10 @@ export const blogPosts = pgTable('blog_posts', {
   content: text('content').notNull(),
   excerpt: text('excerpt'),
   featured_image: text('featured_image'),
-  published_at: timestamp('published_at'), // Change to timestamp with time zone
-  created_at: timestamp('created_at').defaultNow(),
-  updated_at: timestamp('updated_at').defaultNow(), // Set default value for updated_at
-  author_id: uuid('author_id').notNull(), // Change to uuid
+  published_at: timestamp('published_at').withTimezone(), // Change to timestamp with time zone
+  created_at: timestamp('created_at').defaultNow().withTimezone(), // Set default value for created_at
+  updated_at: timestamp('updated_at').defaultNow().withTimezone(), // Set default value for updated_at
+  author_id: uuid('author_id').notNull(), // Ensure author_id is uuid
   is_published: boolean('is_published').default(false),
 });
 
