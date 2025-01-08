@@ -1,8 +1,10 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { createClient } from '@/utils/supabase/client'
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -10,6 +12,20 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  // Handle pre-filled email/password from query params
+  useEffect(() => {
+    const emailParam = searchParams.get('email')
+    const passwordParam = searchParams.get('password')
+    
+    if (emailParam) {
+      setEmail(emailParam)
+    }
+    if (passwordParam) {
+      setPassword(passwordParam)
+    }
+  }, [searchParams])
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault()
