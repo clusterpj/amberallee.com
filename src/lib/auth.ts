@@ -34,6 +34,16 @@ export async function checkUserRole(userId: string): Promise<UserRole> {
 
 // Server-side authentication helper
 export async function requireAdminAuth(request: NextRequest) {
+  const authHeader = request.headers.get('authorization')
+  const token = authHeader?.split(' ')[1]
+
+  if (!token) {
+    return NextResponse.json(
+      { error: 'Authorization token required' },
+      { status: 401 }
+    )
+  }
+
   const supabaseAuthClient = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -45,16 +55,23 @@ export async function requireAdminAuth(request: NextRequest) {
     }
   )
 
-  const { data: { session }, error } = await supabaseAuthClient.auth.getSession()
+  // Verify the access token
+  const { data: { user }, error } = await supabaseAuthClient.auth.getUser(token)
 
-  if (error || !session) {
-    return NextResponse.redirect(new URL('/login', request.url))
+  if (error || !user) {
+    return NextResponse.json(
+      { error: 'Invalid or expired token' },
+      { status: 401 }
+    )
   }
 
-  const role = await checkUserRole(session.user.id)
+  const role = await checkUserRole(user.id)
   
   if (role !== 'admin') {
-    return NextResponse.redirect(new URL('/login', request.url))
+    return NextResponse.json(
+      { error: 'Unauthorized - Admin access required' },
+      { status: 403 }
+    )
   }
 
   return null
