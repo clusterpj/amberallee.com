@@ -37,7 +37,8 @@ export async function middleware(request: NextRequest) {
       headers: {
         'Content-Type': 'application/json',
         'Cache-Control': 'no-cache'
-      }
+      },
+      credentials: 'include'
     })
     
     if (!sessionResponse.ok) {
@@ -55,9 +56,12 @@ export async function middleware(request: NextRequest) {
     // Ensure we have JSON response
     const contentType = sessionResponse.headers.get('content-type')
     if (!contentType?.includes('application/json')) {
-      // Try to parse as text to get more info
-      const text = await sessionResponse.text()
-      console.error('Non-JSON response:', text)
+      // If we get HTML, it's likely a redirect to login
+      if (contentType?.includes('text/html')) {
+        const redirectUrl = new URL('/auth/signin', request.url)
+        redirectUrl.searchParams.set('redirect', request.nextUrl.pathname)
+        return NextResponse.redirect(redirectUrl)
+      }
       throw new Error(`Expected JSON but got ${contentType}`)
     }
 

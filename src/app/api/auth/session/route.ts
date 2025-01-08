@@ -2,9 +2,15 @@ import { NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
-export async function GET() {
+export async function GET(request: Request) {
   const cookieStore = cookies()
   
+  // Set headers to ensure JSON response
+  const headers = new Headers({
+    'Content-Type': 'application/json',
+    'Cache-Control': 'no-store, max-age=0'
+  })
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -27,12 +33,12 @@ export async function GET() {
     const { data: { session }, error } = await supabase.auth.getSession()
 
     if (error || !session) {
-      return new Response(JSON.stringify({ error: 'Not authenticated' }), {
+      return new Response(JSON.stringify({ 
+        error: 'Not authenticated',
+        redirect: '/auth/signin'
+      }), { 
         status: 401,
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'no-store, max-age=0'
-        }
+        headers
       })
     }
 

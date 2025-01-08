@@ -61,8 +61,10 @@ export function useAuth() {
           // Validate session with server
           const validationResponse = await fetch('/api/auth/session', {
             headers: {
-              'Content-Type': 'application/json'
-            }
+              'Content-Type': 'application/json',
+              'Cache-Control': 'no-cache'
+            },
+            credentials: 'include'
           })
         
           if (!validationResponse.ok) {
@@ -70,18 +72,17 @@ export function useAuth() {
             throw new Error('Session validation failed')
           }
 
-          const responseText = await validationResponse.text()
-          if (!responseText) {
-            throw new Error('Empty response from session validation')
+          // Check content type before parsing
+          const contentType = validationResponse.headers.get('content-type')
+          if (!contentType?.includes('application/json')) {
+            throw new Error(`Expected JSON but got ${contentType}`)
           }
 
-          let validatedSession
-          try {
-            validatedSession = JSON.parse(responseText).session
-          } catch (parseError) {
-            console.error('Failed to parse session response:', responseText)
-            throw new Error('Invalid session data')
+          const responseData = await validationResponse.json()
+          if (!responseData?.session) {
+            throw new Error('Invalid session response format')
           }
+          const validatedSession = responseData.session
 
           if (validatedSession) {
             const { error } = await supabase.auth.setSession(validatedSession)
