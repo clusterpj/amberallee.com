@@ -15,7 +15,7 @@ type BookInput = {
   series?: string
   tropes?: string[]
   is_published?: boolean
-  book_number?: number
+  series_order?: number
 }
 
 export async function POST(request: NextRequest) {
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
         tropes: body.tropes || null,
         created_at: sql`${now}`,
         updated_at: sql`${now}`,
-        book_number: body.book_number || null,
+        series_order: body.series_order || null,
         is_published: body.is_published || false
       })
       .returning()
@@ -102,7 +102,7 @@ export async function PUT(request: NextRequest) {
         series: body.series ? sql`${body.series}` : null,
         tropes: body.tropes || null,
         updated_at: sql`${now}`,
-        book_number: body.book_number || null,
+        series_order: body.series_order || null,
         is_published: body.is_published || false
       })
       .where(sql`id = ${id}`)
