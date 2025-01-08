@@ -22,7 +22,7 @@ const bookUrlMap: Record<string, string> = {
 }
 
 async function getBooks() {
-  const supabase = createServerSupabaseClient()
+  const supabase = await createServerSupabaseClient()
   const { data: books, error } = await supabase
     .from('books')
     .select('*')
