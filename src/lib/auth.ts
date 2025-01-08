@@ -167,46 +167,6 @@ export async function signUp(email: string, password: string) {
   return authData
 }
 
-export async function signIn(email: string, password: string) {
-  // Sign in with Supabase
-  const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-    email,
-    password
-  })
-
-  if (authError) {
-    throw authError
-  }
-
-  if (authData?.user) {
-    // Check if user exists in our custom table
-    const { data: userData, error: userError } = await supabase
-      .from('users')
-      .select('*')
-      .eq('id', authData.user.id)
-      .single()
-
-    // If user doesn't exist in our custom table, create it
-    if (!userData && !userError) {
-      await createUserRecord(authData.user.id, authData.user.email!)
-    }
-
-    // Store session tokens in cookies with proper SameSite attribute
-    if (authData.session) {
-      const cookieOptions = `path=/; max-age=${60 * 60}; SameSite=Lax; Secure`
-      document.cookie = `sb-access-token=${authData.session.access_token}; ${cookieOptions}`
-      document.cookie = `sb-refresh-token=${authData.session.refresh_token}; path=/; max-age=${60 * 60 * 24 * 7}; ${cookieOptions}`
-        
-      // Also store session in localStorage for immediate client-side access
-      localStorage.setItem('supabase.auth.token', JSON.stringify({
-        currentSession: authData.session,
-        expiresAt: authData.session.expires_at
-      }))
-    }
-  }
-
-  return authData
-}
 
 export async function signOut() {
   // Clear session cookies with SameSite attribute

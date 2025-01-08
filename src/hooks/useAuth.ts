@@ -133,7 +133,7 @@ export function useAuth() {
       document.cookie = 'sb-access-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Lax; Secure'
       document.cookie = 'sb-refresh-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Lax; Secure'
       setUser(null)
-      router.push('/')
+      router.push('/auth/signin')
     } catch (error) {
       console.error('Error signing out:', error)
     }

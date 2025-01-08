@@ -92,7 +92,8 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       const { data: { session } } = await supabase.auth.getSession()
       
       if (!session) {
-        throw new Error('No active session - please log in again')
+        window.location.href = '/auth/signin'
+        return
       }
 
       // Include auth token in request
