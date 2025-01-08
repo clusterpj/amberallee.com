@@ -234,18 +234,13 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
                     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
                   )
       
-                  // Get session token from server
-                  const authResponse = await fetch('/api/auth/session', {
-                    method: 'GET',
-                    credentials: 'include'
-                  })
-
-                  if (!authResponse.ok) {
-                    setUploadError('Session expired. Please refresh the page.')
+                  // Get current session from client
+                  const { data: { session } } = await supabase.auth.getSession()
+                  
+                  if (!session) {
+                    setUploadError('Session expired. Please log in again.')
                     return
                   }
-
-                  const { session: authSession } = await authResponse.json()
 
                   const { data, error } = await supabase.storage
                     .from('book-covers')
@@ -253,8 +248,6 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
                       cacheControl: '3600',
                       upsert: false
                     })
-
-                  if (error) throw error
 
                   if (error) throw error
 
