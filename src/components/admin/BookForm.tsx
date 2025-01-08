@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -110,15 +111,6 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${serverSession.access_token}`
-        },
-        body: JSON.stringify(requestData)
-      })
-
-      const apiResponse = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`
         },
         body: JSON.stringify(requestData)
       })
@@ -257,15 +249,18 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
 
                   const { session } = await authResponse.json()
 
-                  const { error } = await supabase.storage
+                  const uploadTask = supabase.storage
                     .from('book-covers')
                     .upload(`amber-images/${filePath}`, file, {
                       cacheControl: '3600',
-                      upsert: false,
-                      onProgress: (progress) => {
-                        setUploadProgress((progress.loaded / progress.total) * 100)
-                      }
+                      upsert: false
                     })
+
+                  uploadTask.on('progress', (progress) => {
+                    setUploadProgress((progress.loadedBytes / progress.totalBytes) * 100)
+                  })
+
+                  const { error } = await uploadTask
 
                   if (error) throw error
 
@@ -311,9 +306,11 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
             <Label>Preview</Label>
             <div className="relative">
               <div className="border rounded-lg overflow-hidden w-48">
-                <img
+                <Image
                   src={imagePreview}
                   alt="Cover preview"
+                  width={192}
+                  height={288}
                   className="w-full h-auto object-cover"
                   onError={() => setImagePreview('')}
                 />
