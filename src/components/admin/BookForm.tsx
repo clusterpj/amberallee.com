@@ -88,21 +88,21 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       console.log('Request data:', requestData)
       
       // Use server-side auth from our lib
-      const response = await fetch('/api/auth/session', {
+      const authResponse = await fetch('/api/auth/session', {
         credentials: 'include'
       })
       
-      if (!response.ok) {
+      if (!authResponse.ok) {
         throw new Error('Authentication required')
       }
       
-      const { session } = await response.json()
+      const { session } = await authResponse.json()
       
       if (!session) {
         throw new Error('Please log in to continue')
       }
 
-      const response = await fetch(url, {
+      const apiResponse = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
@@ -114,10 +114,10 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       
       console.log('Response status:', response.status)
 
-      if (!response.ok) {
+      if (!apiResponse.ok) {
         let errorMessage = 'Failed to save book'
         try {
-          const errorData = await response.text()
+          const errorData = await apiResponse.text()
           errorMessage = errorData || errorMessage
         } catch (parseError) {
           console.error('Error parsing error response:', parseError)
@@ -125,7 +125,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         throw new Error(errorMessage)
       }
 
-      const responseText = await response.text()
+      const responseText = await apiResponse.text()
       
       // Check if we got HTML instead of JSON (likely auth redirect)
       if (responseText.startsWith('<!DOCTYPE html>')) {
