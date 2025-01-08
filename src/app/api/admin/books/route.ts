@@ -45,7 +45,10 @@ export async function POST(request: NextRequest) {
       })
       .returning()
 
-    return NextResponse.json(insertedBook[0])
+    return NextResponse.json({
+      success: true,
+      data: insertedBook[0]
+    })
   } catch (error) {
     console.error('Error creating book:', error)
     return NextResponse.json({ error: 'Failed to create book' }, { status: 500 })
@@ -87,7 +90,10 @@ export async function PUT(request: NextRequest) {
       .where(sql`id = ${id}`)
       .returning()
 
-    return NextResponse.json(updatedBook[0])
+    return NextResponse.json({
+      success: true,
+      data: updatedBook[0]
+    })
   } catch (error) {
     console.error('Error updating book:', error)
     return NextResponse.json({ error: 'Failed to update book' }, { status: 500 })

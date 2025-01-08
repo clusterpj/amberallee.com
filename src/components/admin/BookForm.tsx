@@ -108,9 +108,15 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         throw new Error(errorMessage)
       }
 
-      const result = await response.json()
-      onSuccess()
-      return result
+      const responseText = await response.text()
+      try {
+        const result = JSON.parse(responseText)
+        onSuccess()
+        return result
+      } catch (error) {
+        console.error('Failed to parse response:', responseText)
+        throw new Error('Invalid response from server')
+      }
     } catch (error) {
       if (error instanceof Error) {
         console.error('Error saving book:', error.message)
