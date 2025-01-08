@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
 import BookForm from '@/components/admin/BookForm'
-import { createBrowserClient } from '@supabase/ssr'
+import { supabase } from '@/lib/supabase'
 
 interface Book {
   id: string
@@ -39,16 +39,12 @@ export default function AdminBooksPage() {
 
   async function fetchBooks() {
     try {
-      const supabase = createBrowserClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      )
-      
       // Get session first
       const { data: { session } } = await supabase.auth.getSession()
       
       if (!session) {
-        throw new Error('Session expired. Please log in again.')
+        window.location.href = '/auth/signin'
+        return
       }
 
       const { data, error } = await supabase
