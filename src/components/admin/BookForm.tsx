@@ -93,24 +93,35 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       )
       
       // Get current session with error handling
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-      
-      if (sessionError) {
-        console.error('Session error:', sessionError)
-        throw new Error('Session error - please refresh the page and try again')
-      }
-      
-      if (!session) {
-        // Attempt to refresh session
-        const { data: { session: refreshedSession }, error: refreshError } = await supabase.auth.refreshSession()
+      let session;
+      try {
+        const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession()
         
-        if (refreshError || !refreshedSession) {
-          console.error('Refresh session error:', refreshError)
-          throw new Error('Session expired - please log in again')
+        if (sessionError) {
+          console.error('Session error:', sessionError)
+          throw new Error('Session error - please refresh the page and try again')
         }
         
-        // Use refreshed session
-        session = refreshedSession
+        if (!currentSession) {
+          // Attempt to refresh session
+          const { data: { session: refreshedSession }, error: refreshError } = await supabase.auth.refreshSession()
+          
+          if (refreshError || !refreshedSession) {
+            console.error('Refresh session error:', refreshError)
+            // Redirect to login if refresh fails
+            window.location.href = '/login'
+            return
+          }
+          
+          session = refreshedSession
+        } else {
+          session = currentSession
+        }
+      } catch (error) {
+        console.error('Session handling error:', error)
+        // Redirect to login if session handling fails
+        window.location.href = '/login'
+        return
       }
 
       const response = await fetch(url, {
@@ -245,24 +256,35 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
                   )
       
                   // Get current session with error handling
-                  const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-      
-                  if (sessionError) {
-                    console.error('Session error:', sessionError)
-                    throw new Error('Session error - please refresh the page and try again')
-                  }
-      
-                  if (!session) {
-                    // Attempt to refresh session
-                    const { data: { session: refreshedSession }, error: refreshError } = await supabase.auth.refreshSession()
+                  let session;
+                  try {
+                    const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession()
         
-                    if (refreshError || !refreshedSession) {
-                      console.error('Refresh session error:', refreshError)
-                      throw new Error('Session expired - please log in again')
+                    if (sessionError) {
+                      console.error('Session error:', sessionError)
+                      throw new Error('Session error - please refresh the page and try again')
                     }
         
-                    // Use refreshed session
-                    session = refreshedSession
+                    if (!currentSession) {
+                      // Attempt to refresh session
+                      const { data: { session: refreshedSession }, error: refreshError } = await supabase.auth.refreshSession()
+          
+                      if (refreshError || !refreshedSession) {
+                        console.error('Refresh session error:', refreshError)
+                        // Redirect to login if refresh fails
+                        window.location.href = '/login'
+                        return
+                      }
+          
+                      session = refreshedSession
+                    } else {
+                      session = currentSession
+                    }
+                  } catch (error) {
+                    console.error('Session handling error:', error)
+                    // Redirect to login if session handling fails
+                    window.location.href = '/login'
+                    return
                   }
 
                   const { error } = await supabase.storage
