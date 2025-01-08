@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
 import BookForm from '@/components/admin/BookForm'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/utils/supabase/client'
 
 interface Book {
   id: string
@@ -39,10 +39,12 @@ export default function DashboardPage() {
 
   async function fetchBooks() {
     try {
-      // Get session and verify admin role
-      const { data: { session }, error: authError } = await supabase.auth.getSession()
+      const supabase = createClient()
       
-      if (authError || !session) {
+      // Get user and verify admin role
+      const { data: { user }, error: authError } = await supabase.auth.getUser()
+      
+      if (authError || !user) {
         window.location.href = '/auth/signin'
         return
       }
@@ -50,7 +52,7 @@ export default function DashboardPage() {
       const { data: userData, error: roleError } = await supabase
         .from('users')
         .select('role')
-        .eq('id', session.user.id)
+        .eq('id', user.id)
         .single()
 
       if (roleError || userData?.role !== 'admin') {
