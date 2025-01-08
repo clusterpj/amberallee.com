@@ -26,7 +26,7 @@ interface Book {
   purchase_now_button?: string
 }
 
-export default function AdminBooksPage() {
+export default function DashboardPage() {
   const [books, setBooks] = useState<Book[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')

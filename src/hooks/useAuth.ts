@@ -88,9 +88,9 @@ export function useAuth() {
           }
           setUser(customUser)
           
-          // Only redirect if we're not already on the dashboard
-          if (event === 'SIGNED_IN' && window.location.pathname !== '/dashboard') {
-            router.replace('/dashboard')
+          // Only redirect if we're not already on the admin dashboard
+          if (event === 'SIGNED_IN' && !window.location.pathname.startsWith('/admin/dashboard')) {
+            router.replace('/admin/dashboard')
           }
         } else {
           setUser(null)
