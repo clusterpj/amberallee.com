@@ -1,4 +1,4 @@
-import { pgTable, uuid, serial, text, timestamp, date, integer, boolean, varchar, pgEnum } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, serial, text, timestamp, integer, boolean, varchar, pgEnum } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
 // Enums
@@ -14,12 +14,12 @@ export const books = pgTable('books', {
   published_date: timestamp('published_date'), // Change to timestamp with time zone
   cover_image_url: text('cover_image_url'),
   price: integer('price').default(0), // Set default value to 0
-  categories: text('categories').array().default('{}'), // Add categories field
+  categories: text('categories').array().default([]), // Add categories field
   purchase_now_button: text('purchase_now_button').default(''), // Add purchase_now_button field
   series: text('series').default(''), // Add series field
   book_number: integer('book_number').default(0), // Add book_number field
-  teasers: text('teasers').array().default('{}'), // Add teasers field
-  tropes: text('tropes').array().default('{}'), // Ensure tropes has a default value
+  teasers: text('teasers').array().default([]), // Add teasers field
+  tropes: text('tropes').array().default([]), // Ensure tropes has a default value
   corebill_item_id: text('corebill_item_id'),
   created_at: timestamp('created_at').defaultNow(),
   updated_at: timestamp('updated_at'),
@@ -35,9 +35,9 @@ export const blogPosts = pgTable('blog_posts', {
   content: text('content').notNull(),
   excerpt: text('excerpt'),
   featured_image: text('featured_image'),
-  published_at: timestamp('published_at').withTimezone(), // Change to timestamp with time zone
-  created_at: timestamp('created_at').defaultNow().withTimezone(), // Set default value for created_at
-  updated_at: timestamp('updated_at').defaultNow().withTimezone(), // Set default value for updated_at
+  published_at: timestamp('published_at', { withTimezone: true }), // Change to timestamp with time zone
+  created_at: timestamp('created_at', { withTimezone: true }).defaultNow(), // Set default value for created_at
+  updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow(), // Set default value for updated_at
   author_id: uuid('author_id').notNull(), // Ensure author_id is uuid
   is_published: boolean('is_published').default(false),
 });
@@ -80,7 +80,7 @@ export const users = pgTable('users', {
   is_super_admin: boolean('is_super_admin').default(false), // Add is_super_admin field
   created_at: timestamp('created_at').defaultNow(),
   updated_at: timestamp('updated_at').defaultNow(), // Set default value for updated_at
-  phone: text('phone').default(null), // Add phone field
+  phone: text('phone'), // Add phone field
   phone_confirmed_at: timestamp('phone_confirmed_at'), // Add phone_confirmed_at field
   phone_change: text('phone_change').default(''), // Add phone_change field
   phone_change_token: text('phone_change_token').default(''), // Add phone_change_token field
