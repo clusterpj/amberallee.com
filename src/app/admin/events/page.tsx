@@ -87,6 +87,24 @@ export default function AdminEventsPage() {
     setShowForm(true)
   }
 
+  const fetchEvents = async () => {
+    try {
+      const supabase = createClient()
+      const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .order('date', { ascending: true })
+
+      if (error) throw error
+      setEvents(data || [])
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : 'Unknown error')
+      console.error('Error fetching events:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleSubmit = async (values: Event) => {
     try {
       const supabase = createClient()
