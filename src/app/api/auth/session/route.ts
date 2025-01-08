@@ -10,27 +10,46 @@ export async function GET() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        async get(name: string) {
-          return (await cookieStore.get(name))?.value
+        get(name: string) {
+          return cookieStore.get(name)?.value
+        },
+        set(name: string, value: string, options: any) {
+          cookieStore.set({ name, value, ...options })
+        },
+        remove(name: string, options: any) {
+          cookieStore.set({ name, value: '', ...options })
         }
       }
     }
   )
 
-  const { data: { session }, error } = await supabase.auth.getSession()
+  try {
+    const { data: { session }, error } = await supabase.auth.getSession()
 
-  if (error || !session) {
-    return new Response(JSON.stringify({ error: 'Not authenticated' }), {
-      status: 401,
+    if (error || !session) {
+      return new Response(JSON.stringify({ error: 'Not authenticated' }), {
+        status: 401,
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-store, max-age=0'
+        }
+      })
+    }
+
+    return new Response(JSON.stringify({ session }), {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-store, max-age=0'
+      }
+    })
+  } catch (error) {
+    console.error('Session error:', error)
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+      status: 500,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-store, max-age=0'
       }
     })
   }
-
-  return new Response(JSON.stringify({ session }), {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
 }

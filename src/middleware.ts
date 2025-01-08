@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
 
 export async function middleware(request: NextRequest) {
-  const res = NextResponse.next()
+  const response = NextResponse.next()
   
   // Create Supabase client
   const supabase = createServerClient(
@@ -12,32 +12,14 @@ export async function middleware(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        async get(name: string) {
-          return (await request.cookies.get(name))?.value
+        get(name: string) {
+          return request.cookies.get(name)?.value
         },
-        async set(name: string, value: string, options) {
-          request.cookies.set({
-            name,
-            value,
-            ...options
-          })
-          res.cookies.set({
-            name,
-            value,
-            ...options
-          })
+        set(name: string, value: string, options: any) {
+          response.cookies.set({ name, value, ...options })
         },
-        async remove(name: string, options) {
-          request.cookies.set({
-            name,
-            value: '',
-            ...options
-          })
-          res.cookies.set({
-            name,
-            value: '',
-            ...options
-          })
+        remove(name: string, options: any) {
+          response.cookies.set({ name, value: '', ...options })
         }
       }
     }
@@ -51,14 +33,25 @@ export async function middleware(request: NextRequest) {
 
   try {
     // Validate session with server
-    const sessionResponse = await fetch(new URL('/api/auth/session', request.url))
+    const sessionResponse = await fetch(new URL('/api/auth/session', request.url), {
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache'
+      }
+    })
     
     if (!sessionResponse.ok) {
       // Clear auth cookies and redirect to login
       const response = NextResponse.redirect(new URL('/auth/signin', request.url))
       response.cookies.delete('sb-access-token')
       response.cookies.delete('sb-refresh-token')
+      response.cookies.delete('sb-bdififwytjactxqekism-auth-token.3')
       return response
+    }
+
+    const contentType = sessionResponse.headers.get('content-type')
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Received non-JSON response')
     }
 
     const { session } = await sessionResponse.json()
