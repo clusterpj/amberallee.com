@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/utils/supabase/client'
 
 interface BookFormData {
   id?: string
@@ -91,20 +91,11 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       console.log('Sending request to:', url)
       console.log('Request data:', requestData)
       
-      // Get current session
-      const { data: { session } } = await supabase.auth.getSession()
-      
-      if (!session) {
-        window.location.href = '/auth/signin'
-        return
-      }
-
-      // Include auth token in request
+      const supabase = createClient()
       const apiResponse = await fetch(url, {
         method,
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(requestData)
       })
@@ -226,6 +217,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
                   const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`
                   const filePath = `${fileName}`
 
+                  const supabase = createClient()
                   const { error: uploadError } = await supabase.storage
                     .from('book-covers')
                     .upload(`amber-images/${filePath}`, file, {
