@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { signUp } from '@/lib/auth'
+import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
@@ -14,8 +14,21 @@ export default function SignUp() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await signUp(email, password)
-      router.push('/auth/signin?message=Please check your email to verify your account')
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`
+        }
+      })
+
+      if (error) {
+        throw error
+      }
+
+      if (data.user) {
+        router.push('/auth/signin?message=Please check your email to verify your account')
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to sign up')
     }

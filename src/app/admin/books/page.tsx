@@ -39,10 +39,21 @@ export default function DashboardPage() {
 
   async function fetchBooks() {
     try {
-      // Get session first
-      const { data: { session } } = await supabase.auth.getSession()
+      // Get session and verify admin role
+      const { data: { session }, error: authError } = await supabase.auth.getSession()
       
-      if (!session) {
+      if (authError || !session) {
+        window.location.href = '/auth/signin'
+        return
+      }
+
+      const { data: userData, error: roleError } = await supabase
+        .from('users')
+        .select('role')
+        .eq('id', session.user.id)
+        .single()
+
+      if (roleError || userData?.role !== 'admin') {
         window.location.href = '/auth/signin'
         return
       }

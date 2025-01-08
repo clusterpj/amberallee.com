@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, Suspense } from 'react'
-import { signIn } from '@/lib/auth'
+import { supabase } from '@/lib/supabase'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
@@ -19,13 +19,19 @@ function SignInForm() {
 
     try {
       console.log('Attempting to sign in...')
-      const data = await signIn(email, password)
-      console.log('Sign in response:', data)
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      })
+
+      if (error) {
+        throw error
+      }
 
       if (data?.user) {
         console.log('Sign in successful, redirecting...')
-        // Force a hard navigation to the dashboard
-        window.location.href = searchParams.get('returnUrl') || '/dashboard'
+        // Force a hard navigation to the admin dashboard
+        window.location.href = searchParams.get('returnUrl') || '/admin/dashboard'
       } else {
         console.log('No user data returned')
         setError('Invalid credentials')
