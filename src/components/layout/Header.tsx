@@ -34,6 +34,12 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
+  const handleSignOut = async () => {
+    await supabase.auth.signOut()
+    router.refresh()
+    router.push('/login')
+  }
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20)
