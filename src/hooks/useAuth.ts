@@ -102,8 +102,8 @@ export function useAuth() {
           }
           setUser(customUser)
           
-          // Only redirect if we're not already on the admin dashboard
-          if (event === 'SIGNED_IN' && !window.location.pathname.startsWith('/admin/dashboard')) {
+          // Redirect all signed-in users to /admin/dashboard
+          if (event === 'SIGNED_IN') {
             // Use full page reload to avoid RSC issues
             window.location.href = '/admin/dashboard'
           }
