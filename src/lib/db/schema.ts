@@ -35,6 +35,7 @@ export const blogPosts = pgTable('blog_posts', {
   content: text('content').notNull(),
   excerpt: text('excerpt'),
   featured_image: text('featured_image'),
+  cover_image_url: text('cover_image_url'),
   published_at: timestamp('published_at', { withTimezone: true }), // Change to timestamp with time zone
   created_at: timestamp('created_at', { withTimezone: true }).defaultNow(), // Set default value for created_at
   updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow(), // Set default value for updated_at
