@@ -1,7 +1,7 @@
       'use client'
 
 import { useState, Suspense } from 'react'
-import { signIn } from '@/lib/auth'
+import { supabase } from '@/lib/supabase'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
@@ -19,7 +19,14 @@ function SignInForm() {
 
     try {
       console.log('Attempting to sign in...')
-      const data = await signIn(email, password)
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      })
+      
+      if (error) {
+        throw error
+      }
       console.log('Sign in response:', data)
 
       if (data?.user) {
