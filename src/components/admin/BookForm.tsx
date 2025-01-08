@@ -65,35 +65,48 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const url = book ? `/api/admin/books/${book.id}` : '/api/admin/books'
+      const url = book ? `/api/admin/books?id=${book.id}` : '/api/admin/books'
       const method = book ? 'PUT' : 'POST'
       
+      // Prepare data according to Supabase schema
+      const requestData = {
+        title: formData.title,
+        description: formData.description,
+        cover_image_url: formData.cover_image_url,
+        amazon_link: formData.amazon_link,
+        published_date: formData.published_date,
+        price: Math.round(formData.price * 100), // Convert to cents and round
+        series: formData.series,
+        book_number: formData.book_number,
+        tropes: formData.tropes,
+        teasers: formData.teasers,
+        is_published: formData.is_published,
+        categories: formData.categories
+      }
+
       const response = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          ...formData,
-          price: formData.price * 100, // Convert to cents
-          publishedDate: formData.published_date,
-          amazonLink: formData.amazon_link,
-          coverImage: formData.cover_image_url,
-          isPublished: formData.is_published,
-          bookNumber: formData.book_number
-        })
+        body: JSON.stringify(requestData)
       })
 
       if (!response.ok) {
-        throw new Error('Failed to save book')
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to save book')
       }
 
+      const result = await response.json()
       onSuccess()
+      return result
     } catch (error) {
       if (error instanceof Error) {
-        console.error('Error saving book:', error.message);
+        console.error('Error saving book:', error.message)
+        setUploadError(error.message)
       } else {
-        console.error('Error saving book:', error);
+        console.error('Error saving book:', error)
+        setUploadError('An unexpected error occurred')
       }
     }
   }
@@ -101,7 +114,9 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
     const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'price' ? Number(value) : value
+      [name]: name === 'price' ? 
+        Math.max(0, Number((Number(value).toFixed(2)))) : // Ensure valid price format
+        value
     }))
   }
 
