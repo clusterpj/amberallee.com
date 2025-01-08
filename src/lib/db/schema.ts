@@ -55,8 +55,8 @@ export const events = pgTable('events', {
   is_virtual: boolean('is_virtual').default(false),
   registration_link: text('registration_link'), // Add registration_link field
   image_url: text('image_url'), // Add image_url field
-  created_at: timestamp('created_at').defaultNow(),
-  updated_at: timestamp('updated_at').defaultNow(), // Set default value for updated_at
+  created_at: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow(), // Set default value for updated_at
 });
 
 // Users Table
