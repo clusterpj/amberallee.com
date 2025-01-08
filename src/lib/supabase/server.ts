@@ -1,8 +1,9 @@
 import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
 import { Database } from '@/types/supabase'
 
-export function createClient() {
+export function createClient(cookieStore: {
+  get: (name: string) => { value: string } | undefined
+}) {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
     throw new Error('Missing environment variable: NEXT_PUBLIC_SUPABASE_URL')
   }
@@ -11,8 +12,6 @@ export function createClient() {
     throw new Error('Missing environment variable: NEXT_PUBLIC_SUPABASE_ANON_KEY')
   }
 
-  const cookieStore = cookies()
-  
   return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
