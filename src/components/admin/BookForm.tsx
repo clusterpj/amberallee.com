@@ -39,6 +39,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       purchase_now_button: book.purchase_now_button || '',
       series: book.series || '',
       book_number: book.book_number || 0,
+      series_order: book.series_order || 0,
       teasers: book.teasers || [],
       tropes: book.tropes || [],
       amazon_link: book.amazon_link || '',
@@ -53,6 +54,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       purchase_now_button: '',
       series: '',
       book_number: 0,
+      series_order: 0,
       teasers: [],
       tropes: [],
       amazon_link: '',
@@ -62,7 +64,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
   const [uploading, setUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [imagePreview, setImagePreview] = useState(book?.cover_image_url || '')
-  const [uploadError, setUploadError] = useState('')
+  const [uploadError, setUploadError] = useState<string>('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -231,7 +233,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
                       upsert: false
                     })
 
-                  if (error) throw error
+                  if (uploadError) throw uploadError
 
                   // Get public URL
                   const { data: urlData } = await supabase
