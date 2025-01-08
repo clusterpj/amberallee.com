@@ -1,37 +1,29 @@
-import { createServerClient } from '@supabase/ssr'
-import { Database } from '@/types/supabase'
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 
-export function createClient(cookieStore: {
-  get: (name: string) => { value: string } | undefined
-}) {
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
-    throw new Error('Missing environment variable: NEXT_PUBLIC_SUPABASE_URL')
-  }
-
-  if (!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-    throw new Error('Missing environment variable: NEXT_PUBLIC_SUPABASE_ANON_KEY')
-  }
-
-  return createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+export function createClient() {
+  const cookieStore = cookies()
+  
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
         get(name: string) {
           return cookieStore.get(name)?.value
         },
-        set(name: string, value: string, options: any) {
+        set(name: string, value: string, options: CookieOptions) {
           try {
-            cookieStore.set(name, value, options)
+            cookieStore.set({ name, value, ...options })
           } catch (error) {
-            console.error('Error setting cookie:', error)
+            // Handle error
           }
         },
-        remove(name: string, options: any) {
+        remove(name: string, options: CookieOptions) {
           try {
-            cookieStore.delete(name, options)
+            cookieStore.set({ name, value: '', ...options })
           } catch (error) {
-            console.error('Error removing cookie:', error)
+            // Handle error
           }
         }
       }
