@@ -234,8 +234,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
                   if (error) throw error
 
                   // Get public URL
-                  const supabase = createClient()
-                  const { data: urlData } = supabase
+                  const { data: urlData } = await supabase
                     .storage
                     .from('book-covers')
                     .getPublicUrl(`amber-images/${filePath}`)
