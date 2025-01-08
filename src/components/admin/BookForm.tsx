@@ -91,10 +91,19 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
       )
+      
+      // Get current session
+      const { data: { session } } = await supabase.auth.getSession()
+      
+      if (!session) {
+        throw new Error('No active session found - please log in again')
+      }
+
       const response = await fetch(url, {
         method,
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`
         },
         body: JSON.stringify(requestData),
         credentials: 'include'
@@ -216,7 +225,18 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
                   const filePath = `${fileName}`
 
                   // Upload to Supabase storage
-                  const supabase = createServerClient()
+                  const supabase = createBrowserClient(
+                    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+                    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+                  )
+      
+                  // Get current session for storage upload
+                  const { data: { session } } = await supabase.auth.getSession()
+      
+                  if (!session) {
+                    throw new Error('No active session found - please log in again')
+                  }
+
                   const { error } = await supabase.storage
                     .from('book-covers')
                     .upload(`amber-images/${filePath}`, file, {
