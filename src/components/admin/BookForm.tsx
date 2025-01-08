@@ -87,41 +87,19 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       console.log('Sending request to:', url)
       console.log('Request data:', requestData)
       
-      const supabase = createBrowserClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      )
+      // Use server-side auth from our lib
+      const response = await fetch('/api/auth/session', {
+        credentials: 'include'
+      })
       
-      // Get current session with error handling
-      let session;
-      try {
-        const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession()
-        
-        if (sessionError) {
-          console.error('Session error:', sessionError)
-          throw new Error('Session error - please refresh the page and try again')
-        }
-        
-        if (!currentSession) {
-          // Attempt to refresh session
-          const { data: { session: refreshedSession }, error: refreshError } = await supabase.auth.refreshSession()
-          
-          if (refreshError || !refreshedSession) {
-            console.error('Refresh session error:', refreshError)
-            // Redirect to login if refresh fails
-            window.location.href = '/login'
-            return
-          }
-          
-          session = refreshedSession
-        } else {
-          session = currentSession
-        }
-      } catch (error) {
-        console.error('Session handling error:', error)
-        // Redirect to login if session handling fails
-        window.location.href = '/login'
-        return
+      if (!response.ok) {
+        throw new Error('Authentication required')
+      }
+      
+      const { session } = await response.json()
+      
+      if (!session) {
+        throw new Error('Please log in to continue')
       }
 
       const response = await fetch(url, {
