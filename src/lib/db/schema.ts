@@ -48,7 +48,7 @@ export const events = pgTable('events', {
   id: uuid('id').primaryKey().default('gen_random_uuid()'), // Use uuid instead of serial
   title: text('title').notNull(),
   description: text('description'),
-  date: timestamp('date').notNull(), // Change to timestamp with time zone
+  date: timestamp('date', { withTimezone: true }).notNull(),
   time: text('time'),
   location: text('location'),
   virtual_link: text('virtual_link'),
@@ -98,11 +98,11 @@ export const users = pgTable('users', {
 
 // Newsletter Subscribers Table
 export const newsletterSubscribers = pgTable('newsletter_subscribers', {
-  id: serial('id').primaryKey(),
-  email: varchar('email', { length: 255 }).notNull().unique(),
+  id: uuid('id').primaryKey().default('gen_random_uuid()'),
+  email: text('email').notNull().unique(),
   is_verified: boolean('is_verified').default(false),
-  created_at: timestamp('created_at').defaultNow(),
-  unsubscribed_at: timestamp('unsubscribed_at'),
+  created_at: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  unsubscribed_at: timestamp('unsubscribed_at', { withTimezone: true }),
 });
 
 // Relations
