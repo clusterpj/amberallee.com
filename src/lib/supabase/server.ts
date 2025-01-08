@@ -20,16 +20,16 @@ export function createClient(cookieStore: {
         get(name: string) {
           return cookieStore.get(name)?.value
         },
-        set(name: string, value: string, options) {
+        set(name: string, value: string, options: any) {
           try {
-            cookieStore.set({ name, value, ...options })
+            cookieStore.set(name, value, options)
           } catch (error) {
             console.error('Error setting cookie:', error)
           }
         },
-        remove(name: string, options) {
+        remove(name: string, options: any) {
           try {
-            cookieStore.set({ name, value: '', ...options })
+            cookieStore.delete(name, options)
           } catch (error) {
             console.error('Error removing cookie:', error)
           }
