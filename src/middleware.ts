@@ -28,7 +28,7 @@ export async function middleware(request: NextRequest) {
   // Public routes that don't require authentication
   const publicRoutes = ['/auth/signin', '/auth/signup', '/login', '/', '/books']
   if (publicRoutes.includes(request.nextUrl.pathname)) {
-    return res
+    return response
   }
 
   try {
@@ -42,19 +42,30 @@ export async function middleware(request: NextRequest) {
     
     if (!sessionResponse.ok) {
       // Clear auth cookies and redirect to login
-      const response = NextResponse.redirect(new URL('/auth/signin', request.url))
-      response.cookies.delete('sb-access-token')
-      response.cookies.delete('sb-refresh-token')
-      response.cookies.delete('sb-bdififwytjactxqekism-auth-token.3')
-      return response
+      const redirectResponse = NextResponse.redirect(new URL('/auth/signin', request.url))
+      redirectResponse.cookies.delete('sb-access-token')
+      redirectResponse.cookies.delete('sb-refresh-token')
+      // Delete all versions of the auth token
+      for (let i = 0; i < 5; i++) {
+        redirectResponse.cookies.delete(`sb-bdififwytjactxqekism-auth-token.${i}`)
+      }
+      return redirectResponse
     }
 
+    // Ensure we have JSON response
     const contentType = sessionResponse.headers.get('content-type')
-    if (!contentType || !contentType.includes('application/json')) {
-      throw new Error('Received non-JSON response')
+    if (!contentType?.includes('application/json')) {
+      // Try to parse as text to get more info
+      const text = await sessionResponse.text()
+      console.error('Non-JSON response:', text)
+      throw new Error(`Expected JSON but got ${contentType}`)
     }
 
-    const { session } = await sessionResponse.json()
+    const result = await sessionResponse.json()
+    if (!result?.session) {
+      throw new Error('Invalid session response format')
+    }
+    const { session } = result
     
     if (!session || !session.user) {
       // Store the attempted URL to redirect back after login
@@ -78,7 +89,7 @@ export async function middleware(request: NextRequest) {
     }
 
     // Update response with new tokens if they were refreshed
-    return res
+    return response
 
   } catch (error) {
     console.error('Middleware error:', error)
