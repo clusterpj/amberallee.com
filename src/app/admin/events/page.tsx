@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/utils/supabase/client'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { EventForm } from "@/components/admin/EventForm"
@@ -22,22 +22,37 @@ export default function AdminEventsPage() {
   const [, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchEvents()
-  }, [])
-
-  const fetchEvents = async () => {
-    try {
-      setLoading(true)
-      const { data, error } = await supabase
-        .from('events')
-        .select('*')
-        .order('date', { ascending: true })
-
-      if (error) {
-        setError(error.message)
-        throw error
+    const fetchData = async () => {
+      const supabase = createClient()
+      
+      // Verify admin access
+      const { data: { user }, error: authError } = await supabase.auth.getUser()
+      if (authError || !user) {
+        window.location.href = '/auth/signin'
+        return
       }
-      setEvents(data || [])
+
+      const { data: userData, error: roleError } = await supabase
+        .from('users')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+
+      if (roleError || userData?.role !== 'admin') {
+        window.location.href = '/auth/signin'
+        return
+      }
+
+      // Fetch events
+      try {
+        setLoading(true)
+        const { data, error } = await supabase
+          .from('events')
+          .select('*')
+          .order('date', { ascending: true })
+
+        if (error) throw error
+        setEvents(data || [])
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'Unknown error');
       console.error('Error fetching events:', error);
@@ -53,16 +68,14 @@ export default function AdminEventsPage() {
 
   const handleDeleteEvent = async (id: string) => {
     try {
+      const supabase = createClient()
       const { error } = await supabase
         .from('events')
         .delete()
         .eq('id', id)
       
-      if (error) {
-        setError(error.message)
-        throw error
-      }
-      fetchEvents()
+      if (error) throw error
+      await fetchEvents()
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'Unknown error');
       console.error('Error deleting event:', error);
@@ -76,6 +89,7 @@ export default function AdminEventsPage() {
 
   const handleSubmit = async (values: Event) => {
     try {
+      const supabase = createClient()
       const eventData = {
         ...values,
         image_url: values.image_url || '/default-event.jpg',
@@ -88,13 +102,15 @@ export default function AdminEventsPage() {
           .from('events')
           .update(eventData)
           .eq('id', selectedEvent.id)
+        if (updateError) throw updateError
       } else {
         // Create new event
         const { error: insertError } = await supabase
           .from('events')
           .insert([eventData])
+        if (insertError) throw insertError
       }
-      fetchEvents()
+      await fetchEvents()
       setShowForm(false)
     } catch (error) {
       console.error('Error saving event:', error)
