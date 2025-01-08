@@ -3,17 +3,19 @@ import { db } from '@/lib/db'
 import { books } from '@/lib/db/schema'
 import { createServerClient } from '@supabase/ssr'
 import { sql } from 'drizzle-orm'
+import { requireAdminAuth } from '@/lib/auth'
 
 type BookInput = {
   title: string
   description?: string
-  amazonLink?: string
-  coverImage?: string
-  publishedDate?: string
+  amazon_link?: string
+  cover_image_url?: string
+  published_date?: string
   price?: number
   series?: string
   tropes?: string[]
-  isPublished?: boolean
+  is_published?: boolean
+  book_number?: number
 }
 
 export async function POST(request: NextRequest) {
@@ -48,16 +50,16 @@ export async function POST(request: NextRequest) {
       .values({
         title: sql`${body.title}`,
         description: body.description ? sql`${body.description}` : null,
-        amazon_link: body.amazonLink ? sql`${body.amazonLink}` : null,
-        cover_image_url: body.coverImage ? sql`${body.coverImage}` : null,
-        published_date: body.publishedDate ? sql`${new Date(body.publishedDate).toISOString()}` : null,
+        amazon_link: body.amazon_link ? sql`${body.amazon_link}` : null,
+        cover_image_url: body.cover_image_url ? sql`${body.cover_image_url}` : null,
+        published_date: body.published_date ? sql`${new Date(body.published_date).toISOString()}` : null,
         price: body.price || null,
         series: body.series ? sql`${body.series}` : null,
         tropes: body.tropes || null,
         created_at: sql`${now}`,
         updated_at: sql`${now}`,
-        book_number: body.bookNumber || null,
-        is_published: body.isPublished || false
+        book_number: body.book_number || null,
+        is_published: body.is_published || false
       })
       .returning()
 
@@ -93,15 +95,15 @@ export async function PUT(request: NextRequest) {
       .set({
         title: sql`${body.title}`,
         description: body.description ? sql`${body.description}` : null,
-        amazon_link: body.amazonLink ? sql`${body.amazonLink}` : null,
-        cover_image_url: body.coverImage ? sql`${body.coverImage}` : null,
-        published_date: body.publishedDate ? sql`${new Date(body.publishedDate).toISOString()}` : null,
+        amazon_link: body.amazon_link ? sql`${body.amazon_link}` : null,
+        cover_image_url: body.cover_image_url ? sql`${body.cover_image_url}` : null,
+        published_date: body.published_date ? sql`${new Date(body.published_date).toISOString()}` : null,
         price: body.price || null,
         series: body.series ? sql`${body.series}` : null,
         tropes: body.tropes || null,
         updated_at: sql`${now}`,
-        book_number: body.bookNumber || null,
-        is_published: body.isPublished || false
+        book_number: body.book_number || null,
+        is_published: body.is_published || false
       })
       .where(sql`id = ${id}`)
       .returning()
