@@ -92,11 +92,25 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
       )
       
-      // Get current session
-      const { data: { session } } = await supabase.auth.getSession()
+      // Get current session with error handling
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+      
+      if (sessionError) {
+        console.error('Session error:', sessionError)
+        throw new Error('Session error - please refresh the page and try again')
+      }
       
       if (!session) {
-        throw new Error('No active session found - please log in again')
+        // Attempt to refresh session
+        const { data: { session: refreshedSession }, error: refreshError } = await supabase.auth.refreshSession()
+        
+        if (refreshError || !refreshedSession) {
+          console.error('Refresh session error:', refreshError)
+          throw new Error('Session expired - please log in again')
+        }
+        
+        // Use refreshed session
+        session = refreshedSession
       }
 
       const response = await fetch(url, {
@@ -230,11 +244,25 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
                     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
                   )
       
-                  // Get current session for storage upload
-                  const { data: { session } } = await supabase.auth.getSession()
+                  // Get current session with error handling
+                  const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+      
+                  if (sessionError) {
+                    console.error('Session error:', sessionError)
+                    throw new Error('Session error - please refresh the page and try again')
+                  }
       
                   if (!session) {
-                    throw new Error('No active session found - please log in again')
+                    // Attempt to refresh session
+                    const { data: { session: refreshedSession }, error: refreshError } = await supabase.auth.refreshSession()
+        
+                    if (refreshError || !refreshedSession) {
+                      console.error('Refresh session error:', refreshError)
+                      throw new Error('Session expired - please log in again')
+                    }
+        
+                    // Use refreshed session
+                    session = refreshedSession
                   }
 
                   const { error } = await supabase.storage
