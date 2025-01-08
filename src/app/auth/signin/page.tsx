@@ -59,6 +59,7 @@ function SignInForm() {
         if (!session) {
           throw new Error('No session returned')
         }
+        // parseError variable removed since it wasn't being used
 
         console.log('Sign in successful, redirecting...')
         window.location.href = searchParams.get('returnUrl') || '/dashboard'
