@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
-import { createClient } from '@/lib/supabase/client'
+import { supabase } from '@/lib/supabase'
 
 export default function AdminNavigation() {
   const pathname = usePathname()
@@ -52,7 +52,7 @@ export default function AdminNavigation() {
         <li>
           <button
             onClick={async () => {
-              const supabase = createClient()
+              await supabase.auth.signOut()
               await supabase.auth.signOut()
               window.location.href = '/'
             }}
