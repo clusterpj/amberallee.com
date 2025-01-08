@@ -139,42 +139,9 @@ export function useAuth() {
     }
   }
 
-  const signIn = async (email: string, password: string) => {
-    try {
-      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      })
-      
-      if (authError) throw authError
-
-      if (authData.user) {
-        const role = await ensureUserRecord(authData.user)
-        const customUser: CustomUser = {
-          ...authData.user,
-          role
-        }
-        setUser(customUser)
-        
-        // Use window.location for initial redirect to avoid RSC issues
-        if (typeof window !== 'undefined') {
-          window.location.href = '/admin/dashboard'
-        } else {
-          router.replace('/admin/dashboard')
-        }
-      }
-
-      return authData
-    } catch (error) {
-      console.error('Error signing in:', error)
-      throw error
-    }
-  }
-
   return {
     user,
     loading,
     signOut,
-    signIn,
   }
 }
