@@ -6,7 +6,9 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Menu, X, User, LayoutDashboard, Settings, ShoppingBag, LogOut } from 'lucide-react'
 import { useState, useEffect } from 'react'
-import { useAuth } from '@/hooks/useAuth'
+import { createClient } from '@/utils/supabase/client'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,7 +20,24 @@ import {
 export default function Header() {
   const pathname = usePathname()
   const router = useRouter()
-  const { user, signOut, loading } = useAuth()
+  const supabase = createClient()
+  const [user, setUser] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      setUser(user)
+      setLoading(false)
+    }
+    getUser()
+  }, [])
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut()
+    router.push('/login')
+    router.refresh()
+  }
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   
@@ -106,13 +125,13 @@ export default function Header() {
                   >
                     <User className="h-5 w-5 text-[#004AAD] flex-shrink-0" />
                     <span className="text-[#004AAD] font-medium truncate max-w-[120px]">
-                      {user?.email?.split('@')[0] || 'Account'}
+                      {user?.email ? user.email.split('@')[0] : 'Account'}
                     </span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-white shadow-lg rounded-lg">
                   {userNavigation
-                    .filter(item => item.role.includes(user?.role || 'customer'))
+                    .filter(item => item.role.includes('customer')) // Default to customer role for now
                     .map((item) => (
                       <DropdownMenuItem key={item.name}>
                         <Link 
