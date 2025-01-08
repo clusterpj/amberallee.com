@@ -8,7 +8,6 @@ import { Menu, X, User, LayoutDashboard, Settings, ShoppingBag, LogOut } from 'l
 import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,19 +32,8 @@ export default function Header() {
     getUser()
   }, [])
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    router.push('/login')
-    router.refresh()
-  }
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  
-  const handleSignOut = async () => {
-    await signOut()
-    router.push('/')
-    router.refresh()
-  }
 
   useEffect(() => {
     const handleScroll = () => {
