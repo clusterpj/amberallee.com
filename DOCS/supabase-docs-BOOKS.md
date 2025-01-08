@@ -13,7 +13,13 @@ CREATE TABLE books (
     published_date DATE,
     price INTEGER,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    categories TEXT[], -- Array of categories
+    purchase_now_button TEXT, -- Purchase button configuration
+    series TEXT, -- Series name
+    book_number INTEGER, -- Order in series
+    teasers TEXT[], -- Array of teasers
+    tropes TEXT[] -- Array of tropes
 );
 ```
 
@@ -27,175 +33,12 @@ CREATE TABLE books (
 - `price`: Integer, Optional, Price in cents
 - `created_at`: Timestamp with timezone, Required, Auto-generated
 - `updated_at`: Timestamp with timezone, Required, Auto-generated
-
-## API Operations
-
-### Reading Data
-
-#### Get All Books
-```typescript
-const getAllBooks = async () => {
-  const { data: books, error } = await supabase
-    .from('books')
-    .select('*');
-    
-  if (error) throw error;
-  return books;
-};
-```
-
-#### Get Books with Pagination
-```typescript
-const getBooksPaginated = async (page: number, pageSize: number) => {
-  const start = page * pageSize;
-  const end = start + pageSize - 1;
-  
-  const { data: books, error } = await supabase
-    .from('books')
-    .select('*')
-    .range(start, end);
-    
-  if (error) throw error;
-  return books;
-};
-```
-
-#### Get Book by ID
-```typescript
-const getBookById = async (id: string) => {
-  const { data: book, error } = await supabase
-    .from('books')
-    .select('*')
-    .eq('id', id)
-    .single();
-    
-  if (error) throw error;
-  return book;
-};
-```
-
-### Writing Data
-
-#### Insert New Book
-```typescript
-interface BookInput {
-  title: string;
-  description?: string;
-  cover_image_url?: string;
-  amazon_link?: string;
-  published_date?: string;
-  price?: number;
-}
-
-const createBook = async (book: BookInput) => {
-  const { data, error } = await supabase
-    .from('books')
-    .insert([book])
-    .select();
-    
-  if (error) throw error;
-  return data[0];
-};
-```
-
-#### Update Book
-```typescript
-const updateBook = async (id: string, updates: Partial<BookInput>) => {
-  const { data, error } = await supabase
-    .from('books')
-    .update(updates)
-    .eq('id', id)
-    .select();
-    
-  if (error) throw error;
-  return data[0];
-};
-```
-
-#### Delete Book
-```typescript
-const deleteBook = async (id: string) => {
-  const { error } = await supabase
-    .from('books')
-    .delete()
-    .eq('id', id);
-    
-  if (error) throw error;
-};
-```
-
-## Real-time Subscriptions
-
-### Subscribe to All Book Changes
-```typescript
-const subscribeToBooks = (callback: (payload: any) => void) => {
-  return supabase.channel('books-changes')
-    .on(
-      'postgres_changes',
-      { event: '*', schema: 'public', table: 'books' },
-      callback
-    )
-    .subscribe();
-};
-```
-
-### Subscribe to Specific Events
-```typescript
-// Insert events
-const subscribeToNewBooks = (callback: (payload: any) => void) => {
-  return supabase.channel('books-inserts')
-    .on(
-      'postgres_changes',
-      { event: 'INSERT', schema: 'public', table: 'books' },
-      callback
-    )
-    .subscribe();
-};
-
-// Update events
-const subscribeToBookUpdates = (callback: (payload: any) => void) => {
-  return supabase.channel('books-updates')
-    .on(
-      'postgres_changes',
-      { event: 'UPDATE', schema: 'public', table: 'books' },
-      callback
-    )
-    .subscribe();
-};
-
-// Delete events
-const subscribeToBookDeletions = (callback: (payload: any) => void) => {
-  return supabase.channel('books-deletions')
-    .on(
-      'postgres_changes',
-      { event: 'DELETE', schema: 'public', table: 'books' },
-      callback
-    )
-    .subscribe();
-};
-```
-
-## Error Handling
-
-```typescript
-interface SupabaseError {
-  message: string;
-  details: string;
-  hint: string;
-  code: string;
-}
-
-const handleSupabaseError = (error: SupabaseError) => {
-  console.error('Supabase Error:', {
-    message: error.message,
-    details: error.details,
-    code: error.code
-  });
-  
-  // Add appropriate error handling logic here
-  throw new Error(`Database error: ${error.message}`);
-};
-```
+- `categories`: Text Array, Optional, Book categories for improved searchability
+- `purchase_now_button`: Text, Optional, Custom purchase button configuration
+- `series`: Text, Optional, Name of the book series
+- `book_number`: Integer, Optional, Position in the series
+- `teasers`: Text Array, Optional, Marketing teasers
+- `tropes`: Text Array, Optional, Genre tropes for enhanced discoverability
 
 ## Type Definitions
 
@@ -210,10 +53,30 @@ interface Book {
   price?: number;
   created_at: string;
   updated_at: string;
+  categories?: string[];
+  purchase_now_button?: string;
+  series?: string;
+  book_number?: number;
+  teasers?: string[];
+  tropes?: string[];
 }
 
-interface BookFilter {
-  title?: string;
+interface BookInput {
+  title: string;
+  description?: string;
+  cover_image_url?: string;
+  amazon_link?: string;
+  published_date?: string;
+  price?: number;
+  categories?: string[];
+  purchase_now_button?: string;
+  series?: string;
+  book_number?: number;
+  teasers?: string[];
+  tropes?: string[];
+}
+
+interface BookFilter extends Partial<BookInput> {
   published_date?: {
     start?: string;
     end?: string;
@@ -222,18 +85,57 @@ interface BookFilter {
     min?: number;
     max?: number;
   };
+  series_only?: boolean;
 }
 ```
 
-## Usage Examples
+## Enhanced API Operations
 
-### Implementing a Book Search
+### Reading Data with Advanced Filtering
+
 ```typescript
-const searchBooks = async (filter: BookFilter) => {
+const getBooksByCategory = async (category: string) => {
+  const { data: books, error } = await supabase
+    .from('books')
+    .select('*')
+    .contains('categories', [category]);
+    
+  if (error) throw error;
+  return books;
+};
+
+const getBooksBySeries = async (seriesName: string) => {
+  const { data: books, error } = await supabase
+    .from('books')
+    .select('*')
+    .eq('series', seriesName)
+    .order('book_number', { ascending: true });
+    
+  if (error) throw error;
+  return books;
+};
+
+const searchBooksAdvanced = async (filter: BookFilter) => {
   let query = supabase.from('books').select('*');
   
   if (filter.title) {
     query = query.ilike('title', `%${filter.title}%`);
+  }
+  
+  if (filter.series) {
+    query = query.eq('series', filter.series);
+  }
+  
+  if (filter.categories?.length) {
+    query = query.contains('categories', filter.categories);
+  }
+  
+  if (filter.tropes?.length) {
+    query = query.contains('tropes', filter.tropes);
+  }
+  
+  if (filter.series_only) {
+    query = query.not('series', 'is', null);
   }
   
   if (filter.published_date?.start) {
@@ -244,53 +146,113 @@ const searchBooks = async (filter: BookFilter) => {
     query = query.lte('published_date', filter.published_date.end);
   }
   
-  if (filter.price?.min) {
-    query = query.gte('price', filter.price.min);
-  }
-  
-  if (filter.price?.max) {
-    query = query.lte('price', filter.price.max);
-  }
-  
   const { data, error } = await query;
   if (error) throw error;
   return data;
 };
 ```
 
-### Basic CRUD Operations Example
+### Writing Data with Validation
+
 ```typescript
-// Example implementation
-const bookOperations = {
-  async create(book: BookInput) {
-    return await createBook(book);
-  },
-  
-  async read(id: string) {
-    return await getBookById(id);
-  },
-  
-  async update(id: string, updates: Partial<BookInput>) {
-    return await updateBook(id, updates);
-  },
-  
-  async delete(id: string) {
-    return await deleteBook(id);
-  },
-  
-  async list(page = 0, pageSize = 10) {
-    return await getBooksPaginated(page, pageSize);
+const createBookWithValidation = async (book: BookInput) => {
+  // Validate series data consistency
+  if (book.series && typeof book.book_number === 'undefined') {
+    throw new Error('Book number is required when adding to a series');
   }
+  
+  // Ensure arrays are properly formatted
+  const formattedBook = {
+    ...book,
+    categories: book.categories || [],
+    tropes: book.tropes || [],
+    teasers: book.teasers || []
+  };
+  
+  const { data, error } = await supabase
+    .from('books')
+    .insert([formattedBook])
+    .select();
+    
+  if (error) throw error;
+  return data[0];
+};
+
+const updateBookWithValidation = async (id: string, updates: Partial<BookInput>) => {
+  // Prevent series inconsistencies
+  if (updates.series === null && updates.book_number !== null) {
+    updates.book_number = null;
+  }
+  
+  const { data, error } = await supabase
+    .from('books')
+    .update(updates)
+    .eq('id', id)
+    .select();
+    
+  if (error) throw error;
+  return data[0];
+};
+```
+
+## Performance Optimizations
+
+### Batch Operations
+
+```typescript
+const batchUpdateBooks = async (updates: Array<{ id: string } & Partial<BookInput>>) => {
+  const { data, error } = await supabase
+    .from('books')
+    .upsert(updates)
+    .select();
+    
+  if (error) throw error;
+  return data;
+};
+
+const batchDeleteBooks = async (ids: string[]) => {
+  const { error } = await supabase
+    .from('books')
+    .delete()
+    .in('id', ids);
+    
+  if (error) throw error;
+};
+```
+
+### Optimized Queries
+
+```typescript
+const getSeriesWithBooks = async (seriesName: string) => {
+  const { data: books, error } = await supabase
+    .from('books')
+    .select('id, title, book_number, published_date') // Select only needed fields
+    .eq('series', seriesName)
+    .order('book_number', { ascending: true });
+    
+  if (error) throw error;
+  return books;
 };
 ```
 
 ## Integration Notes
 
-1. Ensure Supabase client is properly initialized with project URL and anon key
-2. Implement proper error handling for all database operations
-3. Consider implementing retry logic for failed operations
-4. Use TypeScript types for better type safety
-5. Set up appropriate RLS policies for security
-6. Consider implementing caching for frequently accessed data
-7. Use prepared statements to prevent SQL injection
-8. Implement proper validation before database operations
+1. Database Considerations
+   - Implement appropriate indexes for frequently queried columns
+   - Consider partitioning for large series collections
+   - Use materialized views for complex category/trope combinations
+
+2. Security Considerations
+   - Implement RLS policies for public/private book visibility
+   - Validate array inputs to prevent injection
+   - Sanitize search inputs
+
+3. Performance Optimizations
+   - Cache frequently accessed series data
+   - Implement lazy loading for book covers
+   - Use connection pooling for high-traffic periods
+
+4. Monitoring and Maintenance
+   - Track query performance metrics
+   - Monitor real-time subscription usage
+   - Implement automated data validation checks
