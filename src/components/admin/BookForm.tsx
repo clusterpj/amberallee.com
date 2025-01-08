@@ -104,33 +104,15 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         setUploadError('Session expired. Please refresh the page.')
         return
       }
-        
-        if (sessionError) {
-          console.error('Session error:', sessionError)
-          throw new Error('Session error - please refresh the page and try again')
-        }
-        
-        if (!currentSession) {
-          // Attempt to refresh session
-          const { data: { session: refreshedSession }, error: refreshError } = await supabase.auth.refreshSession()
-          
-          if (refreshError || !refreshedSession) {
-            console.error('Refresh session error:', refreshError)
-            // Show error message instead of redirecting
-            setUploadError('Session expired. Please refresh the page and try again.')
-            return
-          }
-          
-          session = refreshedSession
-        } else {
-          session = currentSession
-        }
-      } catch (error) {
-        console.error('Session handling error:', error)
-        // Show error message instead of redirecting
-        setUploadError('Authentication error. Please refresh the page and try again.')
-        return
-      }
+
+      const apiResponse = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${serverSession.access_token}`
+        },
+        body: JSON.stringify(requestData)
+      })
 
       const apiResponse = await fetch(url, {
         method,
