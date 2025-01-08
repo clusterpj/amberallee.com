@@ -46,9 +46,10 @@ export async function POST(request: NextRequest) {
       .returning()
 
     return NextResponse.json(insertedBook[0])
-  } catch (error) {
-    console.error('Error creating book:', error)
-    return NextResponse.json({ error: 'Failed to create book' }, { status: 500 })
+  }
+}
+
+export async function PUT(request: NextRequest) {
   try {
     const authResponse = await requireAdminAuth(request)
     if (authResponse) {
