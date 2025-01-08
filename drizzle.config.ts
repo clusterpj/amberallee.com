@@ -5,12 +5,8 @@ dotenv.config({ path: '.env.local' });
 export default {
   schema: './src/lib/db/schema.ts',
   out: './drizzle',
-  driver: 'pg', // Changed from 'dialect: postgresql' to 'driver: pg'
+  driver: 'postgresql',
   dbCredentials: {
-    host: 'localhost',
-    user: 'amberallee',
-    password: '1q2w3e4r',
-    database: 'amberallee_dev',
-    port: 5432
+    connectionString: process.env.DATABASE_URL || 'postgres://amberallee:1q2w3e4r@localhost:5432/amberallee_dev'
   }
 } satisfies Config;
