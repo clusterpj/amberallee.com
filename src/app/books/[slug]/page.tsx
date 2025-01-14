@@ -15,16 +15,17 @@ export default async function BookPage({
 }: { 
   params: { slug: string } 
 }) {
-  // First await the params before destructuring
-  const awaitedParams = await params
-  const { slug } = awaitedParams
+  const { slug } = params
   
-  const supabase = await createClient()
+  const supabase = createClient()
   const { data: book, error } = await supabase
     .from('books')
     .select('*')
     .eq('slug', slug)
     .single()
+    
+  console.log('Book data:', book)
+  console.log('Error:', error)
 
   if (error || !book) {
     return <div>Book not found</div>
