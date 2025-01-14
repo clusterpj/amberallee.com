@@ -91,21 +91,6 @@ export default function AboutPage() {
               </p>
             </div>
 
-            {/* Contact CTA */}
-            <div className="mt-16 text-center">
-              <h3 className="text-3xl font-bold text-primary mb-4">Connect with Amber</h3>
-              <p className="text-xl text-muted-foreground mb-8">
-                Want to stay updated on new releases and exclusive content?
-              </p>
-              <div className="flex justify-center gap-4">
-                <Button asChild variant="secondary">
-                  <Link href="/newsletter">Join Newsletter</Link>
-                </Button>
-                <Button asChild variant="outline">
-                  <Link href="/contact">Contact</Link>
-                </Button>
-              </div>
-            </div>
           </div>
         </div>
       </section>
