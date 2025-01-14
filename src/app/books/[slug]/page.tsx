@@ -20,7 +20,7 @@ export default async function BookPage({
   const supabase = await createClient()
   
   // First try to get the book by slug
-  let { data: book, error } = await supabase
+  const { data: book, error } = await supabase
     .from('books')
     .select('*')
     .eq('slug', slug)
