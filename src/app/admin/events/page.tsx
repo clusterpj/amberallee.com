@@ -53,13 +53,16 @@ export default function AdminEventsPage() {
 
         if (error) throw error
         setEvents(data || [])
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : 'Unknown error');
-      console.error('Error fetching events:', error);
-    } finally {
-      setLoading(false)
+      } catch (error: unknown) {
+        setError(error instanceof Error ? error.message : 'Unknown error');
+        console.error('Error fetching events:', error);
+      } finally {
+        setLoading(false)
+      }
     }
-  }
+
+    fetchData()
+  }, [])
 
   const handleEditEvent = (event: Event) => {
     setSelectedEvent(event)
