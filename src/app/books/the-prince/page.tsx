@@ -167,22 +167,15 @@ export default function ThePrincePage() {
                 <CardContent className="p-6 space-y-6">
                   <h2 className="text-3xl font-bold text-primary">About the Book</h2>
                   <div className="space-y-4 text-foreground/80">
-                    <p className="text-lg leading-relaxed">
-                      Luca Falcone has been groomed to be the next Don of his mafia family in Las Vegas. 
-                      His entire life has been about becoming the man his father can be proud to hand his 
-                      legacy to. The one rule to survive: leave no witnesses. But what happens when Luca 
-                      breaks that rule? That choice alters the course of his life and puts his entire 
-                      future at risk. Can he leave his family's legacy behind, or will the mafia catch 
-                      up to him and threaten the new future he is trying to build?
-                    </p>
-                    <p className="text-lg leading-relaxed">
-                      Gemma Barone has been dealt a horrible hand in life, but during the spring break 
-                      of her senior year in college, she meets a man who changes everything with a 
-                      whirlwind romance. As she settles into her new relationship, ugly truths and 
-                      haunting mysteries are revealed about the man she now can't live without. Will 
-                      she be strong enough to survive the lies and betrayals of what she thought was 
-                      her fairy tale love story, or will life, once again, deal her a losing hand?
-                    </p>
+                    {book?.description ? (
+                      <p className="text-lg leading-relaxed whitespace-pre-line">
+                        {book.description}
+                      </p>
+                    ) : (
+                      <p className="text-lg leading-relaxed text-muted-foreground">
+                        No description available
+                      </p>
+                    )}
                   </div>
                 </CardContent>
               </Card>

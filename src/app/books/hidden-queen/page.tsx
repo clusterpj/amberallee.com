@@ -168,32 +168,16 @@ export default function HiddenQueenPage() {
               <Card className="bg-background/50 backdrop-blur-sm border border-primary/10">
                 <CardContent className="p-6 space-y-6">
                   <h2 className="text-3xl font-bold text-primary">About the Book</h2>
-                  <p className="text-lg text-foreground/90 italic font-medium">
-                    It's Sin City, what could go wrong?
-                  </p>
                   <div className="space-y-4 text-foreground/80">
-                    <p className="text-lg leading-relaxed italic">
-                      "You have your whole life ahead of you and I won't let you throw it away to that awful place. 
-                      The answer is no. I'm not going to say it again."
-                    </p>
-                    <p className="text-lg leading-relaxed">
-                      When Kendall Drake disregards her guardians' warning and arrives in Las Vegas to accept the summer 
-                      internship of a lifetime, she doesn't expect to meet Wyatt Dawson. Arrogant, rich, and exceedingly 
-                      handsome, he is a delicious distraction that she does not need as she tries to make a name for herself 
-                      in a male-dominated industry. As she juggles her new position and Wyatt's irresistible seduction while 
-                      pretending to be on summer vacation with her friend, Harper, she finds herself caught in a world she 
-                      never knew actually existed. Power plays, secrets, deception, and murder. Kendall soon realizes she's 
-                      bit off more than she can chew when her new life becomes entangled with the life she once led.
-                    </p>
-                    <p className="text-lg leading-relaxed font-medium">
-                      Who is Wyatt really?
-                    </p>
-                    <p className="text-lg leading-relaxed font-medium">
-                      Why was she told not to come to Sin City?
-                    </p>
-                    <p className="text-lg leading-relaxed">
-                      Danger follows her every move and the ghosts of her past lurk in the shadows waiting to tie up loose ends.
-                    </p>
+                    {book?.description ? (
+                      <p className="text-lg leading-relaxed whitespace-pre-line">
+                        {book.description}
+                      </p>
+                    ) : (
+                      <p className="text-lg leading-relaxed text-muted-foreground">
+                        No description available
+                      </p>
+                    )}
                   </div>
                 </CardContent>
               </Card>
