@@ -4,7 +4,7 @@
 import { createBrowserClient } from '@supabase/ssr'
 import { useState } from 'react'
 
-export default function SupabaseProvider({ 
+export function SupabaseProvider({ 
   children 
 }: { 
   children: React.ReactNode 

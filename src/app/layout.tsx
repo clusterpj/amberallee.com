@@ -1,5 +1,5 @@
 import { Inter as FontSans } from 'next/font/google'
-import { SupabaseProvider } from '@/providers/SupabaseProvider'
+import SupabaseProvider from '@/providers/SupabaseProvider'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import Banner from '@/components/layout/Banner'
