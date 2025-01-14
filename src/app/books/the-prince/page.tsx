@@ -91,16 +91,6 @@ export default function ThePrincePage() {
                   <h1 className="text-5xl font-bold text-primary">
                     {book?.title || 'The Prince: Falcone Family'}
                   </h1>
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="text-muted-foreground">
-                      {book?.series || 'Las Vegas Mafia Series'}
-                    </Badge>
-                    {(book?.categories || ['Romance']).map((category: string, index: number) => (
-                      <Badge key={index} variant="outline" className="text-muted-foreground">
-                        {category}
-                      </Badge>
-                    ))}
-                  </div>
                 </div>
 
                 {/* Price */}
