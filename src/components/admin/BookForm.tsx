@@ -44,7 +44,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       tropes: book.tropes || [],
       amazon_link: book.amazon_link || '',
       is_published: book.is_published || false,
-      price: book.price ? (book.price / 100) : 0.00 // Safely convert cents to dollars for display
+      price: book.price ? parseFloat((book.price / 100).toFixed(2)) : 0.00 // Safely convert cents to dollars for display
     } : {
       title: '',
       description: '',
@@ -320,7 +320,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
             name="price"
             type="number"
             step="0.01"
-            value={formData.price === 0 ? '' : formData.price.toFixed(2)}
+            value={formData.price === 0 ? '' : (formData.price / 100).toFixed(2)}
             onChange={handleChange}
             required
           />
