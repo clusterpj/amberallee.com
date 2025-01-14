@@ -108,12 +108,6 @@ export default function BooksPage() {
                     </span>
                   )}
                 </CardTitle>
-                {book.series && (
-                  <CardDescription className="text-sm text-muted-foreground">
-                    {book.series}
-                    {book.series_order && ` #${book.series_order}`}
-                  </CardDescription>
-                )}
               </CardHeader>
               <CardContent className="space-y-6">
                 {book.cover_image_url && (
