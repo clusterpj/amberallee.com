@@ -46,12 +46,12 @@ export async function POST(request: Request) {
       // Create a new price if one doesn't exist
       let priceId: string
       if (!product.default_price) {
-        const price = await stripe.prices.create({
+        const newPrice = await stripe.prices.create({
           currency: 'usd',
           product: stripeProductId,
           unit_amount: price,
         })
-        priceId = price.id
+        priceId = newPrice.id
       } else {
         priceId = typeof product.default_price === 'string' 
           ? product.default_price 
