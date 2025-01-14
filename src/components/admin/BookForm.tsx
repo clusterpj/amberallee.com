@@ -379,13 +379,17 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
             className="flex-1 min-w-[100px] bg-transparent outline-none px-2"
             placeholder="Add category..."
             onKeyDown={(e) => {
-              if (e.key === 'Enter' && e.currentTarget.value.trim()) {
+              const target = e.target as HTMLInputElement
+              const value = target?.value?.trim()
+              if (e.key === 'Enter' && value) {
                 e.preventDefault()
                 setFormData(prev => ({
                   ...prev,
-                  categories: [...prev.categories, e.currentTarget.value.trim()]
+                  categories: [...prev.categories, value]
                 }))
-                e.currentTarget.value = ''
+                if (target) {
+                  target.value = ''
+                }
               }
             }}
           />
@@ -417,13 +421,17 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
             className="flex-1 min-w-[100px] bg-transparent outline-none px-2"
             placeholder="Add trope..."
             onKeyDown={(e) => {
-              if (e.key === 'Enter' && e.currentTarget.value.trim()) {
+              const target = e.target as HTMLInputElement
+              const value = target?.value?.trim()
+              if (e.key === 'Enter' && value) {
                 e.preventDefault()
                 setFormData(prev => ({
                   ...prev,
-                  tropes: [...prev.tropes, e.currentTarget.value.trim()]
+                  tropes: [...prev.tropes, value]
                 }))
-                e.currentTarget.value = ''
+                if (target) {
+                  target.value = ''
+                }
               }
             }}
           />
@@ -455,13 +463,17 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
             className="flex-1 min-w-[100px] bg-transparent outline-none px-2"
             placeholder="Add teaser..."
             onKeyDown={(e) => {
-              if (e.key === 'Enter' && e.currentTarget.value.trim()) {
+              const target = e.target as HTMLInputElement
+              const value = target?.value?.trim()
+              if (e.key === 'Enter' && value) {
                 e.preventDefault()
                 setFormData(prev => ({
                   ...prev,
-                  teasers: [...prev.teasers, e.currentTarget.value.trim()]
+                  teasers: [...prev.teasers, value]
                 }))
-                e.currentTarget.value = ''
+                if (target) {
+                  target.value = ''
+                }
               }
             }}
           />
