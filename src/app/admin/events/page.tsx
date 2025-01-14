@@ -202,24 +202,23 @@ export default function AdminEventsPage() {
           aria-describedby="event-form-description"
         >
           <DialogHeader>
-            <DialogTitle id="event-form-title">
+            <DialogTitle id="event-form-title" className="text-2xl font-bold">
               {selectedEvent ? 'Edit Event' : 'Create New Event'}
             </DialogTitle>
-            {selectedEvent ? (
-              <DialogDescription id="event-form-description">
-                Edit the details of this event
-              </DialogDescription>
-            ) : (
-              <DialogDescription id="event-form-description">
-                Create a new event with all the necessary details
-              </DialogDescription>
-            )}
+            <DialogDescription id="event-form-description" className="text-sm text-muted-foreground">
+              {selectedEvent ? 
+                'Edit the details of this event' : 
+                'Create a new event with all the necessary details'
+              }
+            </DialogDescription>
           </DialogHeader>
-          <EventForm
-            initialData={selectedEvent || undefined}
-            onSubmit={handleSubmit}
-            onCancel={() => setShowForm(false)}
-          />
+          <div className="mt-4">
+            <EventForm
+              initialData={selectedEvent || undefined}
+              onSubmit={handleSubmit}
+              onCancel={() => setShowForm(false)}
+            />
+          </div>
         </DialogContent>
       </Dialog>
     </div>
