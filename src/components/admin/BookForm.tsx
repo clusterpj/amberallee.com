@@ -44,7 +44,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       tropes: book.tropes || [],
       amazon_link: book.amazon_link || '',
       is_published: book.is_published || false,
-      price: book.price / 100 // Convert cents to dollars for display
+      price: book.price ? (book.price / 100) : 0.00 // Safely convert cents to dollars for display
     } : {
       title: '',
       description: '',
@@ -87,6 +87,12 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       setUploadError('Price must be a positive number')
       return
     }
+    
+    // Ensure price is a valid number and not too large
+    if (formData.price > 1000000) {
+      setUploadError('Price must be less than $1,000,000')
+      return
+    }
 
     try {
       const supabase = createClient()
@@ -98,7 +104,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         cover_image_url: formData.cover_image_url,
         amazon_link: formData.amazon_link,
         published_date: formData.published_date,
-        price: Math.round(Number(formData.price) * 100), // Convert dollars to cents
+        price: formData.price ? Math.round(Number(formData.price) * 100) : 0, // Convert dollars to cents
         series: formData.series,
         series_order: formData.series_order,
         tropes: formData.tropes,
@@ -314,7 +320,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
             name="price"
             type="number"
             step="0.01"
-            value={formData.price.toFixed(2)}
+            value={formData.price === 0 ? '' : formData.price.toFixed(2)}
             onChange={handleChange}
             required
           />
