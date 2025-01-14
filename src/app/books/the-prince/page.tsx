@@ -1,19 +1,41 @@
+'use client'
+
 import Image from "next/image"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { createClient } from '@/utils/supabase/client'
+import { useEffect, useState } from 'react'
 
 export default function ThePrincePage() {
-  const tropes = [
-    "Secret Identity",
-    "Dark Secret",
-    "Stalker Hero/Obsessive Love",
-    "Virgin Heroine",
-    "Mafia Romance",
-    "Hero Falls First"
-  ]
+  const [book, setBook] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    const fetchBook = async () => {
+      try {
+        const supabase = createClient()
+        const { data, error } = await supabase
+          .from('books')
+          .select('*')
+          .eq('title', 'The Prince: Falcone Family')
+          .single()
+
+        if (error) throw error
+        setBook(data)
+      } catch (err) {
+        setError('Failed to load book data')
+        console.error(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchBook()
+  }, [])
 
   return (
     <div className="min-h-screen bg-background">
@@ -67,22 +89,24 @@ export default function ThePrincePage() {
                 {/* Title and Series */}
                 <div className="space-y-2">
                   <h1 className="text-5xl font-bold text-primary">
-                    The Prince: Falcone Family
+                    {book?.title || 'The Prince: Falcone Family'}
                   </h1>
                   <div className="flex items-center gap-2">
                     <Badge variant="outline" className="text-muted-foreground">
-                      Las Vegas Mafia Series
+                      {book?.series || 'Las Vegas Mafia Series'}
                     </Badge>
-                    <Badge variant="outline" className="text-muted-foreground">
-                      Romance
-                    </Badge>
+                    {(book?.categories || ['Romance']).map((category: string, index: number) => (
+                      <Badge key={index} variant="outline" className="text-muted-foreground">
+                        {category}
+                      </Badge>
+                    ))}
                   </div>
                 </div>
 
                 {/* Price */}
                 <div className="flex items-center gap-4">
                   <div className="text-3xl font-bold text-primary">
-                    ${(19.99).toFixed(2)}
+                    ${book?.price ? (book.price / 100).toFixed(2) : '19.99'}
                   </div>
                 </div>
 
@@ -116,7 +140,7 @@ export default function ThePrincePage() {
                 <div className="space-y-4">
                   <h2 className="text-2xl font-semibold text-primary">Tropes</h2>
                   <div className="flex flex-wrap gap-2">
-                    {tropes.map((trope, index) => (
+                    {(book?.tropes || []).map((trope: string, index: number) => (
                       <Badge 
                         key={index}
                         variant="secondary" 
@@ -136,7 +160,7 @@ export default function ThePrincePage() {
                       <CardContent className="p-4">
                         <dl className="space-y-1">
                           <dt className="text-sm text-muted-foreground">Series</dt>
-                          <dd className="text-foreground font-medium">Las Vegas Mafia Series</dd>
+                          <dd className="text-foreground font-medium">{book?.series || 'Las Vegas Mafia Series'}</dd>
                         </dl>
                       </CardContent>
                     </Card>
@@ -144,7 +168,7 @@ export default function ThePrincePage() {
                       <CardContent className="p-4">
                         <dl className="space-y-1">
                           <dt className="text-sm text-muted-foreground">Book</dt>
-                          <dd className="text-foreground font-medium">#1</dd>
+                          <dd className="text-foreground font-medium">#{book?.series_order || '1'}</dd>
                         </dl>
                       </CardContent>
                     </Card>

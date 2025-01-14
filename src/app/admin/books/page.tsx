@@ -161,7 +161,7 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent className="p-4 pt-0 flex-1">
                 <p className="text-sm text-gray-600 line-clamp-3">
-                  {book.description}
+                  {book?.description || 'Book description not available'}
                 </p>
               </CardContent>
               <CardFooter className="p-4 pt-0">
