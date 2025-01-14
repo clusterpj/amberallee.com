@@ -108,14 +108,12 @@ export default function BooksPage() {
                     </span>
                   )}
                 </CardTitle>
-                <CardDescription className="text-sm text-muted-foreground">
-                  Published: {new Date(book.published_date).toLocaleDateString()}
-                  {book.price > 0 && (
-                    <span className="block mt-1">
-                      ${(book.price / 100).toFixed(2)}
-                    </span>
-                  )}
-                </CardDescription>
+                {book.series && (
+                  <CardDescription className="text-sm text-muted-foreground">
+                    {book.series}
+                    {book.series_order && ` #${book.series_order}`}
+                  </CardDescription>
+                )}
               </CardHeader>
               <CardContent className="space-y-6">
                 {book.cover_image_url && (
