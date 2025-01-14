@@ -10,12 +10,17 @@ interface PageProps {
   params: { slug: string }
 }
 
-export default async function BookPage({ params }: { params: { slug: string } }) {
+export default async function BookPage({ 
+  params 
+}: { 
+  params: { slug: string } 
+}) {
+  const { slug } = params
   const supabase = await createClient()
   const { data: book, error } = await supabase
     .from('books')
     .select('*')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single()
 
   if (error || !book) {
