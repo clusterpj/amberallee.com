@@ -5,7 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useEffect, useState } from 'react'
 import { PaymentForm } from '@/components/payment/PaymentForm'
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog'
@@ -26,16 +26,12 @@ interface Book {
 }
 
 // Map book titles to their URL-friendly paths
-const bookUrlMap: Record<string, string> = {
-  'The Prince': 'the-prince',
-  'Hidden Queen': 'hidden-queen'
-}
 
 export default function BooksPage() {
   const [selectedBook, setSelectedBook] = useState<Book | null>(null)
-  const [books, setBooks] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [books, setBooks] = useState<Book[]>([])
+  const [, setLoading] = useState(true)
+  const [, setError] = useState('')
 
   useEffect(() => {
     const fetchBooks = async () => {

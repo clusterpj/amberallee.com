@@ -17,7 +17,6 @@ interface PaymentFormProps {
 
 export function PaymentForm({ bookId, price, stripeProductId, onSuccess, onCancel }: PaymentFormProps) {
   const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
 
   const handlePayment = async () => {
     setIsLoading(true)
