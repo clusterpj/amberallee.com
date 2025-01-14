@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useEffect, useState } from 'react'
+import { PaymentForm } from '@/components/payment/PaymentForm'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 
 interface Book {
   id: string
@@ -30,6 +32,7 @@ const bookUrlMap: Record<string, string> = {
 }
 
 export default function BooksPage() {
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null)
   const [books, setBooks] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -88,6 +91,19 @@ export default function BooksPage() {
 
       <div className="container mx-auto px-4 py-16">
         {/* Books Grid */}
+        <Dialog open={!!selectedBook} onOpenChange={(open) => !open && setSelectedBook(null)}>
+          <DialogContent>
+            {selectedBook && (
+              <PaymentForm
+                bookId={selectedBook.id}
+                price={selectedBook.price}
+                onSuccess={() => setSelectedBook(null)}
+                onCancel={() => setSelectedBook(null)}
+              />
+            )}
+          </DialogContent>
+        </Dialog>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {books.map((book) => (
             <Card 
@@ -156,9 +172,9 @@ export default function BooksPage() {
                           variant="outline"
                           className="w-full bg-transparent text-white border-white hover:bg-white/10"
                         >
-                          <a href={book.amazon_link} target="_blank" rel="noopener noreferrer">
-                            Buy on Amazon
-                          </a>
+                          <button onClick={() => setSelectedBook(book)}>
+                            Purchase Now
+                          </button>
                         </Button>
                       </div>
                     </div>
