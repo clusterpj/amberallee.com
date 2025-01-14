@@ -68,14 +68,32 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Validate required fields
+    if (!formData.title.trim()) {
+      setUploadError('Title is required')
+      return
+    }
+    if (!formData.description.trim()) {
+      setUploadError('Description is required') 
+      return
+    }
+    if (!formData.published_date) {
+      setUploadError('Published date is required')
+      return
+    }
+    if (isNaN(formData.price) || formData.price < 0) {
+      setUploadError('Price must be a positive number')
+      return
+    }
+
     try {
-      const url = book ? `/api/admin/books?id=${book.id}` : '/api/admin/books'
-      const method = book ? 'PUT' : 'POST'
+      const supabase = createClient()
       
       // Prepare data according to Supabase schema
       const requestData = {
-        title: formData.title,
-        description: formData.description,
+        title: formData.title.trim(),
+        description: formData.description.trim(),
         cover_image_url: formData.cover_image_url,
         amazon_link: formData.amazon_link,
         published_date: formData.published_date,
@@ -85,8 +103,40 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         tropes: formData.tropes,
         teasers: formData.teasers,
         is_published: formData.is_published,
-        categories: formData.categories
+        categories: formData.categories,
+        purchase_now_button: formData.purchase_now_button
       }
+
+      let error = null
+      let data = null
+      
+      if (book?.id) {
+        // Update existing book
+        const { error: updateError, data: updateData } = await supabase
+          .from('books')
+          .update(requestData)
+          .eq('id', book.id)
+          .select()
+          .single()
+          
+        error = updateError
+        data = updateData
+      } else {
+        // Create new book
+        const { error: insertError, data: insertData } = await supabase
+          .from('books')
+          .insert(requestData)
+          .select()
+          .single()
+          
+        error = insertError
+        data = insertData
+      }
+
+      if (error) throw error
+      
+      onSuccess()
+      return data
 
       console.log('Sending request to:', url)
       console.log('Request data:', requestData)
@@ -147,6 +197,10 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
   }
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
+    
+    // Clear any previous errors when user starts typing
+    if (uploadError) setUploadError('')
+    
     setFormData(prev => ({
       ...prev,
       [name]: name === 'price' ? 
