@@ -128,8 +128,7 @@ export default function AdminEventsPage() {
       const supabase = createClient()
       const eventData = {
         ...values,
-        image_url: values.image_url || '/default-event.jpg',
-        id: selectedEvent?.id || ''
+        image_url: values.image_url || '/default-event.jpg'
       }
 
       if (selectedEvent) {
@@ -140,7 +139,7 @@ export default function AdminEventsPage() {
           .eq('id', selectedEvent.id)
         if (updateError) throw updateError
       } else {
-        // Create new event
+        // Create new event - don't include id, let Supabase generate it
         const { error: insertError } = await supabase
           .from('events')
           .insert([eventData])
