@@ -59,16 +59,18 @@ export default function HiddenQueenPage() {
               {/* Book Cover */}
               <div className="relative group order-1 md:order-1">
                 <div className="relative aspect-[2/3] overflow-hidden rounded-xl shadow-2xl">
-                  <Image 
-                    src="/hidden-queen-cover.jpg"
-                    alt="Hidden Queen Book Cover"
-                    fill
-                    className={cn(
-                      "object-cover",
-                      "transform transition-transform duration-500",
-                      "group-hover:scale-105"
-                    )}
-                  />
+                  {book?.cover_image_url && (
+                    <Image 
+                      src={book.cover_image_url}
+                      alt="Hidden Queen Book Cover"
+                      fill
+                      className={cn(
+                        "object-cover",
+                        "transform transition-transform duration-500",
+                        "group-hover:scale-105"
+                      )}
+                    />
+                  )}
                   <div className="absolute top-4 right-4">
                     <Badge className="bg-primary/90 hover:bg-primary text-white">
                       Book 2
