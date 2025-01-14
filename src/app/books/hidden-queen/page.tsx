@@ -140,7 +140,7 @@ export default function HiddenQueenPage() {
                 <div className="space-y-4">
                   <h2 className="text-2xl font-semibold text-primary">Tropes</h2>
                   <div className="flex flex-wrap gap-2">
-                    {(book?.tropes || []).map((trope: string, index: number) => (
+                    {(book?.teasers || []).map((teaser: string, index: number) => (
                       <Badge 
                         key={index}
                         variant="secondary" 
