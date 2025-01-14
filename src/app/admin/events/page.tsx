@@ -123,34 +123,6 @@ export default function AdminEventsPage() {
     }
   }
 
-  const handleSubmit = async (values: Event) => {
-    try {
-      const supabase = createClient()
-      const eventData = {
-        ...values,
-        image_url: values.image_url || '/default-event.jpg'
-      }
-
-      if (selectedEvent) {
-        // Update existing event
-        const { error: updateError } = await supabase
-          .from('events')
-          .update(eventData)
-          .eq('id', selectedEvent.id)
-        if (updateError) throw updateError
-      } else {
-        // Create new event - don't include id, let Supabase generate it
-        const { error: insertError } = await supabase
-          .from('events')
-          .insert([eventData])
-        if (insertError) throw insertError
-      }
-      await fetchEvents()
-      setShowForm(false)
-    } catch (error) {
-      console.error('Error saving event:', error)
-    }
-  }
 
   return (
     <div className="space-y-6">
