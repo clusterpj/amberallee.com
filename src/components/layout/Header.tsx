@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { Menu, X, User, LayoutDashboard, Settings, ShoppingBag, LogOut } from 'lucide-react'
+import { Menu, X, User, Settings, LogOut } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import {
@@ -19,7 +19,7 @@ export default function Header() {
   const pathname = usePathname()
   const router = useRouter()
   const supabase = createClient()
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<{ email?: string; role?: string } | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function Header() {
       setLoading(false)
     }
     getUser()
-  }, [])
+  }, [supabase.auth])
 
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -61,9 +61,6 @@ export default function Header() {
     { name: 'Contact', href: '/contact' },
   ]
 
-  const userNavigation = [
-    { name: 'Admin Dashboard', href: '/admin/dashboard', role: ['admin'] },
-  ]
 
   return (
     <header className={cn(

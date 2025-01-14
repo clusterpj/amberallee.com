@@ -25,8 +25,6 @@ export async function POST(request: Request) {
       )
     }
 
-    // Convert price to string to match Stripe's unit_amount_decimal format
-    const priceDecimal = price.toString()
 
     if (!stripeProductId || !stripeProductId.startsWith('prod_')) {
       return NextResponse.json(

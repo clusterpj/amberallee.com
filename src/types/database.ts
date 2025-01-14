@@ -1,3 +1,9 @@
-Need to install the following packages:
-supabase@2.6.8
-Ok to proceed? (y) 
+export interface Database {
+  // Define your database types here
+  // Example:
+  // users: {
+  //   id: string
+  //   email: string
+  //   role: string
+  // }
+}
