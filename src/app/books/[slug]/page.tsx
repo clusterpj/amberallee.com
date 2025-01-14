@@ -17,7 +17,7 @@ export default async function BookPage({
 }) {
   const { slug } = params
   
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: book, error } = await supabase
     .from('books')
     .select('*')
