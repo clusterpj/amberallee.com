@@ -17,7 +17,8 @@ export default async function BookPage({
   const supabase = await createClient()
   
   // First try to get the book by slug
-  const { data: book, error } = await supabase
+  let book
+  const { data: initialBook, error } = await supabase
     .from('books')
     .select('*')
     .eq('slug', slug)
@@ -35,6 +36,10 @@ export default async function BookPage({
       return <div>Book not found</div>
     }
     book = fallbackBook
+  } else if (error || !initialBook) {
+    return <div>Book not found</div>
+  } else {
+    book = initialBook
   } else if (error || !book) {
     return <div>Book not found</div>
   }
