@@ -25,6 +25,7 @@ interface Book {
   is_published: boolean
   categories: string[]
   purchase_now_button: string
+  slug: string
 }
 
 // Map book titles to their URL-friendly paths
