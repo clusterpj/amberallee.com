@@ -10,8 +10,8 @@ interface PageProps {
   params: { slug: string }
 }
 
-export default async function BookPage({ params }: PageProps) {
-  const supabase = createClient()
+export default async function BookPage({ params }: { params: { slug: string } }) {
+  const supabase = await createClient()
   const { data: book, error } = await supabase
     .from('books')
     .select('*')
