@@ -10,9 +10,16 @@ interface Event {
   title: string
   description: string
   date: string
-  location: string
-  registration_link: string
-  image_url: string
+  end_date?: string
+  location?: string
+  virtual_link?: string
+  is_virtual: boolean
+  image_url?: string
+  registration_link?: string
+  time?: string
+  capacity?: number
+  status: string
+  tags?: string[]
 }
 
 async function getUpcomingEvents() {

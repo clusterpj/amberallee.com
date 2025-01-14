@@ -95,7 +95,22 @@ export default function AdminEventsPage() {
       const supabase = createClient()
       const { data, error } = await supabase
         .from('events')
-        .select('*')
+        .select(`
+          id,
+          title,
+          description,
+          date,
+          end_date,
+          location,
+          virtual_link,
+          is_virtual,
+          image_url,
+          registration_link,
+          time,
+          capacity,
+          status,
+          tags
+        `)
         .order('date', { ascending: true })
 
       if (error) throw error

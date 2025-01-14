@@ -9,11 +9,42 @@ CREATE TABLE events (
     title TEXT NOT NULL,
     description TEXT,
     date TIMESTAMPTZ NOT NULL,
+    end_date TIMESTAMPTZ,
     location TEXT,
+    virtual_link TEXT,
+    is_virtual BOOLEAN DEFAULT false,
+    image_url TEXT,
     registration_link TEXT,
+    time TEXT,
+    capacity INTEGER,
+    status TEXT DEFAULT 'scheduled' CHECK (status IN ('scheduled', 'ongoing', 'completed', 'cancelled')),
+    tags TEXT[] DEFAULT '{}',
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+-- Add indexes for better performance
+CREATE INDEX idx_events_date ON events(date);
+CREATE INDEX idx_events_status ON events(status);
+CREATE INDEX idx_events_location ON events(location);
+CREATE INDEX idx_events_tags ON events USING GIN(tags);
+
+-- Add RLS policies
+ALTER TABLE events ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public read access for events" 
+ON events 
+FOR SELECT 
+USING (true);
+
+CREATE POLICY "Admin full access for events"
+ON events
+FOR ALL
+USING (EXISTS (
+  SELECT 1 FROM users 
+  WHERE users.id = auth.uid() 
+  AND users.role = 'admin'
+));
 ```
 
 ### Column Details
