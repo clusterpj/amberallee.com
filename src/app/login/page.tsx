@@ -6,7 +6,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 export default function LoginPage({
   searchParams,
 }: {
-  searchParams: { message?: string }
+  searchParams: { message?: string | string[] }
 }) {
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2 mx-auto">
