@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 const FEATURED_BOOKS = [
   {
     title: "The Prince",
-    cover: "/the-prince-cover.jpg",
+    cover: "https://m.media-amazon.com/images/I/81xfln5hhtL._SL1500_.jpg",
     link: "/books/the-prince",
     excerpt: "Luca Falcone has been groomed to be the next Don of his mafia family in Las Vegas. When he breaks the one rule to survive - leave no witnesses - his entire future is at risk. Can he leave his family's legacy behind, or will the mafia catch up to him?",
     details: {
