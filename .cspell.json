@@ -3,7 +3,8 @@
   "language": "en",
   "words": [
     "reauthentication",
-    "amberallee"
+    "amberallee",
+    "supabase"
   ],
   "ignorePaths": [
     "**/node_modules/**",

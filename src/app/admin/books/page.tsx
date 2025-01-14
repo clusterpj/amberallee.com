@@ -16,6 +16,8 @@ interface Book {
   price: number
   series: string
   series_order: number
+  book_number: number
+  slug: string
   tropes: string[]
   teasers: string[]
   amazon_link: string
@@ -186,7 +188,7 @@ export default function DashboardPage() {
                   {book?.description || 'Book description not available'}
                 </p>
               </CardContent>
-              <CardFooter className="p-4 pt-0">
+              <CardFooter className="p-4 pt-0 flex gap-2">
                 <Button
                   variant="outline"
                   size="sm"
@@ -194,6 +196,14 @@ export default function DashboardPage() {
                   onClick={() => handleEdit(book)}
                 >
                   Edit Book
+                </Button>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="w-full"
+                  onClick={() => handleDelete(book.id)}
+                >
+                  Delete Book
                 </Button>
               </CardFooter>
             </Card>
