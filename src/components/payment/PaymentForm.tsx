@@ -73,7 +73,7 @@ export function PaymentForm({ bookId, price, onSuccess, onCancel }: PaymentFormP
   }
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full max-w-md bg-background">
       <CardHeader>
         <CardTitle>Complete Your Purchase</CardTitle>
       </CardHeader>

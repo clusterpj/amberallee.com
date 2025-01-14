@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useEffect, useState } from 'react'
 import { PaymentForm } from '@/components/payment/PaymentForm'
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 
 interface Book {
   id: string
@@ -92,7 +92,11 @@ export default function BooksPage() {
       <div className="container mx-auto px-4 py-16">
         {/* Books Grid */}
         <Dialog open={!!selectedBook} onOpenChange={(open) => !open && setSelectedBook(null)}>
-          <DialogContent>
+          <DialogContent className="bg-background">
+            <DialogTitle className="sr-only">Purchase {selectedBook?.title}</DialogTitle>
+            <DialogDescription className="sr-only">
+              Complete your purchase of {selectedBook?.title}
+            </DialogDescription>
             {selectedBook && (
               <PaymentForm
                 bookId={selectedBook.id}
