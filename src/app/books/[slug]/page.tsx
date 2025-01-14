@@ -15,7 +15,10 @@ export default async function BookPage({
 }: { 
   params: { slug: string } 
 }) {
-  const { slug } = params
+  // First await the params before destructuring
+  const awaitedParams = await params
+  const { slug } = awaitedParams
+  
   const supabase = await createClient()
   const { data: book, error } = await supabase
     .from('books')
