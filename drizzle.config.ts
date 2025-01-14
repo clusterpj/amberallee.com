@@ -5,8 +5,12 @@ dotenv.config({ path: '.env.local' });
 export default {
   schema: './src/lib/db/schema.ts',
   out: './drizzle',
-  dialect: 'postgresql',
+  driver: 'pg',
   dbCredentials: {
-    connectionString: process.env.DATABASE_URL || 'postgres://amberallee:1q2w3e4r@localhost:5432/amberallee_dev'
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT || '5432'),
+    user: process.env.DB_USER || 'amberallee',
+    password: process.env.DB_PASSWORD || '1q2w3e4r',
+    database: process.env.DB_NAME || 'amberallee_dev',
   }
 } satisfies Config;
