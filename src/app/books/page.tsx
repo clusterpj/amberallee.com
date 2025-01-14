@@ -1,9 +1,12 @@
+'use client'
+
 import { createClient } from '@/utils/supabase/client'
 import Image from "next/image"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { useEffect, useState } from 'react'
 
 interface Book {
   id: string
@@ -20,10 +23,6 @@ const bookUrlMap: Record<string, string> = {
   'The Prince': 'the-prince',
   'Hidden Queen': 'hidden-queen'
 }
-
-'use client'
-
-import { useEffect, useState } from 'react'
 
 export default function BooksPage() {
   const [books, setBooks] = useState<any[]>([])
