@@ -52,8 +52,12 @@ export function EventForm({
   })
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+    <div className="flex flex-col h-[calc(100vh-200px)]">
+      <Form {...form}>
+        <form 
+          onSubmit={form.handleSubmit(onSubmit)} 
+          className="space-y-6 overflow-y-auto flex-1 p-4"
+        >
         <FormField
           control={form.control}
           name="title"
@@ -184,6 +188,11 @@ export function EventForm({
           )}
         />
         
+        </form>
+      </Form>
+      
+      {/* Sticky Footer */}
+      <div className="sticky bottom-0 bg-background border-t p-4">
         <div className="flex justify-end gap-4">
           <Button 
             type="button" 
@@ -196,7 +205,7 @@ export function EventForm({
             Save Event
           </Button>
         </div>
-      </form>
-    </Form>
+      </div>
+    </div>
   )
 }
