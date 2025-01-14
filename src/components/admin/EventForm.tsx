@@ -188,24 +188,26 @@ export function EventForm({
           )}
         />
         
+          <div className="sticky bottom-0 bg-background border-t p-4">
+            <div className="flex justify-end gap-4">
+              <Button 
+                type="button" 
+                variant="outline"
+                onClick={onCancel}
+              >
+                Cancel
+              </Button>
+              <Button 
+                type="submit" 
+                className="bg-pink-600 hover:bg-pink-700"
+                onClick={form.handleSubmit(onSubmit)}
+              >
+                Save Event
+              </Button>
+            </div>
+          </div>
         </form>
       </Form>
-      
-      {/* Sticky Footer */}
-      <div className="sticky bottom-0 bg-background border-t p-4">
-        <div className="flex justify-end gap-4">
-          <Button 
-            type="button" 
-            variant="outline"
-            onClick={onCancel}
-          >
-            Cancel
-          </Button>
-          <Button type="submit" className="bg-pink-600 hover:bg-pink-700">
-            Save Event
-          </Button>
-        </div>
-      </div>
     </div>
   )
 }
