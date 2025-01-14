@@ -355,49 +355,117 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="categories">Categories (comma separated)</Label>
-        <Input
-          id="categories"
-          name="categories"
-          value={formData.categories.join(', ')}
-          onChange={(e) => {
-            const categories = e.target.value
-              .split(',')
-              .map(c => c.trim())
-              .filter(c => c.length > 0)
-            setFormData(prev => ({ ...prev, categories }))
-          }}
-        />
+        <Label>Categories</Label>
+        <div className="flex flex-wrap gap-2 p-2 border rounded-md">
+          {formData.categories.map((category, index) => (
+            <div key={index} className="flex items-center gap-1 px-2 py-1 bg-secondary/10 rounded-full text-sm">
+              {category}
+              <button
+                type="button"
+                onClick={() => {
+                  setFormData(prev => ({
+                    ...prev,
+                    categories: prev.categories.filter((_, i) => i !== index)
+                  }))
+                }}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                ×
+              </button>
+            </div>
+          ))}
+          <input
+            type="text"
+            className="flex-1 min-w-[100px] bg-transparent outline-none px-2"
+            placeholder="Add category..."
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && e.currentTarget.value.trim()) {
+                e.preventDefault()
+                setFormData(prev => ({
+                  ...prev,
+                  categories: [...prev.categories, e.currentTarget.value.trim()]
+                }))
+                e.currentTarget.value = ''
+              }
+            }}
+          />
+        </div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="tropes">Tropes (comma separated)</Label>
-        <Input
-          id="tropes"
-          name="tropes"
-          value={formData.tropes.join(', ')}
-          onChange={(e) => {
-            const tropes = e.target.value
-              .split(',')
-              .map(t => t.trim())
-              .filter(t => t.length > 0)
-            setFormData(prev => ({ ...prev, tropes }))
-          }}
-        />
+        <Label>Tropes</Label>
+        <div className="flex flex-wrap gap-2 p-2 border rounded-md">
+          {formData.tropes.map((trope, index) => (
+            <div key={index} className="flex items-center gap-1 px-2 py-1 bg-secondary/10 rounded-full text-sm">
+              {trope}
+              <button
+                type="button"
+                onClick={() => {
+                  setFormData(prev => ({
+                    ...prev,
+                    tropes: prev.tropes.filter((_, i) => i !== index)
+                  }))
+                }}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                ×
+              </button>
+            </div>
+          ))}
+          <input
+            type="text"
+            className="flex-1 min-w-[100px] bg-transparent outline-none px-2"
+            placeholder="Add trope..."
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && e.currentTarget.value.trim()) {
+                e.preventDefault()
+                setFormData(prev => ({
+                  ...prev,
+                  tropes: [...prev.tropes, e.currentTarget.value.trim()]
+                }))
+                e.currentTarget.value = ''
+              }
+            }}
+          />
+        </div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="teasers">Teasers (one per line)</Label>
-        <Textarea
-          id="teasers"
-          name="teasers"
-          value={formData.teasers.join('\n')}
-          onChange={(e) => {
-            const teasers = e.target.value.split('\n').filter(t => t.trim().length > 0)
-            setFormData(prev => ({ ...prev, teasers }))
-          }}
-          rows={3}
-        />
+        <Label>Teasers</Label>
+        <div className="flex flex-wrap gap-2 p-2 border rounded-md">
+          {formData.teasers.map((teaser, index) => (
+            <div key={index} className="flex items-center gap-1 px-2 py-1 bg-secondary/10 rounded-full text-sm">
+              {teaser}
+              <button
+                type="button"
+                onClick={() => {
+                  setFormData(prev => ({
+                    ...prev,
+                    teasers: prev.teasers.filter((_, i) => i !== index)
+                  }))
+                }}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                ×
+              </button>
+            </div>
+          ))}
+          <input
+            type="text"
+            className="flex-1 min-w-[100px] bg-transparent outline-none px-2"
+            placeholder="Add teaser..."
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && e.currentTarget.value.trim()) {
+                e.preventDefault()
+                setFormData(prev => ({
+                  ...prev,
+                  teasers: [...prev.teasers, e.currentTarget.value.trim()]
+                }))
+                e.currentTarget.value = ''
+              }
+            }}
+          />
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
