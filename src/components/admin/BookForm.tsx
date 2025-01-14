@@ -138,53 +138,8 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       onSuccess()
       return data
 
-      console.log('Sending request to:', url)
-      console.log('Request data:', requestData)
-      
-      const supabase = createClient()
-      const apiResponse = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestData)
-      })
-      
-      console.log('Response status:', apiResponse.status)
-
-      if (!apiResponse.ok) {
-        let errorMessage = 'Failed to save book'
-        try {
-          const errorData = await apiResponse.json()
-          errorMessage = errorData.error || errorMessage
-        } catch (parseError) {
-          console.error('Error parsing error response:', parseError)
-        }
-        throw new Error(errorMessage)
-      }
-
-      const responseText = await apiResponse.text()
-      
-      // Check if we got HTML instead of JSON (likely auth redirect)
-      if (responseText.startsWith('<!DOCTYPE html>')) {
-        console.error('Received HTML response, likely auth redirect:', responseText)
-        throw new Error('Authentication required - please log in again')
-      }
-
-      try {
-        const result = JSON.parse(responseText)
-        if (!result.success) {
-          throw new Error(result.error || 'Failed to save book')
-        }
-        onSuccess()
-        return result.data
-      } catch (error) {
-        console.error('Failed to parse response:', responseText)
-        if (apiResponse.status === 401) {
-          throw new Error('Session expired - please refresh the page and try again')
-        }
-        throw new Error('Failed to save book. Please check your connection and try again.')
-      }
+      onSuccess()
+      return data
     } catch (error) {
       if (error instanceof Error) {
         console.error('Error saving book:', error.message)
