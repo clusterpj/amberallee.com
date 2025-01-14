@@ -1,38 +1,26 @@
-'use client'
-
 import Image from "next/image"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { createClient } from '@/utils/supabase/client'
-import { useEffect, useState } from 'react'
-
-import { use } from 'react'
+import { createClient } from '@/utils/supabase/server'
 
 interface PageProps {
   params: { slug: string }
 }
 
-async function getBook(slug: string) {
+export default async function BookPage({ params }: PageProps) {
   const supabase = createClient()
-  const { data, error } = await supabase
+  const { data: book, error } = await supabase
     .from('books')
     .select('*')
-    .eq('slug', slug)
+    .eq('slug', params.slug)
     .single()
 
-  if (error) throw error
-  return data
-}
-
-export default function BookPage({ params }: PageProps) {
-  const slug = use(params).slug
-  const book = use(getBook(slug))
-
-
-  if (!book) return <div>Book not found</div>
+  if (error || !book) {
+    return <div>Book not found</div>
+  }
 
   return (
     <div className="min-h-screen bg-background">
