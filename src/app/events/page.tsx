@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { createClient } from '@/utils/supabase/server'
+import { Database } from '@/types/supabase'
 import { format } from 'date-fns'
 
 interface Event {
@@ -23,7 +24,10 @@ async function getUpcomingEvents() {
     .gte('date', new Date().toISOString())
     .order('date', { ascending: true })
 
-  if (error) throw error
+  if (error) {
+    console.error('Error fetching events:', error)
+    throw error
+  }
   return data as Event[]
 }
 
