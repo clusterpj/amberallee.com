@@ -24,8 +24,8 @@ interface Book {
   is_published: boolean
   created_at: string
   updated_at: string
-  categories?: string[]
-  purchase_now_button?: string
+  categories: string[]
+  purchase_now_button: string
 }
 
 export default function DashboardPage() {
