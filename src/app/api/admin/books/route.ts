@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { books } from '@/lib/db/schema'
-import { createServerClient } from '@supabase/ssr'
 import { sql } from 'drizzle-orm'
 import { requireAdminAuth } from '@/lib/auth'
 
