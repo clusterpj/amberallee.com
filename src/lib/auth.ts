@@ -3,7 +3,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 export async function requireAdminAuth(request?: NextRequest) {
   const supabase = createServerClient(
@@ -38,7 +38,10 @@ export async function requireAdminAuth(request?: NextRequest) {
   const { data: { user }, error } = await supabase.auth.getUser()
 
   if (error || !user) {
-    redirect('/auth/signin')
+    return NextResponse.json(
+      { error: 'Not authenticated' },
+      { status: 401 }
+    )
   }
 
   // Check if user is admin
@@ -49,10 +52,13 @@ export async function requireAdminAuth(request?: NextRequest) {
     .single()
 
   if (roleError || userData?.role !== 'admin') {
-    redirect('/auth/signin')
+    return NextResponse.json(
+      { error: 'Not authorized' },
+      { status: 403 }
+    )
   }
 
-  return { user }
+  return null
 }
 
 interface CookieOptions {
