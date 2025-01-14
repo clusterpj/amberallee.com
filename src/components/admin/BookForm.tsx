@@ -438,36 +438,47 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         </div>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-4">
         <Label>Teasers</Label>
-        <div className="space-y-2">
+        <div className="space-y-4">
           {formData.teasers.map((teaser, index) => (
-            <div key={index} className="flex items-start gap-2 p-3 bg-secondary/10 rounded-lg">
-              <textarea
-                value={teaser}
-                onChange={(e) => {
-                  const newTeasers = [...formData.teasers]
-                  newTeasers[index] = e.target.value
-                  setFormData(prev => ({
-                    ...prev,
-                    teasers: newTeasers
-                  }))
-                }}
-                className="flex-1 bg-transparent outline-none text-sm resize-none"
-                rows={3}
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  setFormData(prev => ({
-                    ...prev,
-                    teasers: prev.teasers.filter((_, i) => i !== index)
-                  }))
-                }}
-                className="text-muted-foreground hover:text-foreground mt-1"
-              >
-                ×
-              </button>
+            <div key={index} className="group relative">
+              <div className="flex items-start gap-3 p-4 bg-background rounded-lg border border-input hover:border-primary transition-colors">
+                <div className="flex-1">
+                  <textarea
+                    value={teaser}
+                    onChange={(e) => {
+                      const newTeasers = [...formData.teasers]
+                      newTeasers[index] = e.target.value
+                      setFormData(prev => ({
+                        ...prev,
+                        teasers: newTeasers
+                      }))
+                    }}
+                    className="w-full bg-transparent outline-none text-sm resize-none min-h-[100px]"
+                    placeholder="Enter teaser text..."
+                    rows={Math.max(3, teaser.split('\n').length)}
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormData(prev => ({
+                      ...prev,
+                      teasers: prev.teasers.filter((_, i) => i !== index)
+                    }))
+                  }}
+                  className="p-1.5 rounded-full hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 6 6 18"/>
+                    <path d="m6 6 12 12"/>
+                  </svg>
+                </button>
+              </div>
+              <div className="absolute -bottom-2 right-4 bg-background px-2 text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+                Teaser {index + 1}
+              </div>
             </div>
           ))}
           <button
@@ -478,11 +489,18 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
                 teasers: [...prev.teasers, '']
               }))
             }}
-            className="w-full text-sm text-muted-foreground hover:text-primary border border-dashed rounded-lg p-3 hover:border-primary transition-colors"
+            className="w-full flex items-center justify-center gap-2 text-sm text-primary hover:text-primary/90 border-2 border-dashed border-primary/20 hover:border-primary/40 rounded-lg p-4 transition-all hover:bg-primary/5"
           >
-            + Add Teaser
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14"/>
+              <path d="M12 5v14"/>
+            </svg>
+            Add New Teaser
           </button>
         </div>
+        <p className="text-sm text-muted-foreground">
+          Use teasers to highlight key moments or quotes from the book. Each teaser will be displayed as a separate paragraph on the book page.
+        </p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
