@@ -15,19 +15,30 @@ export default async function BookPage({
 }: { 
   params: { slug: string } 
 }) {
-  const { slug } = params
+  const slug = params.slug
   
   const supabase = await createClient()
-  const { data: book, error } = await supabase
+  
+  // First try to get the book by slug
+  let { data: book, error } = await supabase
     .from('books')
     .select('*')
     .eq('slug', slug)
     .single()
-    
-  console.log('Book data:', book)
-  console.log('Error:', error)
 
-  if (error || !book) {
+  // If not found, try to get by ID as fallback
+  if (error?.code === 'PGRST116') {
+    const { data: fallbackBook, error: fallbackError } = await supabase
+      .from('books')
+      .select('*')
+      .eq('id', slug)
+      .single()
+    
+    if (fallbackError || !fallbackBook) {
+      return <div>Book not found</div>
+    }
+    book = fallbackBook
+  } else if (error || !book) {
     return <div>Book not found</div>
   }
 
