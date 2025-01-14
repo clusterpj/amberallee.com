@@ -9,36 +9,32 @@ import { Badge } from "@/components/ui/badge"
 import { createClient } from '@/utils/supabase/client'
 import { useEffect, useState } from 'react'
 
-export default function BookPage({ params }: { params: { slug: string } }) {
+import { use } from 'react'
+
+interface PageProps {
+  params: { slug: string }
+}
+
+async function getBook(slug: string) {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('books')
+    .select('*')
+    .eq('slug', slug)
+    .single()
+
+  if (error) throw error
+  return data
+}
+
+export default function BookPage({ params }: PageProps) {
+  const slug = use(params).slug
+  const book = use(getBook(slug))
   const [book, setBook] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  useEffect(() => {
-    const fetchBook = async () => {
-      try {
-        const supabase = createClient()
-        const { data, error } = await supabase
-          .from('books')
-          .select('*')
-          .eq('slug', params.slug)
-          .single()
 
-        if (error) throw error
-        setBook(data)
-      } catch (err) {
-        setError('Failed to load book data')
-        console.error(err)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchBook()
-  }, [params.slug])
-
-  if (loading) return <div>Loading...</div>
-  if (error) return <div>Error: {error}</div>
   if (!book) return <div>Book not found</div>
 
   return (
