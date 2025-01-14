@@ -202,10 +202,19 @@ export default function AdminEventsPage() {
           aria-describedby="event-form-description"
         >
           <DialogHeader>
-            <DialogTitle id="event-form-title" className="text-2xl font-bold">
-              {selectedEvent ? 'Edit Event' : 'Create New Event'}
+            <DialogTitle 
+              id="event-form-title" 
+              className="text-2xl font-bold"
+              asChild
+            >
+              <h2>
+                {selectedEvent ? 'Edit Event' : 'Create New Event'}
+              </h2>
             </DialogTitle>
-            <DialogDescription id="event-form-description" className="text-sm text-muted-foreground">
+            <DialogDescription 
+              id="event-form-description" 
+              className="text-sm text-muted-foreground"
+            >
               {selectedEvent ? 
                 'Edit the details of this event' : 
                 'Create a new event with all the necessary details'
