@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { supabase } from "@/lib/supabase"
+import { createClient } from '@/utils/supabase/server'
 import { format } from 'date-fns'
 
 interface Event {
@@ -16,6 +16,7 @@ interface Event {
 }
 
 async function getUpcomingEvents() {
+  const supabase = createClient()
   const { data, error } = await supabase
     .from('events')
     .select('*')
