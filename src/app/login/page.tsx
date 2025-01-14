@@ -3,11 +3,13 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 
+interface PageProps {
+  searchParams: { [key: string]: string | string[] | undefined }
+}
+
 export default function LoginPage({
   searchParams,
-}: {
-  searchParams: { message?: string | string[] }
-}) {
+}: PageProps) {
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2 mx-auto">
       <Card>
@@ -38,7 +40,7 @@ export default function LoginPage({
               id="password"
               name="password"
               type="password"
-              placeholder="••••••••"
+              placeholder=""
               required
             />
             
