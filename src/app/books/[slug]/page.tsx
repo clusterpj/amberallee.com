@@ -40,7 +40,9 @@ export default async function BookPage({
     return <div>Book not found</div>
   } else {
     book = initialBook
-  } else if (error || !book) {
+  }
+
+  if (!book) {
     return <div>Book not found</div>
   }
 
