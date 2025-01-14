@@ -38,14 +38,29 @@ export async function POST(request: Request) {
     })
     
     try {
-      // Verify the product exists
-      const product = await stripe.products.retrieve(stripeProductId)
-      console.log('Retrieved Stripe product:', product)
+      // Verify the product exists and get its default price
+      const product = await stripe.products.retrieve(stripeProductId, {
+        expand: ['default_price']
+      })
+      
+      if (!product.default_price) {
+        throw new Error('Product has no default price')
+      }
+
+      const priceId = typeof product.default_price === 'string' 
+        ? product.default_price 
+        : product.default_price.id
+
+      console.log('Retrieved Stripe product:', {
+        id: product.id,
+        name: product.name,
+        priceId
+      })
 
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         line_items: [{
-          price: stripeProductId,
+          price: priceId,
           quantity: 1,
         }],
         mode: 'payment',
