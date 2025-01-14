@@ -17,7 +17,7 @@ type BookInput = {
   series_order?: number
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const authResponse = await requireAdminAuth(request)
     if (authResponse) {
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function PUT(request: NextRequest) {
+export async function PUT(request: NextRequest): Promise<NextResponse> {
   try {
     const authResponse = await requireAdminAuth(request)
     if (authResponse) {
