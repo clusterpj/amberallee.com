@@ -17,12 +17,16 @@ export async function POST(request: Request) {
       )
     }
 
-    if (typeof price !== 'number' || price <= 0) {
+    // Validate price is a number and matches Stripe's requirements
+    if (typeof price !== 'number' || price <= 0 || !Number.isInteger(price)) {
       return NextResponse.json(
-        { error: 'Invalid price' },
+        { error: 'Invalid price. Price must be a positive integer in cents' },
         { status: 400 }
       )
     }
+
+    // Convert price to string to match Stripe's unit_amount_decimal format
+    const priceDecimal = price.toString()
 
     if (!stripeProductId || !stripeProductId.startsWith('prod_')) {
       return NextResponse.json(
@@ -62,6 +66,11 @@ export async function POST(request: Request) {
         line_items: [{
           price: priceId,
           quantity: 1,
+          price_data: {
+            currency: 'usd',
+            product: stripeProductId,
+            unit_amount_decimal: priceDecimal
+          }
         }],
         mode: 'payment',
         success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
