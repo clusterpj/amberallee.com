@@ -92,7 +92,7 @@ export default function BooksPage() {
       <div className="container mx-auto px-4 py-16">
         {/* Books Grid */}
         <Dialog open={!!selectedBook} onOpenChange={(open) => !open && setSelectedBook(null)}>
-          <DialogContent className="bg-background">
+          <DialogContent className="bg-white">
             <DialogTitle className="sr-only">Purchase {selectedBook?.title}</DialogTitle>
             <DialogDescription className="sr-only">
               Complete your purchase of {selectedBook?.title}
