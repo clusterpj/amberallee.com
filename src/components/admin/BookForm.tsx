@@ -44,7 +44,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       tropes: book.tropes || [],
       amazon_link: book.amazon_link || '',
       is_published: book.is_published || false,
-      price: book.price ? parseFloat((book.price / 100).toFixed(2)) : 0.00 // Safely convert cents to dollars for display
+      price: book.price ? book.price / 100 : 0.00 // Convert cents to dollars
     } : {
       title: '',
       description: '',
@@ -104,7 +104,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         cover_image_url: formData.cover_image_url,
         amazon_link: formData.amazon_link,
         published_date: formData.published_date,
-        price: formData.price ? Math.round(Number(formData.price) * 100) : 0, // Convert dollars to cents
+        price: Math.round(formData.price * 100), // Convert dollars to cents
         series: formData.series,
         series_order: formData.series_order,
         tropes: formData.tropes,
@@ -320,8 +320,14 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
             name="price"
             type="number"
             step="0.01"
-            value={formData.price === 0 ? '' : (formData.price / 100).toFixed(2)}
-            onChange={handleChange}
+            value={formData.price === 0 ? '' : formData.price.toString()}
+            onChange={(e) => {
+              const value = parseFloat(e.target.value)
+              setFormData(prev => ({
+                ...prev,
+                price: isNaN(value) ? 0 : value
+              }))
+            }}
             required
           />
         </div>
