@@ -45,7 +45,8 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       tropes: book.tropes || [],
       amazon_link: book.amazon_link || '',
       is_published: book.is_published || false,
-      price: book.price ? book.price / 100 : 0.00 // Convert cents to dollars
+      price: book.price ? book.price / 100 : 0.00, // Convert cents to dollars
+      slug: book.slug || generateSlug(book.title)
     } : {
       title: '',
       description: '',
@@ -60,7 +61,8 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       teasers: [],
       tropes: [],
       amazon_link: '',
-      is_published: false
+      is_published: false,
+      slug: ''
     }
   )
   const [uploading, setUploading] = useState(false)
