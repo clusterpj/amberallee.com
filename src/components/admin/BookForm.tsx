@@ -440,10 +440,22 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
 
       <div className="space-y-2">
         <Label>Teasers</Label>
-        <div className="flex flex-wrap gap-2 p-2 border rounded-md">
+        <div className="space-y-2">
           {formData.teasers.map((teaser, index) => (
-            <div key={index} className="flex items-center gap-1 px-2 py-1 bg-secondary/10 rounded-full text-sm">
-              {teaser}
+            <div key={index} className="flex items-start gap-2 p-3 bg-secondary/10 rounded-lg">
+              <textarea
+                value={teaser}
+                onChange={(e) => {
+                  const newTeasers = [...formData.teasers]
+                  newTeasers[index] = e.target.value
+                  setFormData(prev => ({
+                    ...prev,
+                    teasers: newTeasers
+                  }))
+                }}
+                className="flex-1 bg-transparent outline-none text-sm resize-none"
+                rows={3}
+              />
               <button
                 type="button"
                 onClick={() => {
@@ -452,31 +464,24 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
                     teasers: prev.teasers.filter((_, i) => i !== index)
                   }))
                 }}
-                className="text-muted-foreground hover:text-foreground"
+                className="text-muted-foreground hover:text-foreground mt-1"
               >
                 ×
               </button>
             </div>
           ))}
-          <input
-            type="text"
-            className="flex-1 min-w-[100px] bg-transparent outline-none px-2"
-            placeholder="Add teaser..."
-            onKeyDown={(e) => {
-              const target = e.target as HTMLInputElement
-              const value = target?.value?.trim()
-              if (e.key === 'Enter' && value) {
-                e.preventDefault()
-                setFormData(prev => ({
-                  ...prev,
-                  teasers: [...prev.teasers, value]
-                }))
-                if (target) {
-                  target.value = ''
-                }
-              }
+          <button
+            type="button"
+            onClick={() => {
+              setFormData(prev => ({
+                ...prev,
+                teasers: [...prev.teasers, '']
+              }))
             }}
-          />
+            className="w-full text-sm text-muted-foreground hover:text-primary border border-dashed rounded-lg p-3 hover:border-primary transition-colors"
+          >
+            + Add Teaser
+          </button>
         </div>
       </div>
 

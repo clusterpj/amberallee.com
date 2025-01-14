@@ -207,40 +207,15 @@ export default function ThePrincePage() {
               <Card className="bg-background/50 backdrop-blur-sm border border-primary/10">
                 <CardContent className="p-6 space-y-6">
                   <h2 className="text-3xl font-bold text-primary">Teasers</h2>
-                  <div className="grid md:grid-cols-3 gap-8">
-                    <div className="space-y-4">
-                      <div className="text-lg text-foreground/80 italic leading-relaxed">
-                        <p>"Do you always speak to others like that?" She asks.</p>
-                        <p>"Like what?"</p>
-                        <p>"Order people around. Command them to do what you want."</p>
-                        <p>I pause for a moment.</p>
-                        <p>She doesn't know I was raised to give orders and commands for others to follow.</p>
-                        <p>"Does that bother you?"</p>
-                        <p>She blushes. "I kinda like it."</p>
+                  <div className="space-y-6">
+                    {(book?.teasers || []).map((teaser, index) => (
+                      <div key={index} className="space-y-2">
+                        <div className="text-lg text-foreground/80 italic leading-relaxed whitespace-pre-line">
+                          {teaser}
+                        </div>
+                        <div className="border-b border-primary/10"></div>
                       </div>
-                    </div>
-                    <div className="space-y-4">
-                      <div className="text-lg text-foreground/80 italic leading-relaxed">
-                        <p>"Do you have a work thing while we're here?"</p>
-                        <p>"No work. I'm all yours while we're here."</p>
-                        <p>"Then what are we attending?" I ask.</p>
-                        <p>"A wedding."</p>
-                        <p>"Oh, that sounds like fun."</p>
-                        <p>"It will be. You are going to love it."</p>
-                        <p>"Whose wedding is it?" Wondering if it's an employee.</p>
-                        <p>Luca Smirks, "Ours."</p>
-                      </div>
-                    </div>
-                    <div className="space-y-4">
-                      <div className="text-lg text-foreground/80 italic leading-relaxed">
-                        <p>A figure runs across the rainy windows of the study. My body immediately on high alert. 
-                        Moments later the door bursts open and Cassio huffs out of breath.</p>
-                        <p>"She ran."</p>
-                        <p>My legs spring towards the doors where Gemma just bolted. I take off in a dead run.</p>
-                        <p>She's running scared.</p>
-                        <p>She's running from me.</p>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </CardContent>
               </Card>

@@ -216,19 +216,15 @@ export default function HiddenQueenPage() {
               <Card className="bg-background/50 backdrop-blur-sm border border-primary/10">
                 <CardContent className="p-6 space-y-6">
                   <h2 className="text-3xl font-bold text-primary">Teasers</h2>
-                  <div className="grid md:grid-cols-2 gap-8">
-                    <div className="space-y-2">
-                      <p className="text-lg text-foreground/80 italic leading-relaxed">
-                        "Your eyes set you apart from everyone else in this world."
-                      </p>
-                      <p className="text-secondary">~ Wyatt</p>
-                    </div>
-                    <div className="space-y-2">
-                      <p className="text-lg text-foreground/80 italic leading-relaxed">
-                        "In such a short amount of time you've worked yourself into my whole being and I can't picture a life that doesn't have you by my side."
-                      </p>
-                      <p className="text-secondary">~ Wyatt</p>
-                    </div>
+                  <div className="space-y-6">
+                    {(book?.teasers || []).map((teaser, index) => (
+                      <div key={index} className="space-y-2">
+                        <div className="text-lg text-foreground/80 italic leading-relaxed whitespace-pre-line">
+                          {teaser}
+                        </div>
+                        <div className="border-b border-primary/10"></div>
+                      </div>
+                    ))}
                   </div>
                 </CardContent>
               </Card>
