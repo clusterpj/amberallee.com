@@ -96,6 +96,28 @@ export default function DashboardPage() {
     fetchBooks()
   }
 
+  const handleDelete = async (bookId: string) => {
+    if (!window.confirm('Are you sure you want to delete this book? This action cannot be undone.')) {
+      return
+    }
+
+    try {
+      const supabase = createClient()
+      const { error } = await supabase
+        .from('books')
+        .delete()
+        .eq('id', bookId)
+
+      if (error) throw error
+      
+      // Refresh the book list
+      fetchBooks()
+    } catch (error) {
+      setError('Error deleting book')
+      console.error('Error:', error)
+    }
+  }
+
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error: {error}</div>
 
