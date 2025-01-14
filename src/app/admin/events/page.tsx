@@ -212,10 +212,6 @@ export default function AdminEventsPage() {
               }
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={(e) => {
-            e.preventDefault()
-            form.handleSubmit(onSubmit)()
-          }}>
           <div className="mt-4">
             <EventForm
               initialData={selectedEvent || undefined}
