@@ -32,6 +32,13 @@ interface BookFormProps {
   onSuccess: () => void
 }
 
+const generateSlug = (title: string) => {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+}
+
 export default function BookForm({ book, onSuccess }: BookFormProps) {
   const [formData, setFormData] = useState<BookFormData>(
     book ? { 
@@ -159,12 +166,6 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         setUploadError('An unexpected error occurred')
       }
     }
-  }
-  const generateSlug = (title: string) => {
-    return title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '')
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
