@@ -164,20 +164,20 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="max-w-7xl mx-auto">
             <div className="grid lg:grid-cols-[1.2fr,1fr] gap-12 lg:gap-16 items-center">
-              <div className="relative order-2 lg:order-1">
+              <div className="relative order-2 lg:order-1 w-full">
                 <div className="relative group">
-                  <div className="relative aspect-[3/4] rounded-xl overflow-hidden">
+                  <div className="relative aspect-[3/4] rounded-xl overflow-hidden w-full max-w-[500px] mx-auto">
                     <Image
                       src="/author-photo.jpg"
                       alt="Amber Allee"
-                      width={400}
-                      height={600}
-                      className="object-cover rounded-xl transition-all duration-300 group-hover:scale-[1.02]"
+                      width={500}
+                      height={750}
+                      className="object-cover rounded-xl transition-all duration-300 group-hover:scale-[1.02] w-full h-full"
                     />
                   </div>
                 </div>
 
-                <div className="absolute -bottom-8 -right-8 lg:-right-16 bg-white shadow-lg p-6 rounded-xl max-w-xs transition-all duration-300 hover:shadow-xl">
+                <div className="absolute -bottom-8 -right-8 lg:-right-20 bg-white shadow-lg p-6 rounded-xl max-w-xs transition-all duration-300 hover:shadow-xl">
                   <p className="text-highlight2 italic text-sm leading-relaxed">
                     "Writing romance is about exploring the depths of human connection and the transformative power of love."
                   </p>
