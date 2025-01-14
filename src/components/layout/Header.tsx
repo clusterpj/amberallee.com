@@ -145,12 +145,15 @@ export default function Header() {
               <Link
                 href="/login"
                 className={cn(
-                  "px-4 py-2 rounded-full text-base font-semibold transition-all duration-300",
-                  "hover:text-[#004AAD] hover:bg-[#004AAD]/5",
-                  pathname === '/auth/signin' ? "text-[#004AAD] font-bold" : "text-muted-foreground"
+                  "px-6 py-2 rounded-full text-base font-semibold transition-all duration-300",
+                  "bg-gradient-to-r from-[#004AAD] to-[#69AAD4] text-white",
+                  "hover:from-[#00388A] hover:to-[#4F8DB4] hover:shadow-lg",
+                  "active:scale-95 transform transition-transform",
+                  "relative overflow-hidden group"
                 )}
               >
-                Login
+                <span className="relative z-10">Login</span>
+                <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </Link>
             )}
             </>
@@ -241,12 +244,15 @@ export default function Header() {
       <Link
         href="/login"
         className={cn(
-          "px-4 py-2 rounded-full text-base font-semibold transition-all duration-300",
-          "hover:text-[#004AAD] hover:bg-[#004AAD]/5",
-          pathname === '/auth/signin' ? "text-[#004AAD] font-bold" : "text-muted-foreground"
+          "px-6 py-2 rounded-full text-base font-semibold transition-all duration-300",
+          "bg-gradient-to-r from-[#004AAD] to-[#69AAD4] text-white",
+          "hover:from-[#00388A] hover:to-[#4F8DB4] hover:shadow-lg",
+          "active:scale-95 transform transition-transform",
+          "relative overflow-hidden group"
         )}
       >
-        Sign In
+        <span className="relative z-10">Sign In</span>
+        <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </Link>
     )}
   </>
