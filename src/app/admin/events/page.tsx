@@ -198,16 +198,22 @@ export default function AdminEventsPage() {
       <Dialog open={showForm} onOpenChange={setShowForm}>
         <DialogContent 
           className="sm:max-w-[600px] bg-white"
-          aria-describedby="event-form-description"
           aria-labelledby="event-form-title"
+          aria-describedby="event-form-description"
         >
           <DialogHeader>
             <DialogTitle id="event-form-title">
               {selectedEvent ? 'Edit Event' : 'Create New Event'}
             </DialogTitle>
-            <DialogDescription id="event-form-description">
-              {selectedEvent ? 'Edit existing event details' : 'Create a new event'}
-            </DialogDescription>
+            {selectedEvent ? (
+              <DialogDescription id="event-form-description">
+                Edit the details of this event
+              </DialogDescription>
+            ) : (
+              <DialogDescription id="event-form-description">
+                Create a new event with all the necessary details
+              </DialogDescription>
+            )}
           </DialogHeader>
           <EventForm
             initialData={selectedEvent || undefined}
