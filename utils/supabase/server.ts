@@ -2,7 +2,7 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { Database } from '@/lib/db/types'
 
-export function createClient() {
+export async function createClient() {
   const cookieStore = cookies()
   
   // Extract project reference from Supabase URL
