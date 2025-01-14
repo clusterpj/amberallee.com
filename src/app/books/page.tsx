@@ -167,15 +167,12 @@ export default function BooksPage() {
                             View Details
                           </Link>
                         </Button>
-                        <Button 
-                          asChild
-                          variant="outline"
-                          className="w-full bg-transparent text-white border-white hover:bg-white/10"
+                        <button 
+                          onClick={() => setSelectedBook(book)}
+                          className="w-full bg-transparent text-white border border-white hover:bg-white/10 rounded-md px-4 py-2 transition-colors"
                         >
-                          <button onClick={() => setSelectedBook(book)}>
-                            Purchase Now
-                          </button>
-                        </Button>
+                          Purchase Now
+                        </button>
                       </div>
                     </div>
                   </div>

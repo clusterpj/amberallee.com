@@ -21,6 +21,18 @@ export function PaymentForm({ bookId, price, onSuccess, onCancel }: PaymentFormP
   const handlePayment = async () => {
     setIsLoading(true)
     try {
+      // Validate price
+      if (typeof price !== 'number' || price <= 0) {
+        throw new Error('Invalid price')
+      }
+
+      // Validate bookId
+      if (!bookId || typeof bookId !== 'string') {
+        throw new Error('Invalid book ID')
+      }
+
+      console.log('Creating checkout session for book:', bookId, 'with price:', price)
+      
       const response = await fetch('/api/payment/create-checkout-session', {
         method: 'POST',
         headers: {
@@ -33,13 +45,19 @@ export function PaymentForm({ bookId, price, onSuccess, onCancel }: PaymentFormP
       })
 
       if (!response.ok) {
-        throw new Error('Failed to create payment session')
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to create payment session')
       }
 
       const { sessionId } = await response.json()
-      const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+      console.log('Received session ID:', sessionId)
 
-      const { error } = await stripe!.redirectToCheckout({ sessionId })
+      const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+      if (!stripe) {
+        throw new Error('Failed to load Stripe')
+      }
+
+      const { error } = await stripe.redirectToCheckout({ sessionId })
       
       if (error) {
         throw error

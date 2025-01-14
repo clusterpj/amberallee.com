@@ -8,7 +8,24 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 export async function POST(request: Request) {
   try {
     const { bookId, price } = await request.json()
+    
+    // Validate input
+    if (!bookId || typeof bookId !== 'string') {
+      return NextResponse.json(
+        { error: 'Invalid book ID' },
+        { status: 400 }
+      )
+    }
 
+    if (typeof price !== 'number' || price <= 0) {
+      return NextResponse.json(
+        { error: 'Invalid price' },
+        { status: 400 }
+      )
+    }
+
+    console.log('Creating Stripe session for book:', bookId, 'with price:', price)
+    
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [{
