@@ -125,7 +125,7 @@ export default function BooksPage() {
                           variant="secondary"
                           className="w-full bg-white text-primary hover:bg-white/90"
                         >
-                          <Link href={`/books/${bookUrlMap[book.title] || book.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`}>
+                          <Link href={`/books/${book.slug}`}>
                             View Details
                           </Link>
                         </Button>

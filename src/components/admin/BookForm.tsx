@@ -24,6 +24,7 @@ interface BookFormData {
   tropes: string[]
   amazon_link: string
   is_published: boolean
+  slug: string
 }
 
 interface BookFormProps {
@@ -157,6 +158,13 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       }
     }
   }
+  const generateSlug = (title: string) => {
+    return title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '')
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     
@@ -169,22 +177,38 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         Math.max(0, parseFloat(value)) : // Parse as float for decimal values
         name === 'series_order' ?
         Number(value) : // Convert series_order to number
-        value
+        value,
+      ...(name === 'title' && { slug: generateSlug(value) })
     }))
   }
 
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="space-y-2">
-        <Label htmlFor="title">Title</Label>
-        <Input
-          id="title"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          required
-        />
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="title">Title</Label>
+          <Input
+            id="title"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="slug">URL Slug</Label>
+          <Input
+            id="slug"
+            name="slug"
+            value={formData.slug}
+            onChange={handleChange}
+            required
+          />
+          <p className="text-sm text-muted-foreground">
+            This will be used in the book's URL
+          </p>
+        </div>
       </div>
 
       <div className="space-y-2">
