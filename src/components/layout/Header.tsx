@@ -143,7 +143,7 @@ export default function Header() {
               </DropdownMenu>
             ) : (
               <Link
-                href="/auth/signin"
+                href="/login"
                 className={cn(
                   "px-4 py-2 rounded-full text-base font-semibold transition-all duration-300",
                   "hover:text-[#004AAD] hover:bg-[#004AAD]/5",
@@ -239,7 +239,7 @@ export default function Header() {
       </DropdownMenu>
     ) : (
       <Link
-        href="/auth/signin"
+        href="/login"
         className={cn(
           "px-4 py-2 rounded-full text-base font-semibold transition-all duration-300",
           "hover:text-[#004AAD] hover:bg-[#004AAD]/5",
