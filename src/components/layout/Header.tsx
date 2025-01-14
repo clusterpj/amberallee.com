@@ -217,23 +217,16 @@ export default function Header() {
             </p>
           </div>
           <DropdownMenuSeparator />
-          {userNavigation
-            .filter(item => item.role.includes(user?.role || 'customer'))
-            .map((item) => (
-              <DropdownMenuItem key={item.name} className="p-0">
-                <Link 
-                  href={item.href}
-                  className="w-full flex items-center px-2 py-1.5 hover:text-[#004AAD]"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {item.name === 'Profile' && <User className="mr-2 h-4 w-4" />}
-                  {item.name === 'Dashboard' && <LayoutDashboard className="mr-2 h-4 w-4" />}
-                  {item.name === 'Admin Dashboard' && <Settings className="mr-2 h-4 w-4" />}
-                  {item.name === 'Orders' && <ShoppingBag className="mr-2 h-4 w-4" />}
-                  {item.name}
-                </Link>
-              </DropdownMenuItem>
-            ))}
+          <DropdownMenuItem className="p-0">
+            <Link 
+              href="/admin/dashboard"
+              className="w-full flex items-center px-2 py-1.5 hover:text-[#004AAD]"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <Settings className="mr-2 h-4 w-4" />
+              Admin Dashboard
+            </Link>
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem 
             onClick={handleSignOut}
