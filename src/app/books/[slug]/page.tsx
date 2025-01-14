@@ -13,9 +13,9 @@ interface PageProps {
 export default async function BookPage({ 
   params 
 }: { 
-  params: { slug: string } 
+  params: Promise<{ slug: string }> 
 }) {
-  const slug = params.slug
+  const { slug } = await params
   
   const supabase = await createClient()
   
