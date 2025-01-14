@@ -210,38 +210,22 @@ export default function AdminEventsPage() {
       </Card>
 
       <Dialog open={showForm} onOpenChange={setShowForm}>
-        <DialogContent 
-          className="sm:max-w-[600px] bg-white"
-          aria-labelledby="event-form-title"
-          aria-describedby="event-form-description"
-        >
+        <DialogContent className="sm:max-w-[600px] bg-white">
           <DialogHeader>
-            <DialogTitle 
-              id="event-form-title" 
-              className="text-2xl font-bold"
-              asChild
-            >
-              <h2>
-                {selectedEvent ? 'Edit Event' : 'Create New Event'}
-              </h2>
+            <DialogTitle className="text-2xl font-bold">
+              {selectedEvent ? 'Edit Event' : 'Create New Event'}
             </DialogTitle>
-            <DialogDescription 
-              id="event-form-description" 
-              className="text-sm text-muted-foreground"
-            >
+            <DialogDescription className="text-sm text-muted-foreground">
               {selectedEvent ? 
                 'Edit the details of this event' : 
                 'Create a new event with all the necessary details'
               }
             </DialogDescription>
           </DialogHeader>
-          <div className="mt-4">
-            <EventForm
-              initialData={selectedEvent || undefined}
-              onSubmit={handleSubmit}
-              onCancel={() => setShowForm(false)}
-            />
-          </div>
+          <EventForm
+            initialData={selectedEvent || undefined}
+            onCancel={() => setShowForm(false)}
+          />
         </DialogContent>
       </Dialog>
     </div>
