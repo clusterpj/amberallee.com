@@ -2,8 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { createClient } from '@/utils/supabase/server'
-import { Database } from '@/types/supabase'
+import { createClient } from '@/utils/supabase/client'
 import { format } from 'date-fns'
 
 interface Event {
