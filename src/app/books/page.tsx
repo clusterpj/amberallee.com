@@ -137,7 +137,7 @@ export default function BooksPage() {
                           {book.description}
                         </p>
                         {book.tropes && book.tropes.length > 0 && (
-                          <div className="flex flex-wrap gap-2">
+                          <div className="flex flex-wrap gap-2 mb-6"> {/* Added mb-6 for margin-bottom */}
                             {book.tropes.map((trope, index) => (
                               <span 
                                 key={index}
@@ -149,7 +149,7 @@ export default function BooksPage() {
                           </div>
                         )}
                       </div>
-                      <div className="flex flex-col gap-2">
+                      <div className="flex flex-col gap-4"> {/* Increased gap from 2 to 4 */}
                         <Button 
                           asChild
                           variant="secondary"
