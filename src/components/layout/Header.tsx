@@ -107,7 +107,7 @@ export default function Header() {
             ))}
 
             {/* Auth Navigation */}
-            {!loading && user && (
+            {!loading && (
               <>
                 {user ? (
               <DropdownMenu>
@@ -191,7 +191,7 @@ export default function Header() {
                 </Link>
               ))}
               {/* Mobile Auth Navigation */}
-              {!loading && user && (
+              {!loading && (
   <>
     {user ? (
       <DropdownMenu>
