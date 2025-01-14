@@ -52,9 +52,6 @@ export default function BooksPage() {
     fetchBooks()
   }, [])
 
-export default async function BooksPage() {
-  const books = await getBooks()
-
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
