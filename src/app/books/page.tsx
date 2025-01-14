@@ -43,7 +43,12 @@ export default function BooksPage() {
           .select('*')
           .order('published_date', { ascending: false })
 
-        if (error) throw error
+        if (error) {
+          console.error('Supabase error:', error)
+          throw error
+        }
+        
+        console.log('Fetched books:', data)
         setBooks(data || [])
       } catch (error) {
         setError('Failed to load books')
@@ -96,9 +101,20 @@ export default function BooksPage() {
               <CardHeader className="text-center space-y-4">
                 <CardTitle className="text-2xl font-bold text-primary">
                   {book.title}
+                  {book.series && (
+                    <span className="block text-lg font-normal text-muted-foreground mt-1">
+                      {book.series}
+                      {book.series_order && ` #${book.series_order}`}
+                    </span>
+                  )}
                 </CardTitle>
                 <CardDescription className="text-sm text-muted-foreground">
                   Published: {new Date(book.published_date).toLocaleDateString()}
+                  {book.price > 0 && (
+                    <span className="block mt-1">
+                      ${(book.price / 100).toFixed(2)}
+                    </span>
+                  )}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -116,9 +132,23 @@ export default function BooksPage() {
                       "bg-gradient-to-t from-black/80 via-black/50 to-transparent",
                       "opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     )}>
-                      <p className="text-white mb-4 line-clamp-3">
-                        {book.description}
-                      </p>
+                      <div className="space-y-4">
+                        <p className="text-white mb-4 line-clamp-3">
+                          {book.description}
+                        </p>
+                        {book.tropes && book.tropes.length > 0 && (
+                          <div className="flex flex-wrap gap-2">
+                            {book.tropes.map((trope, index) => (
+                              <span 
+                                key={index}
+                                className="px-2 py-1 bg-white/10 text-white text-xs rounded-full"
+                              >
+                                {trope}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                       <div className="flex flex-col gap-2">
                         <Button 
                           asChild
