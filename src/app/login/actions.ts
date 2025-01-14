@@ -18,10 +18,18 @@ export async function login(formData: FormData) {
           return cookieStore.get(name)?.value
         },
         set(name: string, value: string, options: CookieOptions) {
-          cookieStore.set({ name, value, ...options })
+          try {
+            cookieStore.set({ name, value, ...options })
+          } catch (error) {
+            // Ignore errors from server components
+          }
         },
         remove(name: string, options: CookieOptions) {
-          cookieStore.set({ name, value: '', ...options })
+          try {
+            cookieStore.set({ name, value: '', ...options })
+          } catch (error) {
+            // Ignore errors from server components
+          }
         }
       }
     }
