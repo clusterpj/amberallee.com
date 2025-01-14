@@ -1,4 +1,4 @@
-import { createServerSupabaseClient } from '@/lib/supabase/server-only'
+import { createClient } from '@/utils/supabase/client'
 import Image from "next/image"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
@@ -21,20 +21,36 @@ const bookUrlMap: Record<string, string> = {
   'Hidden Queen': 'hidden-queen'
 }
 
-async function getBooks() {
-  const supabase = await createServerSupabaseClient()
-  const { data: books, error } = await supabase
-    .from('books')
-    .select('*')
-    .order('published_date', { ascending: false })
+'use client'
 
-  if (error) {
-    console.error('Error fetching books:', error)
-    return []
-  }
+import { useEffect, useState } from 'react'
 
-  return books
-}
+export default function BooksPage() {
+  const [books, setBooks] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const supabase = createClient()
+        const { data, error } = await supabase
+          .from('books')
+          .select('*')
+          .order('published_date', { ascending: false })
+
+        if (error) throw error
+        setBooks(data || [])
+      } catch (error) {
+        setError('Failed to load books')
+        console.error(error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchBooks()
+  }, [])
 
 export default async function BooksPage() {
   const books = await getBooks()
