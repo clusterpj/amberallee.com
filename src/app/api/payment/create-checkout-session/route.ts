@@ -68,5 +68,12 @@ export async function POST(request: Request) {
         { error: 'Failed to create payment session', details: error instanceof Error ? error.message : 'Unknown error' },
         { status: 500 }
       )
+    }
+  } catch (error) {
+    console.error('Unexpected error:', error)
+    return NextResponse.json(
+      { error: 'An unexpected error occurred' },
+      { status: 500 }
+    )
   }
 }
