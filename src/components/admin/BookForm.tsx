@@ -121,7 +121,8 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         teasers: formData.teasers,
         is_published: formData.is_published,
         categories: formData.categories,
-        purchase_now_button: formData.purchase_now_button
+        purchase_now_button: formData.purchase_now_button,
+        slug: formData.slug // Add slug to the request data
       }
 
       let error = null
