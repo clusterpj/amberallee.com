@@ -30,9 +30,6 @@ async function getBook(slug: string) {
 export default function BookPage({ params }: PageProps) {
   const slug = use(params).slug
   const book = use(getBook(slug))
-  const [book, setBook] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
 
 
   if (!book) return <div>Book not found</div>
