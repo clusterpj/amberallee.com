@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use server'
 
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
@@ -27,6 +28,7 @@ export async function login(formData: FormData) {
         remove(name: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value: '', ...options })
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           } catch (error) {
             // Ignore errors from server components
           }
