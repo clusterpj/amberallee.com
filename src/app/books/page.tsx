@@ -16,6 +16,11 @@ interface Book {
   published_date: string
   cover_image_url: string
   price: number
+  teasers: string[]
+  tropes: string[]
+  series: string
+  series_order: number
+  is_published: boolean
 }
 
 // Map book titles to their URL-friendly paths
