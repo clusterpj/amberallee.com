@@ -17,7 +17,7 @@ const FEATURED_BOOKS = [
   },
   {
     title: "Hidden Queen",
-    cover: "/hidden-queen-cover.jpg",
+    cover: "https://m.media-amazon.com/images/I/813hDlWZyzL._SL1500_.jpg",
     link: "/books/hidden-queen",
     excerpt: "When Kendall Drake disregards her guardians' warning and arrives in Las Vegas to accept the summer internship of a lifetime, she doesn't expect to meet Wyatt Dawson. As she juggles her new position and Wyatt's irresistible seduction, she finds herself caught in a world of power plays, secrets, deception, and murder.",
     details: {
@@ -97,7 +97,7 @@ export default function Home() {
                 <CardContent className="relative p-6">
                   <div className="relative group/image overflow-hidden rounded-xl">
                     <Image
-                      src="/hidden-queen-cover.jpg"
+                      src="https://m.media-amazon.com/images/I/813hDlWZyzL._SL1500_.jpg"
                       alt="Hidden Queen - Latest Release"
                       width={400}
                       height={600}
