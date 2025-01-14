@@ -35,9 +35,13 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    router.refresh()
-    router.push('/login')
+    const { error } = await supabase.auth.signOut()
+    if (error) {
+      console.error('Error signing out:', error.message)
+    } else {
+      router.push('/')
+      router.refresh()
+    }
   }
 
   useEffect(() => {
@@ -58,11 +62,7 @@ export default function Header() {
   ]
 
   const userNavigation = [
-    { name: 'Profile', href: '/dashboard/profile', role: ['customer', 'admin'] },
-    { name: 'Dashboard', href: '/dashboard', role: ['customer', 'admin'] },
     { name: 'Admin Dashboard', href: '/admin/dashboard', role: ['admin'] },
-    { name: 'Orders', href: '/dashboard/orders', role: ['customer'] },
-    { name: 'Settings', href: '/dashboard/settings', role: ['customer', 'admin'] },
   ]
 
   return (
@@ -123,21 +123,20 @@ export default function Header() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-white shadow-lg rounded-lg">
-                  {userNavigation
-                    .filter(item => item.role.includes('customer')) // Default to customer role for now
-                    .map((item) => (
-                      <DropdownMenuItem key={item.name}>
-                        <Link 
-                          href={item.href}
-                          className="w-full"
-                          onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                          {item.name}
-                        </Link>
-                      </DropdownMenuItem>
-                    ))}
+                  <DropdownMenuItem>
+                    <Link 
+                      href="/admin/dashboard"
+                      className="w-full"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Admin Dashboard
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleSignOut}>
+                  <DropdownMenuItem 
+                    onClick={handleSignOut}
+                    className="cursor-pointer"
+                  >
                     Sign Out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
