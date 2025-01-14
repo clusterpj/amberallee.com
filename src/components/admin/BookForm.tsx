@@ -43,13 +43,14 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
       teasers: book.teasers || [],
       tropes: book.tropes || [],
       amazon_link: book.amazon_link || '',
-      is_published: book.is_published || false
+      is_published: book.is_published || false,
+      price: book.price / 100 // Convert cents to dollars for display
     } : {
       title: '',
       description: '',
       cover_image_url: '',
       published_date: new Date().toISOString().split('T')[0],
-      price: 0,
+      price: 0.00,
       categories: [],
       purchase_now_button: '',
       series: '',
@@ -97,7 +98,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
         cover_image_url: formData.cover_image_url,
         amazon_link: formData.amazon_link,
         published_date: formData.published_date,
-        price: Math.round(formData.price * 100), // Convert to cents and round
+        price: Math.round(Number(formData.price) * 100), // Convert dollars to cents
         series: formData.series,
         series_order: formData.series_order,
         tropes: formData.tropes,
@@ -159,7 +160,7 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
     setFormData(prev => ({
       ...prev,
       [name]: name === 'price' ? 
-        Math.max(0, Number((Number(value).toFixed(2)))) : // Ensure valid price format
+        Math.max(0, parseFloat(value)) : // Parse as float for decimal values
         name === 'series_order' ?
         Number(value) : // Convert series_order to number
         value
@@ -312,7 +313,8 @@ export default function BookForm({ book, onSuccess }: BookFormProps) {
             id="price"
             name="price"
             type="number"
-            value={formData.price}
+            step="0.01"
+            value={formData.price.toFixed(2)}
             onChange={handleChange}
             required
           />
