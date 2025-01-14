@@ -10,11 +10,12 @@ import { toast } from 'sonner'
 interface PaymentFormProps {
   bookId: string
   price: number
+  stripeProductId: string
   onSuccess?: () => void
   onCancel?: () => void
 }
 
-export function PaymentForm({ bookId, price, onSuccess, onCancel }: PaymentFormProps) {
+export function PaymentForm({ bookId, price, stripeProductId, onSuccess, onCancel }: PaymentFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
@@ -41,6 +42,7 @@ export function PaymentForm({ bookId, price, onSuccess, onCancel }: PaymentFormP
         body: JSON.stringify({
           bookId,
           price,
+          stripeProductId
         }),
       })
 

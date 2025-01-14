@@ -7,7 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(request: Request) {
   try {
-    const { bookId, price } = await request.json()
+    const { bookId, price, stripeProductId } = await request.json()
     
     // Validate input
     if (!bookId || typeof bookId !== 'string') {
@@ -29,13 +29,7 @@ export async function POST(request: Request) {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [{
-        price_data: {
-          currency: 'usd',
-          product_data: {
-            name: `Book Purchase - ${bookId}`,
-          },
-          unit_amount: price,
-        },
+        price: stripeProductId,
         quantity: 1,
       }],
       mode: 'payment',

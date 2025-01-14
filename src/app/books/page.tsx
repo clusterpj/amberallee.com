@@ -101,6 +101,9 @@ export default function BooksPage() {
               <PaymentForm
                 bookId={selectedBook.id}
                 price={selectedBook.price}
+                stripeProductId={selectedBook.title === 'The Prince' ? 
+                  'prod_RaQF36TKr7DVXc' : 
+                  'prod_RaQEFoRA2dYaCY'}
                 onSuccess={() => setSelectedBook(null)}
                 onCancel={() => setSelectedBook(null)}
               />
