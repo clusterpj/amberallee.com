@@ -23,6 +23,8 @@ interface Book {
   series: string
   series_order: number
   is_published: boolean
+  categories: string[]
+  purchase_now_button: string
 }
 
 // Map book titles to their URL-friendly paths
