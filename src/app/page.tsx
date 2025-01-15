@@ -340,6 +340,7 @@ export default function Home() {
                       id="mce-EMAIL" 
                       required 
                       placeholder="Enter your email"
+                      defaultValue="" // Changed from value to defaultValue
                     />
                   </div>
                   <div aria-hidden="true" style={{position: 'absolute', left: '-5000px'}}>
