@@ -333,7 +333,7 @@ export default function Home() {
                     />
                   </div>
                   <div aria-hidden="true" style={{position: 'absolute', left: '-5000px'}}>
-                    <input type="text" name="b_dc20423e7217e6dc92c18be05_7c4f90951a" tabIndex={-1} value="" />
+                    <input type="text" name="b_dc20423e7217e6dc92c18be05_7c4f90951a" tabIndex={-1} defaultValue="" />
                   </div>
                   <div className="clear">
                     <Button 
