@@ -45,7 +45,9 @@ export function EventForm({
     try {
       const eventData = {
         ...formData,
-        image_url: formData.image_url || '/default-event.jpg'
+        image_url: formData.image_url || '/default-event.jpg',
+        // Ensure date is properly formatted for Supabase
+        date: new Date(formData.date || new Date()).toISOString()
       }
 
       if (initialData?.id) {
@@ -54,9 +56,14 @@ export function EventForm({
           .from('events')
           .update(eventData)
           .eq('id', initialData.id)
+          .select() // Add select to get updated data
         
-        if (error) throw error
+        if (error) {
+          console.error('Update error:', error)
+          throw error
+        }
         toast.success('Event updated successfully')
+        console.log('Updated event:', eventData)
       } else {
         // Create new event
         const { error } = await supabase
