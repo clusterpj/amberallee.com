@@ -2,31 +2,39 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { createClient } from '@/utils/supabase/server'
+import { cn } from "@/lib/utils"
 
-const FEATURED_BOOKS = [
-  {
-    title: "The Prince",
-    cover: "https://m.media-amazon.com/images/I/81xfln5hhtL._SL1500_.jpg",
-    link: "/books/the-prince",
-    excerpt: "Luca Falcone has been groomed to be the next Don of his mafia family in Las Vegas. When he breaks the one rule to survive - leave no witnesses - his entire future is at risk. Can he leave his family's legacy behind, or will the mafia catch up to him?",
-    details: {
-      series: "Las Vegas Mafia Series",
-      price: 19.99,
-      amazonLink: "https://www.amazon.com/Prince-Las-Vegas-Mafia-ebook/dp/B0CVV5XRK1"
+async function getBooks() {
+  try {
+    const supabase = createClient()
+    const { data: books, error } = await supabase
+      .from('books')
+      .select('*')
+      .order('published_date', { ascending: false })
+      .limit(6)
+
+    if (error) {
+      console.error('Error fetching books:', error)
+      return []
     }
-  },
-  {
-    title: "Hidden Queen",
-    cover: "https://m.media-amazon.com/images/I/813hDlWZyzL._SL1500_.jpg",
-    link: "/books/hidden-queen",
-    excerpt: "When Kendall Drake disregards her guardians' warning and arrives in Las Vegas to accept the summer internship of a lifetime, she doesn't expect to meet Wyatt Dawson. As she juggles her new position and Wyatt's irresistible seduction, she finds herself caught in a world of power plays, secrets, deception, and murder.",
-    details: {
-      series: "Las Vegas Mafia Series",
-      price: 19.99,
-      amazonLink: "https://www.amazon.com/Hidden-Queen-Las-Vegas-Mafia-ebook/dp/B0D3KMQ8XQ"
-    }
+
+    return books.map(book => ({
+      ...book,
+      link: `/books/${book.slug || book.id}`,
+      excerpt: book.description?.substring(0, 150) + '...' || '',
+      details: {
+        series: book.series,
+        price: book.price,
+        amazonLink: book.amazon_link
+      }
+    }))
+  } catch (error) {
+    console.error('Error in getBooks:', error)
+    return []
   }
-]
+}
+
 
 const TESTIMONIALS = [
   {
@@ -42,7 +50,8 @@ const TESTIMONIALS = [
 ]
 
 
-export default function Home() {
+export default async function Home() {
+  const books = await getBooks()
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
@@ -123,37 +132,82 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 max-w-[1800px] mx-auto">
-            {FEATURED_BOOKS.map((book) => (
-              <div key={book.title} className="bg-white rounded-lg shadow-lg overflow-hidden">
-                <div className="relative">
-                  <Image
-                    src={book.cover}
-                    alt={book.title}
-                    width={400}
-                    height={600}
-                    className="w-full h-auto object-cover"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-2xl font-bold mb-2">{book.title}</h3>
-                  <p className="text-gray-600 mb-4">
-                    {book.excerpt}
-                  </p>
-                  <p className="text-sm text-gray-500 mb-4">
-                    {book.details.series}
-                  </p>
-                  <Button
-                    asChild
-                    className="btn-gold text-black font-bold w-full px-6 py-3"
-                  >
-                    <Link href={book.link} className="flex items-center justify-center">
-                      <span>Explore Book</span>
-                      <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
-                    </Link>
-                  </Button>
-                </div>
-              </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-[1800px] mx-auto">
+            {books.map((book) => (
+              <Card 
+                key={book.id} 
+                className={cn(
+                  "group relative overflow-hidden",
+                  "hover:shadow-lg transition-all duration-300",
+                  "bg-white h-full flex flex-col"
+                )}
+              >
+                <CardHeader className="text-center space-y-2 p-4">
+                  <CardTitle className="text-xl font-bold text-primary">
+                    {book.title}
+                    {book.series && (
+                      <span className="block text-lg font-normal text-muted-foreground mt-1">
+                        {book.series}
+                        {book.series_order && ` #${book.series_order}`}
+                      </span>
+                    )}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4 p-4 pt-0 flex-1 flex flex-col">
+                  {book.cover_image_url && (
+                    <div className="relative aspect-[2/3] overflow-hidden rounded-lg mb-4">
+                      <Image
+                        src={book.cover_image_url}
+                        alt={book.title}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        className="rounded-md"
+                      />
+                      <div className={cn(
+                        "absolute inset-0 flex flex-col justify-end p-4",
+                        "bg-gradient-to-t from-black/80 via-black/50 to-transparent",
+                        "opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                      )}>
+                        <div className="space-y-2">
+                          <p className="text-white mb-2 line-clamp-3 text-sm">
+                            {book.description}
+                          </p>
+                          {book.tropes && book.tropes.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mb-6">
+                              {book.tropes.map((trope, index) => (
+                                <span 
+                                  key={index}
+                                  className="px-2 py-1 bg-white/10 text-white text-xs rounded-full"
+                                >
+                                  {trope}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex flex-col gap-2">
+                          <Button 
+                            asChild
+                            variant="secondary"
+                            size="sm"
+                            className="w-full bg-white text-primary hover:bg-white/90 text-sm"
+                          >
+                            <Link href={`/books/${book.slug}`}>
+                              View Details
+                            </Link>
+                          </Button>
+                          <button 
+                            onClick={() => setSelectedBook(book)}
+                            className="w-full bg-transparent text-white border border-white hover:bg-white/10 rounded-md px-3 py-1.5 text-sm transition-colors"
+                          >
+                            Purchase Now
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
