@@ -28,6 +28,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'drive.google.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.evbuc.com',
       }
     ],
   },
