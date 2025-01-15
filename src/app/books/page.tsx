@@ -110,18 +110,18 @@ export default function BooksPage() {
           </DialogContent>
         </Dialog>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {books.map((book) => (
             <Card 
               key={book.id} 
               className={cn(
                 "group relative overflow-hidden",
-                "hover:shadow-2xl transition-all duration-500",
-                "bg-white"
+                "hover:shadow-lg transition-all duration-300",
+                "bg-white h-full flex flex-col"
               )}
             >
-              <CardHeader className="text-center space-y-4">
-                <CardTitle className="text-2xl font-bold text-primary">
+              <CardHeader className="text-center space-y-2 p-4">
+                <CardTitle className="text-xl font-bold text-primary">
                   {book.title}
                   {book.series && (
                     <span className="block text-lg font-normal text-muted-foreground mt-1">
@@ -131,9 +131,9 @@ export default function BooksPage() {
                   )}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-4 p-4 pt-0 flex-1 flex flex-col">
                 {book.cover_image_url && (
-                  <div className="relative aspect-[2/3] overflow-hidden rounded-xl">
+                  <div className="relative aspect-[2/3] overflow-hidden rounded-lg mb-4">
                     <Image
                       src={book.cover_image_url}
                       alt={book.title}
@@ -142,12 +142,12 @@ export default function BooksPage() {
                       className="rounded-md"
                     />
                     <div className={cn(
-                      "absolute inset-0 flex flex-col justify-end p-6",
+                      "absolute inset-0 flex flex-col justify-end p-4",
                       "bg-gradient-to-t from-black/80 via-black/50 to-transparent",
-                      "opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      "opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                     )}>
-                      <div className="space-y-4">
-                        <p className="text-white mb-4 line-clamp-3">
+                      <div className="space-y-2">
+                        <p className="text-white mb-2 line-clamp-3 text-sm">
                           {book.description}
                         </p>
                         {book.tropes && book.tropes.length > 0 && (
@@ -163,11 +163,12 @@ export default function BooksPage() {
                           </div>
                         )}
                       </div>
-                      <div className="flex flex-col gap-4"> {/* Increased gap from 2 to 4 */}
+                      <div className="flex flex-col gap-2">
                         <Button 
                           asChild
                           variant="secondary"
-                          className="w-full bg-white text-primary hover:bg-white/90"
+                          size="sm"
+                          className="w-full bg-white text-primary hover:bg-white/90 text-sm"
                         >
                           <Link href={`/books/${book.slug}`}>
                             View Details
@@ -175,7 +176,7 @@ export default function BooksPage() {
                         </Button>
                         <button 
                           onClick={() => setSelectedBook(book)}
-                          className="w-full bg-transparent text-white border border-white hover:bg-white/10 rounded-md px-4 py-2 transition-colors"
+                          className="w-full bg-transparent text-white border border-white hover:bg-white/10 rounded-md px-3 py-1.5 text-sm transition-colors"
                         >
                           Purchase Now
                         </button>
