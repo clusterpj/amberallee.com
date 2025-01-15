@@ -93,7 +93,7 @@ export default function Home() {
                 Experience the emotional depth and compelling storytelling of Amber Allee's novels.
                 Where romance meets unforgettable characters.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex gap-4">
                 <Button
                   asChild
                   size="lg"
@@ -102,17 +102,6 @@ export default function Home() {
                 >
                   <Link href="/books" className="flex items-center">
                     <span className="text-xl font-bold">Explore Books</span>
-                    <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className="border-2 border-[#004AAD] text-[#004AAD] hover:bg-[#004AAD] hover:text-white font-semibold px-8 py-6 rounded-full transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-[#004AAD]/20 group"
-                >
-                  <Link href="/newsletter" className="flex items-center">
-                    Join Newsletter
                     <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
                   </Link>
                 </Button>
