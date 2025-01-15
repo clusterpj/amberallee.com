@@ -30,30 +30,50 @@ async function getUpcomingEvents() {
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString()
   
   try {
+    console.log('Fetching events from Supabase...')
     const { data, error } = await supabase
       .from('events')
       .select('*')
-      // Get events from today onwards
       .gte('date', today)
-      // Also include events that have end_date in the future
       .or(`end_date.is.null,end_date.gte.${today}`)
       .order('date', { ascending: true })
-      .limit(100) // Set a reasonable limit
+      .limit(100)
 
     if (error) {
-      console.error('Error fetching events:', error)
-      throw error
+      console.error('Supabase query error:', {
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint
+      })
+      throw new Error(`Supabase error: ${error.message}`)
     }
+
+    console.log(`Received ${data?.length || 0} events from Supabase`)
     
     // Filter out any events that might have end_date in the past
     const filteredData = data?.filter(event => {
-      const eventEnd = event.end_date || event.date
-      return new Date(eventEnd) >= now
+      try {
+        const eventEnd = event.end_date || event.date
+        return new Date(eventEnd) >= now
+      } catch (dateError) {
+        console.error('Error parsing event date:', {
+          eventId: event.id,
+          date: event.date,
+          endDate: event.end_date,
+          error: dateError
+        })
+        return false
+      }
     }) || []
 
+    console.log(`Filtered to ${filteredData.length} upcoming events`)
     return filteredData as Event[]
   } catch (error) {
-    console.error('Error in getUpcomingEvents:', error)
+    console.error('Error in getUpcomingEvents:', {
+      error: error instanceof Error ? error.message : error,
+      stack: error instanceof Error ? error.stack : undefined
+    })
     return [] as Event[]
   }
 }
