@@ -93,6 +93,26 @@ export default function Footer() {
                   Goodreads
                 </a>
               </li>
+              <li>
+                <a 
+                  href="https://www.tiktok.com/@author.amberallee?_t=8rSKePISXdL&_r=1" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-[#004AAD] transition-colors"
+                >
+                  TikTok
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="https://www.amazon.com/stores/Amber-Allee/author/B0CVV9KV9Z" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-[#004AAD] transition-colors"
+                >
+                  Amazon Author Page
+                </a>
+              </li>
             </ul>
           </div>
 
