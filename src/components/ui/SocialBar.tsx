@@ -29,27 +29,6 @@ export function SocialBar() {
           Amazon Author
         </span>
       </a>
-      {/* Amazon Author Page */}
-      <a
-        href="https://www.amazon.com/stores/Amber-Allee/author/B0CVV9KV9Z"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="bg-white p-2 rounded-full shadow-md hover:scale-110 transition-transform duration-200 group relative
-                 hover:shadow-[0_0_10px_rgba(255,153,0,0.4)] border-2 border-transparent hover:border-[#FF9900]"
-        aria-label="Amazon Author Page"
-      >
-        <svg 
-          className="w-5 h-5 text-[#FF9900] group-hover:text-[#e68a00]" 
-          viewBox="0 0 24 24" 
-          fill="currentColor"
-        >
-          <path d="M10.605 0h2.606v5.621h3.172V8.27h-3.172v5.621c0 .876.271 1.22 1.393 1.22h1.809v2.552h-2.6c-2.7 0-3.893-1.362-3.893-3.893V8.27H7.418V5.62h3.187V0zM1.741 16.297h2.604V8.271h2.604V5.62H1.741v10.677zm14.449-8.026h2.603v8.026h2.604v2.649h-5.207V8.271z"/>
-        </svg>
-        <span className="absolute right-full mr-2 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow-sm
-                       text-xs font-medium text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-          Amazon Author
-        </span>
-      </a>
       {/* Facebook Group */}
       <a
         href="https://www.facebook.com/share/GoP2UGzzWMA78A89/?mibextid=K35XfP"
