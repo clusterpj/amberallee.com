@@ -24,17 +24,38 @@ interface Event {
 
 async function getUpcomingEvents() {
   const supabase = createClient()
-  const { data, error } = await supabase
-    .from('events')
-    .select('*')
-    .gte('date', new Date().toISOString())
-    .order('date', { ascending: true })
+  
+  // Get current date at midnight to include all events for today
+  const now = new Date()
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString()
+  
+  try {
+    const { data, error } = await supabase
+      .from('events')
+      .select('*')
+      // Get events from today onwards
+      .gte('date', today)
+      // Also include events that have end_date in the future
+      .or(`end_date.is.null,end_date.gte.${today}`)
+      .order('date', { ascending: true })
+      .limit(100) // Set a reasonable limit
 
-  if (error) {
-    console.error('Error fetching events:', error)
-    throw error
+    if (error) {
+      console.error('Error fetching events:', error)
+      throw error
+    }
+    
+    // Filter out any events that might have end_date in the past
+    const filteredData = data?.filter(event => {
+      const eventEnd = event.end_date || event.date
+      return new Date(eventEnd) >= now
+    }) || []
+
+    return filteredData as Event[]
+  } catch (error) {
+    console.error('Error in getUpcomingEvents:', error)
+    return [] as Event[]
   }
-  return data as Event[]
 }
 
 export default async function EventsPage() {
