@@ -239,7 +239,7 @@ export default function Home() {
                             onClick={() => setSelectedBook(book)}
                             className="w-full bg-transparent text-white border border-white hover:bg-white/10 rounded-md px-3 py-1.5 text-sm transition-colors"
                           >
-                            Purchase Now
+                            Purchase Signed Copy
                           </button>
                         </div>
                       </div>
