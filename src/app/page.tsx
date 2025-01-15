@@ -1,38 +1,31 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { createClient } from '@/utils/supabase/client'
 import { cn } from "@/lib/utils"
+import { useEffect, useState } from 'react'
+import { PaymentForm } from '@/components/payment/PaymentForm'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 
-async function getBooks() {
-  try {
-    const supabase = createClient()
-    const { data: books, error } = await supabase
-      .from('books')
-      .select('*')
-      .order('published_date', { ascending: false })
-      .limit(6)
-
-    if (error) {
-      console.error('Error fetching books:', error)
-      return []
-    }
-
-    return books.map(book => ({
-      ...book,
-      link: `/books/${book.slug || book.id}`,
-      excerpt: book.description?.substring(0, 150) + '...' || '',
-      details: {
-        series: book.series,
-        price: book.price,
-        amazonLink: book.amazon_link
-      }
-    }))
-  } catch (error) {
-    console.error('Error in getBooks:', error)
-    return []
-  }
+interface Book {
+  id: string
+  title: string
+  description: string
+  amazon_link: string
+  published_date: string
+  cover_image_url: string
+  price: number
+  teasers: string[]
+  tropes: string[]
+  series: string
+  series_order: number
+  is_published: boolean
+  categories: string[]
+  purchase_now_button: string
+  slug: string
 }
 
 
@@ -50,8 +43,38 @@ const TESTIMONIALS = [
 ]
 
 
-export default async function Home() {
-  const books = await getBooks()
+export default function Home() {
+  const [books, setBooks] = useState<Book[]>([])
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const supabase = createClient()
+        const { data, error } = await supabase
+          .from('books')
+          .select('*')
+          .order('published_date', { ascending: false })
+          .limit(6)
+
+        if (error) {
+          console.error('Supabase error:', error)
+          throw error
+        }
+        
+        setBooks(data || [])
+      } catch (error) {
+        setError('Failed to load books')
+        console.error(error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchBooks()
+  }, [])
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
@@ -131,6 +154,22 @@ export default async function Home() {
               Discover stories that will captivate your heart and keep you turning pages late into the night
             </p>
           </div>
+
+          <Dialog open={!!selectedBook} onOpenChange={(open) => !open && setSelectedBook(null)}>
+            <DialogContent className="bg-white">
+              {selectedBook && (
+                <PaymentForm
+                  bookId={selectedBook.id}
+                  price={selectedBook.price}
+                  stripeProductId={selectedBook.title === 'The Prince' ? 
+                    'prod_RaQF36TKr7DVXc' : 
+                    'prod_RaQEFoRA2dYaCY'}
+                  onSuccess={() => setSelectedBook(null)}
+                  onCancel={() => setSelectedBook(null)}
+                />
+              )}
+            </DialogContent>
+          </Dialog>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-[1800px] mx-auto">
             {books.map((book) => (
