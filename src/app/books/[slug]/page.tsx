@@ -105,27 +105,14 @@ export default async function BookPage({
                 </div>
 
                 {/* Action Buttons */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4">
                   <Button 
                     size="lg"
                     className="w-full bg-[#000000] text-white hover:bg-[#333333]"
                     asChild
                   >
                     <a href={book.purchase_now_button || '#'} target="_blank" rel="noopener noreferrer">
-                      Purchase Now
-                    </a>
-                  </Button>
-                  <Button 
-                    size="lg"
-                    className="w-full bg-[#FF9900] text-white hover:bg-[#FF9900]/90"
-                    asChild
-                  >
-                    <a href={book.amazon_link} 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       className="flex items-center justify-center gap-2"
-                    >
-                      Buy on Amazon
+                      Purchase Signed Copy
                     </a>
                   </Button>
                 </div>
