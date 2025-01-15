@@ -25,50 +25,26 @@ interface Event {
 async function getUpcomingEvents() {
   const supabase = createClient()
   
-  // Get current date at midnight to include all events for today
-  const now = new Date()
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString()
-  
   try {
-    console.log('Fetching events from Supabase...')
     const { data, error } = await supabase
       .from('events')
       .select('*')
-      .gte('date', today)
-      .or(`end_date.is.null,end_date.gte.${today}`)
+      .gte('date', new Date().toISOString())
       .order('date', { ascending: true })
-      .limit(100)
 
     if (error) {
-      console.error('Supabase query error:', {
-        message: error.message,
-        code: error.code,
-        details: error.details,
-        hint: error.hint
-      })
-      throw new Error(`Supabase error: ${error.message}`)
+      console.error('Error fetching events:', error)
+      return []
     }
 
-    console.log(`Received ${data?.length || 0} events from Supabase`)
-    
-    // Filter out any events that might have end_date in the past
-    const filteredData = data?.filter(event => {
-      try {
-        const eventEnd = event.end_date || event.date
-        return new Date(eventEnd) >= now
-      } catch (dateError) {
-        console.error('Error parsing event date:', {
-          eventId: event.id,
-          date: event.date,
-          endDate: event.end_date,
-          error: dateError
-        })
-        return false
-      }
-    }) || []
+    // Format dates and ensure proper timezone handling
+    const formattedEvents = data?.map(event => ({
+      ...event,
+      date: new Date(event.date).toISOString(),
+      end_date: event.end_date ? new Date(event.end_date).toISOString() : null
+    })) || []
 
-    console.log(`Filtered to ${filteredData.length} upcoming events`)
-    return filteredData as Event[]
+    return formattedEvents as Event[]
   } catch (error) {
     console.error('Error in getUpcomingEvents:', {
       error: error instanceof Error ? error.message : error,
@@ -116,7 +92,7 @@ export default async function EventsPage() {
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
                           </svg>
-                          {format(new Date(event.date), 'MMMM d, yyyy')} • {format(new Date(event.date), 'h:mm a')}
+                          {format(new Date(event.date), 'MMMM d, yyyy')} at {format(new Date(event.date), 'h:mm a')}
                         </div>
                         <div className="flex items-center text-muted-foreground">
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">

@@ -23,7 +23,7 @@ export function EventForm({
   const [formData, setFormData] = useState<Partial<Event>>({
     title: initialData?.title || '',
     description: initialData?.description || '',
-    date: initialData?.date || new Date().toISOString(),
+    date: initialData?.date ? new Date(initialData.date).toISOString().slice(0, 16) : new Date().toISOString().slice(0, 16),
     location: initialData?.location || '',
     registration_link: initialData?.registration_link || '',
     image_url: initialData?.image_url || '',
