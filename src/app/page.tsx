@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { createClient } from '@/utils/supabase/server'
+import { createClient } from '@/utils/supabase/client'
 import { cn } from "@/lib/utils"
 
 async function getBooks() {
