@@ -24,6 +24,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'static.independent.co.uk',
+      },
+      {
+        protocol: 'https',
+        hostname: 'drive.google.com',
       }
     ],
   },
