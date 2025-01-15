@@ -119,21 +119,47 @@ export default function Footer() {
           {/* Newsletter */}
           <div>
             <h3 className="text-lg font-semibold title-gradient mb-4">Newsletter</h3>
-            <form onSubmit={handleNewsletterSubmit} className="space-y-4">
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="bg-background"
-              />
-              <Button 
-                type="submit" 
-                className="w-full bg-[#004AAD] hover:bg-[#69AAD4] text-white transition-colors"
+            <div id="mc_embed_signup">
+              <form 
+                action="https://amberallee.us7.list-manage.com/subscribe/post?u=dc20423e7217e6dc92c18be05&amp;id=7c4f90951a&amp;f_id=009aafe0f0" 
+                method="post" 
+                id="mc-embedded-subscribe-form" 
+                name="mc-embedded-subscribe-form" 
+                className="validate" 
+                target="_self" 
+                noValidate
               >
-                Subscribe
-              </Button>
-            </form>
+                <div id="mc_embed_signup_scroll" className="space-y-4">
+                  <div className="mc-field-group">
+                    <label htmlFor="mce-EMAIL" className="sr-only">Email Address</label>
+                    <input 
+                      type="email" 
+                      name="EMAIL" 
+                      className="required email w-full px-4 py-3 rounded-md border-accent/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all duration-300 bg-background"
+                      id="mce-EMAIL" 
+                      required 
+                      placeholder="Enter your email"
+                    />
+                  </div>
+                  <div aria-hidden="true" style={{position: 'absolute', left: '-5000px'}}>
+                    <input type="text" name="b_dc20423e7217e6dc92c18be05_7c4f90951a" tabIndex={-1} value="" />
+                  </div>
+                  <div className="clear">
+                    <Button 
+                      type="submit" 
+                      name="subscribe" 
+                      id="mc-embedded-subscribe"
+                      variant="secondary"
+                      size="lg"
+                      className="w-full bg-[#004AAD] hover:bg-[#69AAD4] text-white font-semibold px-8 py-6 rounded-full transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-[#004AAD]/20 group"
+                    >
+                      Subscribe
+                      <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
 
