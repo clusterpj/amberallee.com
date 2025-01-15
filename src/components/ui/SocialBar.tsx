@@ -1,10 +1,34 @@
 'use client';
 
 import { Facebook, Instagram, Book } from 'lucide-react';
+import Image from 'next/image';
 
 export function SocialBar() {
   return (
     <div className="fixed right-4 top-1/2 transform -translate-y-1/2 flex flex-col gap-3 z-40 bg-black/60 p-2 rounded-t-2xl rounded-b-2xl">
+      {/* Amazon Author Page */}
+      <a
+        href="https://www.amazon.com/stores/Amber-Allee/author/B0CVV9KV9Z"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="bg-white p-2 rounded-full shadow-md hover:scale-110 transition-transform duration-200 group relative
+                 hover:shadow-[0_0_10px_rgba(255,153,0,0.4)] border-2 border-transparent hover:border-[#FF9900]"
+        aria-label="Amazon Author Page"
+      >
+        <div className="w-5 h-5 relative">
+          <Image
+            src="/amazon-logo.jpg"
+            alt="Amazon"
+            width={20}
+            height={20}
+            className="rounded-sm"
+          />
+        </div>
+        <span className="absolute right-full mr-2 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow-sm
+                       text-xs font-medium text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+          Amazon Author
+        </span>
+      </a>
       {/* Amazon Author Page */}
       <a
         href="https://www.amazon.com/stores/Amber-Allee/author/B0CVV9KV9Z"
